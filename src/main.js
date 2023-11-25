@@ -1,5 +1,5 @@
 const { app, BrowserWindow } = require('electron')
-const db = require('./database/database.js');
+const db = require('./backend/database.js');
 
 
 const createWindow = () => {
