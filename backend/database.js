@@ -43,6 +43,35 @@ function setupDatabase() {
             // You can place more table creation code here or seed initial data
         }
     });
+    
+    const createLocationsTable = `
+        CREATE TABLE IF NOT EXISTS Locations (
+            location_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            zone_id INTEGER FOREIGN KEY REFERENCES Zones(zone_id),
+            location_name TEXT UNIQUE NOT NULL,
+            location_notes TEXT
+            single_part_only BOOLEAN
+        )
+    `;
+
+    db.run(createLocationsTable, (err) => {
+        if (err) {
+            console.error('Error creating Locations table', err.message);
+        } else {
+            console.log('Locations table created or already exists.');
+        }
+    });
+
+    const createZonesTable = `
+        CREATE TABLE IF NOT EXISTS Zones (
+            zone_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            zone_name TEXT UNIQUE NOT NULL,
+            zone_notes TEXT
+        )
+    `;
+
+    db.run(createZonesTable, (err) => {
+        
 
     // Repeat for other tables...
 }
