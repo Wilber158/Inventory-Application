@@ -6,7 +6,6 @@
   "scripts": {
     "test": "\"echo \\\"Error: no test specified\\\" && exit 1\"",
     "start": "electron ."
-
   },
   "repository": {
     "type": "git",
@@ -15,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron": "^27.0.4"
+    "electron": "^27.0.4",
+    "sqlite3": "^5.1.6"
   }
 }
