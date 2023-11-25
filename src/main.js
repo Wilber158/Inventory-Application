@@ -1,5 +1,5 @@
 const { app, BrowserWindow } = require('electron')
-const db = require('./backend/database.js');
+//const db = require('./backend/database.js');
 
 
 const createWindow = () => {
@@ -8,7 +8,7 @@ const createWindow = () => {
     height: 600
   })
 
-  win.loadFile('index.html')
+  win.loadFile('src/index.html')
 }
 
 app.whenReady().then(() => {
