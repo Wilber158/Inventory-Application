@@ -26,8 +26,9 @@ a:hover {
 .sidebar li{
     margin-bottom: 5px; /* Adjust the margin value according to your preference */
     list-style-type: none;
-    padding: 20px;
+    padding: 15px;
     display: flex;
+    padding-left: 0px;  
 }
 
 .sidebar li a{
