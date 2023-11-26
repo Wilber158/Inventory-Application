@@ -69,9 +69,113 @@ function setupDatabase() {
     `;
 
     db.run(createZonesTable, (err) => {
-        
+        if (err) {
+            console.error('Error creating Zones table', err.message);
+        } else {
+            console.log('Zones table created or already exists.');
+        }
+    });
 
-    // Repeat for other tables...
+    const createVendorTable = `
+        CREATE TABLE IF NOT EXISTS Vendors (
+            vendor_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            vendor_name TEXT UNIQUE NOT NULL,
+            vendor_notes TEXT
+        )
+    `;
+
+    db.run(createVendorTable, (err) => {
+        if (err) {
+            console.error('Error creating Vendors table', err.message);
+        } else {
+            console.log('Vendors table created or already exists.');
+        }
+    }
+    );
+
+    const createCustomerTable = `
+        CREATE TABLE IF NOT EXISTS Customers (
+            customer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_name TEXT UNIQUE NOT NULL,
+            customer_notes TEXT
+        )
+    `;
+
+    db.run(createCustomerTable, (err) => {
+        if (err) {
+            console.error('Error creating Customers table', err.message);
+        } else {
+            console.log('Customers table created or already exists.');
+        }
+    }
+    );
+
+    const createInventoryEntryTable = `
+        CREATE TABLE IF NOT EXISTS InventoryEntries (
+            inventory_entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            part_id INTEGER FOREIGN KEY REFERENCES Parts(part_id),
+            location_id INTEGER FOREIGN KEY REFERENCES Locations(location_id),
+            quantity INTEGER NOT NULL,
+            date_quantity_added DATE NOT NULL,
+            vendor_id INTEGER FOREIGN KEY REFERENCES Vendors(vendor_id),
+            manufacturer TEXT,
+            condition TEXT,
+            unit_cost REAL,
+            inventory_entry_notes TEXT,
+            part_notes TEXT FOREIGN KEY REFERENCES Parts(part_notes)
+            part_abbreviation TEXT FOREIGN KEY REFERENCES Parts(part_abbreviation)
+        )
+    `;
+
+    db.run(createInventoryEntryTable, (err) => {
+        if (err) {
+            console.error('Error creating InventoryEntries table', err.message);
+        } else {
+            console.log('InventoryEntries table created or already exists.');
+        }
+    }
+    );
+
+
+    const createSellPointTable = `
+        CREATE TABLE IF NOT EXISTS SellPoints (
+            sell_point_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_id INTEGER FOREIGN KEY REFERENCES Customers(customer_id),
+            part_id INTEGER FOREIGN KEY REFERENCES Parts(part_id),
+            unit_price REAL,
+            last_updated DATE,
+            sell_point_notes TEXT
+        )
+    `;
+
+    db.run(createSellPointTable, (err) => {
+        if (err) {
+            console.error('Error creating SellPoints table', err.message);
+        } else {
+            console.log('SellPoints table created or already exists.');
+        }
+    }
+    );
+
+    const createAdditionsTable = `
+        CREATE TABLE IF NOT EXISTS Additions (
+            addition_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            part_id INTEGER FOREIGN KEY REFERENCES Parts(part_id),
+            addition_quantity INTEGER,
+            addition_date DATE,
+            vendor_id INTEGER FOREIGN KEY REFERENCES Vendors(vendor_id),
+            addition_notes TEXT
+        )
+    `;
+
+    db.run(createAdditionsTable, (err) => {
+        if (err) {
+            console.error('Error creating Additions table', err.message);
+        } else {
+            console.log('Additions table created or already exists.');
+        }
+    }
+    );
 }
 
 // You might want to export the database connection to use it in other modules
