@@ -8,18 +8,54 @@
       content="default-src 'self'; script-src 'self'"
     />
     <link rel="stylesheet" href="index.css">
+    <script src="index.js" defer></script>
     <meta
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
     <title>Main</title>
   </head>
+  <div id="content1"></div>
+  <div id="content2"></div>
   <body>
-    <iframe src="topbar.html" width="50%" height="100%"></iframe>
-    <iframe src="sidebar.html" width="50%" height="100%"></iframe>
-    <form actiona="/" class = "form">
-      <input type="text" placeholder="Prefix" class="prefix">
-      <button type="submit"></button>
-    </form>
+    <div class="bc">
+    <div class="title">
+      Add Inventory Entry
+    </div>
+    <div class="container">
+      <div class="partNum-container">
+          <div class="partNum">Part Number</div>
+          <form class="partNum">
+              <input type="text" placeholder="Prefix" class="partNum2">
+              <input type="text" placeholder="Part Number" class="partNum2">
+              <input type="text" placeholder="Type" class="partNum2">
+          </form>
+      </div>
+
+      <div class="location-container">
+          <div class="location">Location/Quantity</div>
+          <form class="location">
+              <input type="text" placeholder="Zone" class="location2">
+              <input type="text" placeholder="Location" class="location2">
+              <input type="text" placeholder="Quantity" class="location2">
+          </form>
+      </div>
+
+      <div class="vendor-container">
+          <div class="vendor">Vendor</div>
+          <form class="vendor">
+              <input type="text" placeholder="Seller" class="vendor2">
+          </form>
+      </div>
+
+      <div class="manu-container">
+          <div class="manu">Manufacturer</div>
+          <form class="manu">
+              <input type="text" placeholder="Manu" class="manu2">
+          </form>
+      </div>
+    </div>
+    <button id="submitButton">Submit</button>
+  </div>
   </body>
 </html>
