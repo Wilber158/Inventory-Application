@@ -11,6 +11,7 @@ body{
 .title{
     font-size: 28px;
     padding-bottom: 20px;
+    border-bottom: 2px solid rgb(78, 85, 87); /* Add a border at the bottom of the caption */
 }
 
 .secName{
