@@ -3,7 +3,7 @@ const path = require('path');
 
 // Path to where your database file will be located. 
 // You can place it in the same directory or a dedicated data directory.
-const dbPath = path.join(__dirname, 'inventory.db');
+const dbPath = path.join(__dirname, 'database/inventory.db');
 
 // Open a database connection. If the file does not exist, it will be created.
 const db = new sqlite3.Database(dbPath, (err) => {
@@ -28,7 +28,9 @@ function setupDatabase() {
             description TEXT,
             creation_date TEXT,
             priority_flag BOOLEAN,
-            part_notes TEXT
+            part_notes TEXT,
+            part_abbreviation TEXT,
+            part_prefix TEXT
         )
     `;
     
@@ -47,7 +49,7 @@ function setupDatabase() {
             location_id INTEGER PRIMARY KEY AUTOINCREMENT,
             zone_id INTEGER FOREIGN KEY REFERENCES Zones(zone_id),
             location_name TEXT UNIQUE NOT NULL,
-            location_notes TEXT
+            location_notes TEXT,
             single_part_only BOOLEAN
         )
     `;
@@ -122,7 +124,7 @@ function setupDatabase() {
             condition TEXT,
             unit_cost REAL,
             inventory_entry_notes TEXT,
-            part_notes TEXT FOREIGN KEY REFERENCES Parts(part_notes)
+            part_notes TEXT FOREIGN KEY REFERENCES Parts(part_notes),
             part_abbreviation TEXT FOREIGN KEY REFERENCES Parts(part_abbreviation)
         )
     `;
@@ -176,6 +178,64 @@ function setupDatabase() {
         }
     }
     );
+
+    const createDeletedPartsTable = `
+        CREATE TABLE IF NOT EXISTS DeletedParts (
+            part_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            part_number TEXT UNIQUE NOT NULL,
+            description TEXT,
+            creation_date TEXT,
+            priority_flag BOOLEAN,
+            part_notes TEXT,
+            part_abbreviation TEXT,
+            part_prefix TEXT,
+            deleted_date DATE,
+            deleted_reason INTEGER
+        )
+        `;
+
+    db.run(createDeletedPartsTable, (err) => {
+        if (err) {
+            console.error('Error creating DeletedParts table', err.message);
+        } else {
+            console.log('DeletedParts table created or already exists.');
+        }
+    }
+    );
+
+    const createDeletedInventoryEntriesTable = `
+        CREATE TABLE IF NOT EXISTS DeletedInventoryEntries (
+            inventory_entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            part_id INTEGER FOREIGN KEY REFERENCES Parts(part_id),
+            location_id INTEGER FOREIGN KEY REFERENCES Locations(location_id),
+            quantity INTEGER NOT NULL,
+            date_quantity_added DATE NOT NULL,
+            vendor_id INTEGER FOREIGN KEY REFERENCES Vendors(vendor_id),
+            manufacturer TEXT,
+            condition TEXT,
+            unit_cost REAL,
+            inventory_entry_notes TEXT,
+            part_notes TEXT FOREIGN KEY REFERENCES Parts(part_notes),
+            part_abbreviation TEXT FOREIGN KEY REFERENCES Parts(part_abbreviation),
+            deleted_date DATE,
+            deleted_reason INTEGER
+        )
+        `;
+    
+    db.run(createDeletedInventoryEntriesTable, (err) => {
+        if (err) {
+            console.error('Error creating DeletedInventoryEntries table', err.message);
+        } else {
+            console.log('DeletedInventoryEntries table created or already exists.');
+        }
+    }
+    );
+
+
+    
+
+
+
 }
 
 // You might want to export the database connection to use it in other modules
