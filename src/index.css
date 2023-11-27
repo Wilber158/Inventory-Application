@@ -18,8 +18,14 @@ body{
 }
 table {
     border-spacing: 0 20px; /* Adjust the second value (vertical spacing) to increase space between table rows */
-    background-color: blueviolet;
+    /*background-color: blueviolet;*/
 }
 .partNum2, .location2, .vendor2, .manu2 {
     margin-right: 10px; /* Adjust the margin to increase space between input elements */
+}
+#submitButton{
+    background-color: rgb(96, 141, 253);
+    padding: 7px;
+    border-radius: 10px; /* Adjust the border-radius for roundness */
+    cursor: pointer;
 }
