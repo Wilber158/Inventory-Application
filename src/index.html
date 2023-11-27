@@ -18,44 +18,47 @@
   <div id="content1"></div>
   <div id="content2"></div>
   <body>
-    <div class="bc">
-    <div class="title">
-      Add Inventory Entry
-    </div>
-    <div class="container">
-      <div class="partNum-container">
-          <div class="partNum">Part Number</div>
-          <form class="partNum">
-              <input type="text" placeholder="Prefix" class="partNum2">
-              <input type="text" placeholder="Part Number" class="partNum2">
-              <input type="text" placeholder="Type" class="partNum2">
-          </form>
-      </div>
-
-      <div class="location-container">
-          <div class="location">Location/Quantity</div>
-          <form class="location">
-              <input type="text" placeholder="Zone" class="location2">
-              <input type="text" placeholder="Location" class="location2">
-              <input type="text" placeholder="Quantity" class="location2">
-          </form>
-      </div>
-
-      <div class="vendor-container">
-          <div class="vendor">Vendor</div>
-          <form class="vendor">
-              <input type="text" placeholder="Seller" class="vendor2">
-          </form>
-      </div>
-
-      <div class="manu-container">
-          <div class="manu">Manufacturer</div>
-          <form class="manu">
-              <input type="text" placeholder="Manu" class="manu2">
-          </form>
-      </div>
-    </div>
+    
+    <table>
+      <caption class="title">Add Inventory Entry</caption>
+      <tr>
+        <td class="secName">
+          Part Number:
+        </td>
+        <td>
+          <input type="text" placeholder="Prefix" class="partNum2">
+          <input type="text" placeholder="Part Number" class="partNum2">
+          <input type="text" placeholder="Type" class="partNum2">
+        </td>
+      </tr>
+      <tr>
+        <td class="secName">
+          Location/Quantity:
+        </td>
+        <td>
+          <input type="text" placeholder="Zone" class="location2">
+          <input type="text" placeholder="Location" class="location2">
+          <input type="text" placeholder="Quantity" class="location2">
+        </td>
+      </tr>
+      <tr>
+        <td class="secName">
+          Vendor
+        </td>
+        <td>
+          <input type="text" placeholder="Seller" class="vendor2">
+        </td>
+      </tr>
+      <tr>
+        <td class="secName">
+          Manufacturer
+        </td>
+        <td>
+          <input type="text" placeholder="Manu" class="manu2">
+        </td>
+      </tr>
+    </table>
     <button id="submitButton">Submit</button>
-  </div>
   </body>
 </html>
+
