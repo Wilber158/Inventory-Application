@@ -1,0 +1,19 @@
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Lato", sans-serif;
+}
+
+div {
+    padding: 40px; /* Adjust padding as needed */
+    background-color: #3498db; /* Set the background color for the top part */
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    font-size: 24px; /* Set the font size as needed */
+}
