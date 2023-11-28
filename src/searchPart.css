@@ -1,5 +1,5 @@
 /* Reset some default styles */
-body,h1,h2,h3,p,ul,li {
+body, h1, h2, h3, p, ul, li {
     margin: 0;
     padding: 0;
 }
@@ -41,11 +41,6 @@ nav div {
     background: #8FB7D6;
 }
 
-img {
-    width: 22.90px;
-    height: 22.92px;
-}
-
 /* Main Content Styles */
 #content {
     width: 50%;
@@ -55,9 +50,7 @@ img {
     margin-left: 30%;
     border-radius: 10px;
 }
-section{
-    display: block;
-}
+
 h1 {
     font-size: 32px;
     color: #122E40;
@@ -84,57 +77,75 @@ aside div {
     word-wrap: break-word;
 }
 
-#main-content {
-    
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 40vh; /* 100% of the viewport height */
-    margin: 0;
-}
-
-/* Example of additional styling for the main content */
-#main-content div {
-    margin-bottom: 10px;
-    padding: 10px;
-    background: #FFFFFE;
-    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.10);
-    border-radius: 10px;
-}
-.partNum2, .location2, .vendor2, .manu2 {
-    margin: 10px; /* Adjust the margin to increase space between input elements */
-}
-#submitButton{
+#submitButton {
     background-color: rgb(96, 141, 253);
     padding: 7px;
-    border-radius: 10px; /* Adjust the border-radius for roundness */
+    border-radius: 10px;
     cursor: pointer;
 }
 
-.sidebar li{
-    margin-bottom: 5px; /* Adjust the margin value according to your preference */
+.sidebar li {
+    margin-bottom: 5px;
     list-style-type: none;
     padding: 15px;
     display: flex;
-    padding-left: 0px;  
+    padding-left: 0px;
 }
 
-.sidebar li a{
+.sidebar li a {
     display: flex;
     align-items: center;
 }
 
 a {
-    color: #173244; /* Set your desired color */
-    text-decoration: none; /* Remove underline */
+    color: #173244;
+    text-decoration: none;
     font-family: "Lato", sans-serif;
 }
 
 /* Add this to your existing CSS file */
 
 .sidebar li a img {
-    width: 40px; /* Adjust the width as needed */
-    height: 40px; /* Adjust the height as needed */
-    margin-right: 10px; /* Add some space between the image and text */
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.edit-btn, .delete-btn {
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+/* Add this to your existing CSS file or create a new one */
+
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 90px;
+
 }
