@@ -1,84 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
     <link rel="stylesheet" href="index.css">
-    <title>Your Title</title>
-</head>
-
-<body>
-
-    <header>
-        <div id="logo">LOGO</div>
-        <nav>
-            <div>sdfsfs</div>
-            <div>sdfs</div>
-            <div>sdfsdf</div>
-        </nav>
-    </header>
-    <section>
-        <aside>
-            <div class="sidebar">
-                <ul>
-                    <li><a href="# = path to file"><img src="home.png" alt="Home" width="80" height="80">Home</a></li>
-                    <li><a href="#"><img src="inventory.png" alt="Inventory" width="40" height="40">Inventory</a></li>
-                    <li><a href="#"><img src="insights.png" alt="Insights" width="40" height="40">Insights</a></li>
-                    <li><a href="#"><img src="transactions.png" alt="Transactions" width="40" height="40">Transactions</a></li>
-                </ul>
-            </div>
-        </aside>
-    </section>
-    <section id="content">
-        <h1>Add Inventory Entry</h1>
-        <div id="main-content">
-            <!-- Your main content goes here -->
-
-            <table>
-                <tr>
-                  <td class="secName">
-                    Part Number:
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Prefix" class="partNum2">
-                    <input type="text" placeholder="Part Number" class="partNum2">
-                    <input type="text" placeholder="Type" class="partNum2">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="secName">
-                    Location/Quantity:
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Zone" class="location2">
-                    <input type="text" placeholder="Location" class="location2">
-                    <input type="text" placeholder="Quantity" class="location2">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="secName">
-                    Vendor
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Seller" class="vendor2">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="secName">
-                    Manufacturer
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Manu" class="manu2">
-                  </td>
-                </tr>
-              </table>
-              <button id="submitButton">Submit</button>
-
-
-        </div>
-    </section>
-
-</body>
-
+    <script src="index.js" defer></script>
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>Main</title>
+  </head>
+  <div id="content1"></div>
+  <div id="content2"></div>
+  <body>
+    
+    <table>
+      <caption class="title">Add Inventory Entry</caption>
+      <tr>
+        <td class="secName">
+          Part Number:
+        </td>
+        <td>
+          <input type="text" placeholder="Prefix" class="partNum2">
+          <input type="text" placeholder="Part Number" class="partNum2">
+          <input type="text" placeholder="Type" class="partNum2">
+        </td>
+      </tr>
+      <tr>
+        <td class="secName">
+          Location/Quantity:
+        </td>
+        <td>
+          <input type="text" placeholder="Zone" class="location2">
+          <input type="text" placeholder="Location" class="location2">
+          <input type="text" placeholder="Quantity" class="location2">
+        </td>
+      </tr>
+      <tr>
+        <td class="secName">
+          Vendor
+        </td>
+        <td>
+          <input type="text" placeholder="Seller" class="vendor2">
+        </td>
+      </tr>
+      <tr>
+        <td class="secName">
+          Manufacturer
+        </td>
+        <td>
+          <input type="text" placeholder="Manu" class="manu2">
+        </td>
+      </tr>
+    </table>
+    <button id="submitButton">Submit</button>
+  </body>
 </html>
+
