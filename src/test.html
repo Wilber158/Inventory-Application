@@ -1,84 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="test.css">
-    <title>Your Title</title>
+    <script src="test.js" defer></script>
+    <title>Inventory Lookup</title>
 </head>
-
 <body>
-
-    <header>
-        <div id="logo">LOGO</div>
-        <nav>
-            <div>sdfsfs</div>
-            <div>sdfs</div>
-            <div>sdfsdf</div>
-        </nav>
-    </header>
-    <section>
-        <aside>
-            <div class="sidebar">
-                <ul>
-                    <li><a href="# = path to file"><img src="home.png" alt="Home" width="80" height="80">Home</a></li>
-                    <li><a href="#"><img src="inventory.png" alt="Inventory" width="40" height="40">Inventory</a></li>
-                    <li><a href="#"><img src="insights.png" alt="Insights" width="40" height="40">Insights</a></li>
-                    <li><a href="#"><img src="transactions.png" alt="Transactions" width="40" height="40">Transactions</a></li>
-                </ul>
-            </div>
-        </aside>
-    </section>
-    <section id="content">
-        <h1>Add Inventory Entry</h1>
-        <div id="main-content">
-            <!-- Your main content goes here -->
-
-            <table>
+    <div class="container">
+        <h2>Inventory Lookup</h2>
+        <table id="dataTable">
+            <thead>
                 <tr>
-                  <td class="secName">
-                    Part Number:
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Prefix" class="partNum2">
-                    <input type="text" placeholder="Part Number" class="partNum2">
-                    <input type="text" placeholder="Type" class="partNum2">
-                  </td>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
                 </tr>
-                <tr>
-                  <td class="secName">
-                    Location/Quantity:
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Zone" class="location2">
-                    <input type="text" placeholder="Location" class="location2">
-                    <input type="text" placeholder="Quantity" class="location2">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="secName">
-                    Vendor
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Seller" class="vendor2">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="secName">
-                    Manufacturer
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Manu" class="manu2">
-                  </td>
-                </tr>
-              </table>
-              <button id="submitButton">Submit</button>
-
-
-        </div>
-    </section>
-
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically populated here -->
+            </tbody>
+        </table>
+    </div>
+    
 </body>
-
 </html>
