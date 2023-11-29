@@ -1,6 +1,4 @@
 const database = require('database.js');
-const db = require('./database');
-
 const getAllParts = () => {
     const sql = `
         SELECT * FROM Parts
@@ -115,12 +113,12 @@ const getPartByDate = (date) => {
     `;
     
     return new Promise((resolve, reject) => {
-        database.get(sql, [date], (err, row) => {
+        database.get(sql, [date], (err, rows) => {
             if (err) {
                 console.error(`Error retrieving part details for date: ${date}`, err);
                 reject(new Error(`Error retrieving part details. Please try again later.`));
             } else {
-                resolve(row);
+                resolve(rows);
             }
         });
     });
@@ -128,8 +126,8 @@ const getPartByDate = (date) => {
 
 const createNewPart = (part_number, description, creation_date, priority_flag, part_notes, part_abb, part_prefix) => {
     const sql = `
-        INSERT INTO Parts (part_number, description, creation_date, priority_flag, part_notes, part_abbreviation, part_prefix)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO Parts (part_number, description, creation_date, priority_flag, part_notes, part_abbreviation, part_prefix, quantity_sold)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 0)
     `;
     
     return new Promise((resolve, reject) => {
@@ -138,7 +136,7 @@ const createNewPart = (part_number, description, creation_date, priority_flag, p
                 console.error(`Error creating new part with part_number: ${part_number}`, err);
                 reject(new Error(`Error creating new part. Please try again later.`));
             } else {
-                resolve(this.lastID);
+                resolve(null);
             }
         });
     });
@@ -259,13 +257,11 @@ const updatePartPriority = (partId, priority_flag) => {
     });
 }
 
-//deletion functions are not yet implemented
-
 //Here we will grab the part information that will be deleted, and put it in the deleted parts table, then remove from parts table
-const softDeletePart = ([part_number], deleteReason) => {
+const softDeletePart = (part_number, deleteReason) => {
     return new Promise((resolve, reject) => {
         // First, retrieve the part to be deleted
-        db.get('SELECT * FROM Parts WHERE part_number = ?', [part_number], (err, row) => {
+        database.get('SELECT * FROM Parts WHERE part_number = ?', [part_number], (err, row) => {
             if (err) {
                 return reject(err);
             }
@@ -275,16 +271,16 @@ const softDeletePart = ([part_number], deleteReason) => {
 
             // Insert the part into the DeletedParts table
             const sqlInsert = `
-                INSERT INTO DeletedParts (part_id, part_number, description, creation_date, priority_flag, part_notes, deleted_date, delete_reason)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO DeletedParts (part_id, part_number, description, creation_date, priority_flag, part_notes, part_abb, part_prefix, quantity_sold, deleted_date, delete_reason)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
-            db.run(sqlInsert, [...Object.values(row), new Date().toISOString(), deleteReason], (err) => {
+            database.run(sqlInsert, [...Object.values(row), new Date().toISOString(), deleteReason], (err) => {
                 if (err) {
                     return reject(err);
                 }
 
                 // Delete the part from the original Parts table
-                db.run('DELETE FROM Parts WHERE part_number = ?', [part_number], (err) => {
+                database.run('DELETE FROM Parts WHERE part_number = ?', [part_number], (err) => {
                     if (err) {
                         return reject(err);
                     }
@@ -298,7 +294,7 @@ const softDeletePart = ([part_number], deleteReason) => {
 const recoverDeletedPart = (part_number) => {
     return new Promise((resolve, reject) => {
         // First, retrieve the part to be recovered
-        db.get('SELECT * FROM DeletedParts WHERE part_number = ?', [part_number], (err, row) => {
+        database.get('SELECT * FROM DeletedParts WHERE part_number = ?', [part_number], (err, row) => {
             if (err) {
                 return reject(err);
             }
@@ -308,16 +304,16 @@ const recoverDeletedPart = (part_number) => {
 
             // Insert the part into the Parts table
             const sqlInsert = `
-                INSERT INTO Parts (part_id, part_number, description, creation_date, priority_flag, part_notes, part_abbreviation, part_prefix)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO Parts (part_id, part_number, description, creation_date, priority_flag, part_notes, part_abbreviation, part_prefix, quantity_sold)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
-            db.run(sqlInsert, [...Object.values(row)], (err) => {
+            database.run(sqlInsert, [...Object.values(row)], (err) => {
                 if (err) {
                     return reject(err);
                 }
 
-                // Delete the part from the original DeletedParts table
-                db.run('DELETE FROM DeletedParts WHERE part_number = ?', [part_number], (err) => {
+                // Delete the part from the DeletedParts table
+                database.run('DELETE FROM DeletedParts WHERE part_number = ?', [part_number], (err) => {
                     if (err) {
                         return reject(err);
                     }
@@ -332,13 +328,12 @@ const recoverDeletedPart = (part_number) => {
 module.exports = {
     getPartById,
     getPartByNumber,
-    getPartByAbbreviation,
-    getPartByPrefix,
-    getPartByDescription,
-    getPartByNotes,
-    getPartByPriority,
+    getPartByDate,
+    getAllNonPriorityParts,
+    getAllPartsByDate,
+    getAllPriorityParts,
     getAllParts,
-    createPart,
+    createNewPart,
     updatePartNumber,
     updatePartDescription,
     updatePartNotes,
