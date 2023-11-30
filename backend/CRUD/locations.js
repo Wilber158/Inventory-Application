@@ -1,4 +1,4 @@
-const database = require('./database.js');
+const database = require('../database.js');
 
 
 
@@ -13,7 +13,7 @@ const createLocation = (locations_notes, zone_name, warehouse_name, single_part_
                 console.error('Error creating location', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });

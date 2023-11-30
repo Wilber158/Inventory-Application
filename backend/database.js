@@ -3,7 +3,7 @@ const path = require('path');
 
 // Path to where your database file will be located. 
 // You can place it in the same directory or a dedicated data directory.
-const dbPath = path.join(__dirname, 'database/inventory.db');
+const dbPath = path.join(__dirname, 'inventory.db');
 
 // Open a database connection. If the file does not exist, it will be created.
 const db = new sqlite3.Database(dbPath, (err) => {
@@ -31,7 +31,7 @@ function setupDatabase() {
             part_notes TEXT,
             part_abbreviation TEXT,
             part_prefix TEXT,
-            quantity_sold INTEGER
+            quantity_sold INTEGER DEFAULT 0
         )
     `;
     
@@ -81,9 +81,11 @@ function setupDatabase() {
         CREATE TABLE IF NOT EXISTS Locations (
             location_id INTEGER PRIMARY KEY AUTOINCREMENT,
             location_notes TEXT UNIQUE, 
-            zone_name TEXT FOREIGN KEY REFERENCES Zones(zone_name),
-            warehouse_name TEXT FOREIGN KEY REFERENCES Warehouse(warehouse_name),
-            single_part_only BOOLEAN NOT NULL
+            zone_name TEXT,
+            warehouse_name TEXT,
+            single_part_only BOOLEAN NOT NULL DEFAULT FALSE,
+            FOREIGN KEY (zone_name) REFERENCES Zones(zone_name),
+            FOREIGN KEY (warehouse_name) REFERENCES Warehouse(warehouse_name)
         )
     `;
 
@@ -132,17 +134,20 @@ function setupDatabase() {
     const createInventoryEntryTable = `
         CREATE TABLE IF NOT EXISTS InventoryEntries (
             inventory_entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            part_number INTEGER FOREIGN KEY REFERENCES Parts(part_number),
-            location_id INTEGER FOREIGN KEY REFERENCES Locations(location_id),
+            part_number INTEGER,
+            location_id INTEGER,
             quantity INTEGER NOT NULL,
             data_last_updated DATE NOT NULL,
-            vendor_id INTEGER FOREIGN KEY REFERENCES Vendors(vendor_id),
+            vendor_id INTEGER,
             manufacturer TEXT,
             condition TEXT,
             unit_cost REAL,
             entry_notes TEXT,
-            sell_price REAL
-        )
+            sell_price REAL,
+            FOREIGN KEY (part_number) REFERENCES Parts(part_number),
+            FOREIGN KEY (location_id) REFERENCES Locations(location_id),
+            FOREIGN KEY (vendor_id) REFERENCES Vendors(vendor_id)
+        );
     `;
 
     db.run(createInventoryEntryTable, (err) => {
@@ -159,11 +164,13 @@ function setupDatabase() {
     const createSellPointTable = `
         CREATE TABLE IF NOT EXISTS SellPoints (
             sell_point_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            customer_id INTEGER FOREIGN KEY REFERENCES Customers(customer_id),
-            part_id INTEGER FOREIGN KEY REFERENCES Parts(part_number),
+            customer_id INTEGER,
+            part_id INTEGER,
             unit_price REAL,
             last_updated DATE,
-            sell_point_notes TEXT
+            sell_point_notes TEXT,
+            FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
+            FOREIGN KEY (part_id) REFERENCES Parts(part_number)
         )
     `;
 
@@ -179,11 +186,13 @@ function setupDatabase() {
     const createAdditionsTable = `
         CREATE TABLE IF NOT EXISTS Additions (
             addition_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            part_name INTEGER FOREIGN KEY REFERENCES Parts(part_number),
+            part_id INTEGER,
             addition_quantity INTEGER,
             addition_date DATE,
-            vendor_id INTEGER FOREIGN KEY REFERENCES Vendors(vendor_id),
-            addition_notes TEXT
+            vendor_id INTEGER,
+            addition_notes TEXT,
+            FOREIGN KEY (part_id) REFERENCES Parts(part_id),
+            FOREIGN KEY (vendor_id) REFERENCES Vendors(vendor_id)
         )
     `;
 
@@ -200,13 +209,9 @@ function setupDatabase() {
     const createDeletedPartsTable = `
         CREATE TABLE IF NOT EXISTS DeletedParts (
             part_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            part_number TEXT UNIQUE NOT NULL,
             description TEXT,
             creation_date TEXT,
             priority_flag BOOLEAN,
-            part_notes TEXT,
-            part_abbreviation TEXT,
-            part_prefix TEXT,
             deleted_date DATE,
             deleted_reason INTEGER
         )
@@ -224,18 +229,21 @@ function setupDatabase() {
     const createDeletedInventoryEntriesTable = `
         CREATE TABLE IF NOT EXISTS DeletedInventoryEntries (
             inventory_entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            part_number INTEGER FOREIGN KEY REFERENCES Parts(part_number),
-            location_id INTEGER FOREIGN KEY REFERENCES Locations(location_id),
+            part_id INTEGER,
+            location_id INTEGER,
             quantity INTEGER NOT NULL,
             date_quantity_added DATE NOT NULL,
-            vendor_id INTEGER FOREIGN KEY REFERENCES Vendors(vendor_id),
+            vendor_id INTEGER,
             manufacturer TEXT,
             condition TEXT,
             unit_cost REAL,
             inventory_entry_notes TEXT,
             sell_price REAL,
             deleted_date DATE,
-            deleted_reason INTEGER
+            deleted_reason INTEGER,
+            FOREIGN KEY (part_id) REFERENCES Parts(part_id),
+            FOREIGN KEY (location_id) REFERENCES Locations(location_id),
+            FOREIGN KEY (vendor_id) REFERENCES Vendors(vendor_id)
         )
         `;
     
@@ -256,6 +264,4 @@ function setupDatabase() {
 
 
 }
-
-// You might want to export the database connection to use it in other modules
 module.exports = db;

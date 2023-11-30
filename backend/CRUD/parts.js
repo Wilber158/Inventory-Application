@@ -1,4 +1,7 @@
-const database = require('database.js');
+const database = require('../database.js');
+
+
+
 const getAllParts = () => {
     const sql = `
         SELECT * FROM Parts
@@ -11,6 +14,24 @@ const getAllParts = () => {
                 reject(new Error(`Error retrieving parts. Please try again later.`));
             } else {
                 resolve(rows);
+            }
+        });
+    });
+}
+
+const getPart_id = (part_number) => {
+    const sql = `
+        SELECT part_id FROM Parts
+        WHERE part_number = ?
+    `;
+    
+    return new Promise((resolve, reject) => {
+        database.get(sql, [part_number], (err, row) => {
+            if (err) {
+                console.error(`Error retrieving part_id for part_number: ${part_number}`, err);
+                reject(new Error(`Error retrieving part_id. Please try again later.`));
+            } else {
+                resolve(row.part_id);
             }
         });
     });
@@ -51,6 +72,25 @@ const getPartByNumber = (part_number) => {
         });
     });
 };
+
+const getPartByPrefix = (part_prefix, part_number) => {
+    const sql = `
+        SELECT * FROM Parts
+        WHERE part_prefix = ? AND part_number = ?
+    `;
+    
+    return new Promise((resolve, reject) => {
+        database.get(sql, [part_prefix, part_number], (err, row) => {
+            if (err) {
+                console.error(`Error retrieving part details for part_number: ${part_number}`, err);
+                reject(new Error(`Error retrieving part details. Please try again later.`));
+            } else {
+                resolve(row);
+            }
+        });
+    });
+}
+
 
 const getAllPriorityParts = () => {
     const sql = `
@@ -136,7 +176,7 @@ const createNewPart = (part_number, description, creation_date, priority_flag, p
                 console.error(`Error creating new part with part_number: ${part_number}`, err);
                 reject(new Error(`Error creating new part. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID); //Resolves the promise with the part_id of the newly created part (returns part_id)
             }
         });
     });
@@ -341,5 +381,6 @@ module.exports = {
     updatePartPrefix,
     updatePartPriority,
     softDeletePart,
-    recoverDeletedPart
+    recoverDeletedPart,
+    getPartByPrefix
 }

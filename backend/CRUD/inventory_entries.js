@@ -1,5 +1,4 @@
-const database = require('database.js');
-
+const database = require('../database.js');
 
 //CRUD Operations for the Inventory Entries Table
 
@@ -16,7 +15,7 @@ const createInventoryEntry = (part_number, location_id, quantity, date_last_upda
                 reject(new Error(`Error creating Inventory Enrty. Please try again later`));
 
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -85,6 +84,31 @@ const getInventoryEntry = (part_number, location_id, quantity, date_last_updated
         });
     });
 }
+
+const updateInventoryEntry = (inventory_entry_id, updateFields) => {
+    const fields = [];
+    const values = [];
+
+    // Construct SQL query dynamically based on provided fields
+    Object.entries(updateFields).forEach(([key, value]) => {
+        fields.push(`${key} = ?`);
+        values.push(value);
+    });
+
+    const sql = `UPDATE InventoryEntries SET ${fields.join(', ')} WHERE inventory_entry_id = ?`;
+    values.push(inventory_entry_id);
+
+    return new Promise((resolve, reject) => {
+        database.run(sql, values, (err) => {
+            if (err) {
+                reject(new Error(`Error updating Inventory Entry. Please try again later.`));
+            } else {
+                resolve(null);
+            }
+        });
+    });
+}
+
 
 const updateInventoryEntryQuantity = (inventory_entry_id, quantity) => {
     date_last_updated = new Date();

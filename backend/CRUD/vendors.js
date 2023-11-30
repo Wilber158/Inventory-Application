@@ -1,4 +1,4 @@
-const database = require('./database.js');
+const database = require('../database.js');
 
 
 //CRUD functions for vendors
@@ -12,7 +12,7 @@ const createVendor = (vendor_name, vendor_notes) => {
                 console.error('Error creating vendor', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
