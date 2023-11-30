@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="test.css">
-    <script src="test.js" defer></script>
+    <link rel="stylesheet" href="inventory.css">
+    <script src="inventory.js" defer></script>
     <title>Inventory Lookup</title>
 </head>
 <body>
@@ -30,8 +30,8 @@
             Inventory
         </div>
         <div class="tableOptions"> 
-            <p onclick="allTable()">All</p>
-            <p onclick="conflictsTable()">Conflicts</p>
+            <a href="./inventory.html">All</a>
+            <a href="./inventoryConflict.html">Conflicts</a>
         </div>
         <table class="dataTable" id="dataTable">
             <thead>
@@ -42,19 +42,6 @@
                     <th>Manufacturer</th>
                     <th>Seller</th>
                     <th>Cost</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Table rows will be dynamically populated here -->
-            </tbody>
-            
-        </table>
-        <table class="conflictsTable hidden" id="conflictsTable">
-            <thead>
-                <tr>
-                    <th>Part</th>
-                    <th>Location</th>
                     <th>Action</th>
                 </tr>
             </thead>

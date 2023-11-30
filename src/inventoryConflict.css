@@ -98,18 +98,13 @@ ul {
     display: flex;
     gap: 10px;
 }
+
+.tableOptions a{
+    color: black;
+}
+
 p{
     color: blue;
-}
-
-
-
-.dataTable.hidden {
-    display: none;
-}
-
-.conflictsTable.hidden {
-    display: none;
 }
 
 table {
