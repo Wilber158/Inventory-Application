@@ -4,14 +4,14 @@ const database = require('../database.js');
 
 //Create a new Inventory Entry
 
-const createInventoryEntry = (part_number, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price) => {
-    const sql = `INSERT INTO InventoryEntries (part_number, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price)
+const createInventoryEntry = (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price) => {
+    const sql = `INSERT INTO InventoryEntries (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     
     return new Promise((resolve, reject) => {
-        database.run(sql, [part_number, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price], (err) => {
+        database.run(sql, [part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price], (err) => {
             if (err) {
-                console.error(`Error creating Inventory Entry for part: ${part_number}`, err);
+                console.error(`Error creating Inventory Entry for part: ${part_id}`, err);
                 reject(new Error(`Error creating Inventory Enrty. Please try again later`));
 
             } else {
@@ -21,12 +21,12 @@ const createInventoryEntry = (part_number, location_id, quantity, date_last_upda
     });
 }
 
-const getInventoryEntry = (part_number, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_note, sell_price) => {
+const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_note, sell_price) => {
     const sql = `SELECT * FROM InventoryEntries WHERE 1=1 j`;
     let sqlParams = [];
-    if (part_number != undefined) {
-        sql += `AND part_number = ?`;
-        sqlParams.push(part_number);
+    if (part_id != undefined) {
+        sql += `AND part_id = ?`;
+        sqlParams.push(part_id);
     }
 
     if (location_id != undefined) {
@@ -230,7 +230,7 @@ const softDeleteInventoryEntry = (inventory_entry_id, delete_reason) => {
 
             //Insert the deleted row into the DeletedInventoryEntries table
             const sqlInsert = `INSERT INTO DeletedInventoryEntries 
-                               (inventory_entry_id, part_number, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, deleted date, delete_reason)
+                               (inventory_entry_id, part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, deleted date, delete_reason)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             database.run(sqlInsert, [...Object.values(rows), new Date().toISOString, delete_reason], (err) => {
                 if(err){
@@ -262,7 +262,7 @@ const recoverDeletedPart = (inventory_entry_id) => {
 
             //Insert the deleted row into the InventoryEntries table
             const sqlInsert = `INSERT INTO InventoryEntries 
-                               (inventory_entry_id, part_number, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price)
+                               (inventory_entry_id, part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             database.run(sqlInsert, [...Object.values(rows)], (err) => {
                 if(err){
