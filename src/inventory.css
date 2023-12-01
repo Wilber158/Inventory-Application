@@ -1,0 +1,157 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Header Styles */
+header {
+    width: 100%;
+    height: 90px;
+    background: #4796BD;
+    position: fixed;
+    top: 0;
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+#logo {
+    width: 115.58px;
+    height: 60.16px;
+    position: absolute;
+    left: 50px;
+    top: 15px;
+    background: #F4FAF8;
+    border-radius: 3px;
+}
+
+/* Sidebar styles */
+aside {
+    left: 0;
+    width: 13%;
+    height: 100%;
+    background: white;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed; /* Make the sidebar fixed */
+    top: 90px; /* Adjust the top position to match the height of the fixed header */
+    z-index: 999; /* Ensure it's below the header */
+}
+
+aside div {
+    padding: 10px;
+    text-align: center;
+    color: #122E40;
+    font-size: 24px;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.sidebar li {
+    margin-bottom: 5px;
+    list-style-type: none;
+    padding: 15px;
+    display: flex;
+    padding-left: 0px;
+}
+
+.sidebar li a {
+    display: flex;
+    align-items: center;
+    color: #173244;
+    text-decoration: none;
+    font-family: "Lato", sans-serif;
+}
+
+.sidebar li a img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+ul {
+    padding-inline-start: 0px;
+}
+
+/* main table styles */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    background-color: rgba(248, 238, 224, 0.406);
+    border-radius: 15px;
+    width: 40%;
+}
+#tableTitle{
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.invSelect{
+    width: 15%;
+}
+
+.tableOptions{
+    display: flex;
+    gap: 10px;
+}
+
+.tableOptions a{
+    color: black;
+}
+
+
+p{
+    color: blue;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.edit-btn, .delete-btn {
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+/* js variables */
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 90px;
+}
+
+/*456456464564645646456*/
+
+.inventoryOptions{
+    display: flex;
+}
+
+#submitButton {
+    background-color: rgb(96, 141, 253);
+    padding: 7px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 90px;
+
+}

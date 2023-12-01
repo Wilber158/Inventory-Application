@@ -19,23 +19,6 @@ const getAllParts = () => {
     });
 }
 
-const getPart_id = (part_number) => {
-    const sql = `
-        SELECT part_id FROM Parts
-        WHERE part_number = ?
-    `;
-    
-    return new Promise((resolve, reject) => {
-        database.get(sql, [part_number], (err, row) => {
-            if (err) {
-                console.error(`Error retrieving part_id for part_number: ${part_number}`, err);
-                reject(new Error(`Error retrieving part_id. Please try again later.`));
-            } else {
-                resolve(row.part_id);
-            }
-        });
-    });
-}
 
 const getPartById = (partId) => {
     const sql = `
@@ -73,7 +56,7 @@ const getPartByNumber = (part_number) => {
     });
 };
 
-const getPartByPrefix = (part_prefix, part_number) => {
+const getPartid = (part_prefix, part_number) => {
     const sql = `
         SELECT * FROM Parts
         WHERE part_prefix = ? AND part_number = ?
@@ -382,5 +365,5 @@ module.exports = {
     updatePartPriority,
     softDeletePart,
     recoverDeletedPart,
-    getPartByPrefix
+    getPartid
 }
