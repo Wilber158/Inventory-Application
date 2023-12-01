@@ -134,17 +134,17 @@ function setupDatabase() {
     const createInventoryEntryTable = `
         CREATE TABLE IF NOT EXISTS InventoryEntries (
             inventory_entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            part_number INTEGER,
-            location_id INTEGER,
+            part_id INTEGER NOT NULL,
+            location_id INTEGER NOT NULL,
             quantity INTEGER NOT NULL,
             data_last_updated DATE NOT NULL,
             vendor_id INTEGER,
             manufacturer TEXT,
-            condition TEXT,
+            condition TEXT NOT NULL,
             unit_cost REAL,
             entry_notes TEXT,
             sell_price REAL,
-            FOREIGN KEY (part_number) REFERENCES Parts(part_number),
+            FOREIGN KEY (part_id) REFERENCES Parts(part_id),
             FOREIGN KEY (location_id) REFERENCES Locations(location_id),
             FOREIGN KEY (vendor_id) REFERENCES Vendors(vendor_id)
         );
@@ -170,7 +170,7 @@ function setupDatabase() {
             last_updated DATE,
             sell_point_notes TEXT,
             FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
-            FOREIGN KEY (part_id) REFERENCES Parts(part_number)
+            FOREIGN KEY (part_id) REFERENCES Parts(part_id)
         )
     `;
 
