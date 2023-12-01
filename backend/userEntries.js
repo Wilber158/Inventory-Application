@@ -24,25 +24,31 @@ async function createUserInventoryEntry(part_prefix, part_number, quantity, ware
     }
 }
 
+//part_prefix, part_number and warehouse_name, zone_name MUST be sent in pairs if any of them are to be updated 
 async function updateUserInventoryEntry(inventory_entry_id, part_prefix, part_number, quantity, warehouse_name, zone_name, vendor_name, manufacturer, condition, unit_cost, entry_notes, sell_price){
+    let updateFields = {};
+    let date_last_updated = new Date().toISOString();
     try{
-        let part_id = await getOrCreatePart(part_prefix, part_number);
-        let location_id = await getOrCreateLocation(zone_name, warehouse_name);
-        let vendor_id = await getOrCreateVendor(vendor_name);
-        
-        let date_last_updated = new Date().toISOString();
-        let updateFields = {
-            part_id: part_id,
-            location_id: location_id,
-            quantity: quantity,
-            date_last_updated: date_last_updated,
-            vendor_id: vendor_id,
-            manufacturer: manufacturer,
-            condition: condition,
-            unit_cost: unit_cost,
-            entry_notes: entry_notes,
-            sell_price: sell_price
+        if(!part_prefix && !part_number){
+            let part_id = await getOrCreatePart(part_prefix, part_number);
+            updateFields.part_id = part_id;
         }
+        if(!warehouse_name && !zone_name){
+            let location_id = await getOrCreateLocation(zone_name, warehouse_name);
+            updateFields.location_id = location_id;
+        }
+        if(!vendor_name){
+            let vendor_id = await getOrCreateVendor(vendor_name);
+            updateFields.vendor_id = vendor_id;
+        }
+        if (quantity != null) updateFields.quantity = quantity;
+        updateFields.date_last_updated = date_last_updated; //always update this field
+        if (vendor_id != null) updateFields.vendor_id = vendor_id;
+        if (manufacturer != null) updateFields.manufacturer = manufacturer;
+        if (condition != null) updateFields.condition = condition;
+        if (unit_cost != null) updateFields.unit_cost = unit_cost;
+        if (entry_notes != null) updateFields.entry_notes = entry_notes;
+        if (sell_price != null) updateFields.sell_price = sell_price;
 
         //update the inventory entry
         await entriesCRUD.updateInventoryEntry(inventory_entry_id, updateFields);

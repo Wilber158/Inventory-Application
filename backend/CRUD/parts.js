@@ -165,6 +165,32 @@ const createNewPart = (part_number, description, creation_date, priority_flag, p
     });
 }
 
+const updatePart = (part_id, updateFields) => {
+    const fields = [];
+    const values = [];
+
+    //construct SQL query dynamically based on fields passed
+    Object.entries(updateFields).forEach(([key, value]) => {
+        fields.push(`${key} = ?`);
+        values.push(value);
+    });
+
+    const sql = `UPDATE Parts SET ${fields.join(', ')} WHERE part_id = ?`;
+    values.push(part_id);
+
+    return new Promise((resolve, reject) => {
+        database.run(sql, values, function(err) {
+            if (err) {
+                console.error(`Error updating part with part_id: ${part_id}`, err);
+                reject(new Error(`Error updating part. Please try again later.`));
+            } else {
+                resolve(null);
+            }
+        });
+    });
+}
+
+
 
 const updatePartNumber = (partId, part_number) => {
     const sql = `

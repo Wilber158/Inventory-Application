@@ -293,6 +293,7 @@ module.exports = {
     updateInventoryEntryUnitCost,
     updateInventoryEntryNotes,
     updateInventoryEntrySellPrice,
+    updateInventoryEntry,
     softDeleteInventoryEntry,
     recoverDeletedPart
 }
