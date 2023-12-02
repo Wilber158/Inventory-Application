@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="inventoryConflict.css">
-    <script src="inventoryConflict.js" defer></script>
+    <link rel="stylesheet" href="history.css">
+    <script src="history.js" defer></script>
     <title>Inventory Lookup</title>
 </head>
 <body>
@@ -27,26 +27,26 @@
     
     <main class="container">
         <div id="tableTitle">
-            Inventory
+            Inventory LookUp
         </div>
-        <div class="tableOptions"> 
-            <a href="./inventory.html">All</a>
-            <a href="./inventoryConflict.html">Conflicts</a>
-        </div>
-        
-        <table class="conflictsTable" id="conflictsTable">
+         
+        <table id="dataTable">
             <thead>
                 <tr>
-                    <th>Part</th>
-                    <th>Location</th>
-                    <th>Action</th>
+                <th>Part</th>
+                <th>Quantity</th>
+                <th>Location</th>
+                <th>Manufacturer</th>
+                <th>Seller</th>
+                <th>Cost</th>
+                <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Table rows will be dynamically populated here -->
             </tbody>
-            
         </table>
+        
         <button id="submitButton">Submit</button>
     </main>
     
