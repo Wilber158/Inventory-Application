@@ -46,3 +46,8 @@ async function updateUserPart(part_id, part_number, description, priority_flag, 
 }
 
 
+
+module.exports = {
+    createUserPart,
+    updateUserPart
+}
