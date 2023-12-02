@@ -1,7 +1,7 @@
 /* Reset some default styles */
 body, h1, h2, h3, p, ul, li {
     margin: 0;
-    padding: 0;
+    padding-bottom: 20px;
 }
 
 body {
@@ -113,7 +113,7 @@ a {
 
 /* table settings */
 .container {
-    max-width: 800px;
+    max-width: 80%;
     margin: 20px auto;
 }
 
@@ -160,4 +160,37 @@ input {
     top: 15px;
     background: #F4FAF8;
     border-radius: 3px;
+}
+
+.search_inputs {
+    display: flex;
+    justify-content: space-between; /* Spaces out the elements evenly */
+}
+
+.search_inputs .input_pair {
+    flex-basis: 48%; /* Adjust this value to control the width */
+    margin-bottom: 20px; /* Space between rows */
+}
+
+.search_inputs label, .search_inputs input {
+    display: block;
+    width: 60%;
+    margin-bottom: 5px; /* Space between label and input */
+    box-sizing: border-box;
+}
+
+.search_inputs #quantity_box{
+    width: 60%;
+    display: block;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 0 2px #ccc;
+}
+
+input {
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
 }

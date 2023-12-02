@@ -29,6 +29,13 @@ submitButton.addEventListener('click', function () {
     renderTable(filteredData);
 });
 
+document.addEventListener('keydown', function(e) {
+    // Check if 'Ctrl' and 'F' were pressed together
+    if (e.ctrlKey && e.key === 'F') {
+        document.getElementById('partNumber').focus(); // Focus on your input box
+    }
+});
+
 // Function to render the table with given data
 function renderTable(data) {
     // Clear existing table rows

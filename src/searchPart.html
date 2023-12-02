@@ -34,29 +34,44 @@
     <section id="content">
         <div class="container">
             <h2>Inventory Lookup</h2>
-            <!-- Input fields for prefix, part number, type, and total quantity -->
-            <label for="prefix">Prefix:</label>
-            <input type="text" id="prefix" name="prefix">
+            <form id="inventoryForm">
+                <div class="search_inputs">
+                    <div class="input_pair">
+                        <label for="prefix">Prefix:</label>
+                        <input type="text" id="prefix" name="prefix" required>
+                    </div>
 
-            <label for="partNumber">Part Number:</label>
-            <input type="text" id="partNumber" name="partNumber">
+                    <div class="input_pair">
+                        <label for="partNumber">Part Number:</label>
+                        <input type="text" id="partNumber" name="partNumber" required>
+                    </div>
 
-            <label for="type">Type:</label>
-            <input type="text" id="type" name="type">
+                    <div class="input_pair">
+                        <label for="type">Type:</label>
+                        <input type="text" id="type" name="type" required>
+                    </div>
 
-            <label for="totalQuantity">Total Quantity:</label>
-            <input type="text" id="totalQuantity" name="totalQuantity">
+                    <div class="input_pair">
+                        <label for="totalQuantity">Total Quantity:</label>
+                        <div id="quantity_box"></div>
+                    </div>
 
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+            <!-- Table for displaying search results -->
             <table id="dataTable">
                 <thead>
                     <tr>
-                        <th>Part</th>
+                        <th>Part Number</th>
                         <th>Quantity</th>
+                        <th>Type</th>
                         <th>Location</th>
+                        <th>Condition</th>
                         <th>Manufacturer</th>
-                        <th>Seller</th>
-                        <th>Cost</th>
-                        <th>Action</th>
+                        <th>Vendor</th>
+                        <th>Unit Cost</th>
+                        <th>Entry Notes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,7 +79,6 @@
                 </tbody>
             </table>
         </div>
-        <button id="submitButton">Submit</button>
     </section>
 
 </body>
