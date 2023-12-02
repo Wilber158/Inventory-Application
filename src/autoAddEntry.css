@@ -1,0 +1,54 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+#content {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+
+h2 {
+    color: #333;
+}
+
+#drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 30px;
+    margin: 20px 0;
+}
+
+#drop-zone p {
+    margin: 10px 0;
+    color: #666;
+}
+
+#addButton {
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 20px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+#addButton:hover {
+    background-color: #0056b3;
+}
+
+#fileSelectBtn {
+    background-color: #ccc;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#fileSelectBtn:hover {
+    background-color: #bbb;
+}
