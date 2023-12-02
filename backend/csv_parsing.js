@@ -23,3 +23,8 @@ function parseCSV(filePath) {
 }
 
 
+module.exports = {
+    parseCSV
+};
+
+

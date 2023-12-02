@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const db = require('../backend/database.js');
+const csvParsing = require('../backend/csv_parsing.js');
 
 
 const createWindow = () => {
