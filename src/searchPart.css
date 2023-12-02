@@ -105,15 +105,6 @@ input {
 
 }
 
-#logo{
-    width: 115.58px;
-    height: 60.16px;
-    position: absolute;
-    left: 50px;
-    top: 15px;
-    background: #F4FAF8;
-    border-radius: 3px;
-}
 
 .search_inputs {
     display: flex;

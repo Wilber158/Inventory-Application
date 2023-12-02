@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
     <script src="index.js" defer></script>
-    <title>Your Title</title>
+    <title>Home</title>
 </head>
 
 <body>
@@ -26,47 +26,55 @@
         <h1>Add Inventory Entry</h1>
         <div id="main-content">
             <!-- Your main content goes here -->
-
-            <table>
-                <tr>
-                  <td class="secName">
-                    Part Number:
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Prefix" class="partNum2">
-                    <input type="text" placeholder="Part Number" class="partNum2">
-                    <input type="text" placeholder="Type" class="partNum2">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="secName">
-                    Location/Quantity:
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Zone" class="location2">
-                    <input type="text" placeholder="Location" class="location2">
-                    <input type="text" placeholder="Quantity" class="location2">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="secName">
-                    Vendor
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Seller" class="vendor2">
-                  </td>
-                </tr>
-                <tr>
-                  <td class="secName">
-                    Manufacturer
-                  </td>
-                  <td>
-                    <input type="text" placeholder="Manu" class="manu2">
-                  </td>
-                </tr>
-              </table>
-              <button id="submitButton">Submit</button>
-
+            <form>
+              <table>
+                  <tr>
+                    <td class="secName">
+                      Part Number:
+                    </td>
+                    <td>
+                      <label for="prefix"></label>
+                      <input type="text" placeholder="Prefix" class="partNum2">
+                      <label for="partNumber"></label>
+                      <input type="text" placeholder="Part Number" class="partNum2">
+                      <label for="type"></label>
+                      <input type="text" placeholder="Type" class="partNum2">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="secName">
+                      Location/Quantity:
+                    </td>
+                    <td>
+                      <label for="zone"></label>
+                      <input type="text" placeholder="Zone" class="location2">
+                      <label for="location"></label>
+                      <input type="text" placeholder="Location" class="location2">
+                      <label for="quantity"></label>
+                      <input type="text" placeholder="Quantity" class="location2">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="secName">
+                      Vendor
+                    </td>
+                    <td>
+                      <label for="seller"></label>
+                      <input type="text" placeholder="Seller" class="vendor2">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="secName">
+                      Manufacturer
+                    </td>
+                    <td>
+                      <label for="manufacturer"></label>
+                      <input type="text" placeholder="Manu" class="manu2">
+                    </td>
+                  </tr>
+                </table>
+                <button id="submitButton">Submit</button>
+            </form>
 
         </div>
     </section>
