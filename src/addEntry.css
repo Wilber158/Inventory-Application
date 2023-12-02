@@ -32,6 +32,7 @@ h1 {
     font-weight: 700;
     text-align: center;
     margin-bottom: 20px;
+    margin-top: 5%;
 }
 
 
@@ -42,7 +43,7 @@ h1 {
 }
 
 aside {
-    width: 212px;
+    width: 11%;
     height: 100%;
     background: white;
     position: absolute;
@@ -67,7 +68,8 @@ aside div {
     padding: 20px;
     margin: 30px auto;
     width: 80%;
-    max-width: 600px;
+    max-width: 800px;
+    height: auto;
 }
 section{
     display: block;
@@ -101,7 +103,7 @@ section{
 
 
 .partNum2, .location2, .vendor2, .manu2 {
-    width: calc(25% - 10px);
+    width: calc(20% - 10px);
     margin-right: 10px;
     padding: 10px;
     border: 1px solid #ccc;
@@ -121,6 +123,7 @@ tr{
     padding: 7px;
     border-radius: 10px; /* Adjust the border-radius for roundness */
     cursor: pointer;
+    
 }
 
 
@@ -141,4 +144,14 @@ tr{
     button {
       width: 100%;
     }
+}
+
+.notes-input {
+  width: 50%; /* Or any other width as per your design */
+  height: 10px; /* Or any other height */
+  padding: 10px;
+  margin-top: 5px; /* Spacing above the textarea */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit; /* To ensure the font is consistent with the rest of the form */
 }
