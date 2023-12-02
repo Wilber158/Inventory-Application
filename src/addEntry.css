@@ -84,7 +84,8 @@ aside div {
     border-radius: 10px;
 }
 .partNum2, .location2, .vendor2, .manu2 {
-    margin: 10px; /* Adjust the margin to increase space between input elements */
+    justify-content: baseline;
+    margin: 1%; /* Adjust the margin to increase space between input elements */
 }
 #submitButton{
     background-color: rgb(96, 141, 253);
