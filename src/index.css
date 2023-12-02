@@ -26,25 +26,6 @@ header {
     border-radius: 3px;
 }
 
-nav {
-    position: absolute;
-    top: 41px;
-    right: 0;
-    display: flex;
-    align-items: center;
-}
-
-nav div {
-    width: 24px;
-    height: 24px;
-    margin-right: 15px;
-    background: #8FB7D6;
-}
-
-img {
-    width: 22.90px;
-    height: 22.92px;
-}
 
 /* Main Content Styles */
 #content {
@@ -110,31 +91,4 @@ aside div {
     padding: 7px;
     border-radius: 10px; /* Adjust the border-radius for roundness */
     cursor: pointer;
-}
-
-.sidebar li{
-    margin-bottom: 5px; /* Adjust the margin value according to your preference */
-    list-style-type: none;
-    padding: 15px;
-    display: flex;
-    padding-left: 0px;  
-}
-
-.sidebar li a{
-    display: flex;
-    align-items: center;
-}
-
-a {
-    color: #173244; /* Set your desired color */
-    text-decoration: none; /* Remove underline */
-    font-family: "Lato", sans-serif;
-}
-
-/* Add this to your existing CSS file */
-
-.sidebar li a img {
-    width: 40px; /* Adjust the width as needed */
-    height: 40px; /* Adjust the height as needed */
-    margin-right: 10px; /* Add some space between the image and text */
 }

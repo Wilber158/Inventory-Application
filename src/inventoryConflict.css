@@ -1,23 +1,20 @@
-body {
+/* Reset some default styles */
+body, h1, h2, h3, p, ul, li {
     margin: 0;
     padding: 0;
-    font-family: 'Lato', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
+
+body {
+    font-family: 'Lato', sans-serif;
+}   
 
 /* Header Styles */
 header {
     width: 100%;
     height: 90px;
     background: #4796BD;
-    position: fixed;
-    top: 0;
-    z-index: 1000; /* Ensure it's above other elements */
+    position: relative;
 }
-
 #logo {
     width: 115.58px;
     height: 60.16px;
@@ -30,14 +27,12 @@ header {
 
 /* Sidebar styles */
 aside {
-    left: 0;
-    width: 13%;
+    width: 212px;
     height: 100%;
     background: white;
+    position: absolute;
+    left: 0;
     box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
-    position: fixed; /* Make the sidebar fixed */
-    top: 90px; /* Adjust the top position to match the height of the fixed header */
-    z-index: 999; /* Ensure it's below the header */
 }
 
 aside div {
@@ -49,41 +44,18 @@ aside div {
     word-wrap: break-word;
 }
 
-.sidebar li {
-    margin-bottom: 5px;
-    list-style-type: none;
-    padding: 15px;
-    display: flex;
-    padding-left: 0px;
-}
-
-.sidebar li a {
-    display: flex;
-    align-items: center;
-    color: #173244;
-    text-decoration: none;
-    font-family: "Lato", sans-serif;
-}
-
-.sidebar li a img {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-}
-
-ul {
-    padding-inline-start: 0px;
-}
 
 /* main table styles */
 
+
 .container {
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
+    
+    width: 50%;
+    padding: 20px;
     background-color: rgba(248, 238, 224, 0.406);
-    border-radius: 15px;
-    width: 40%;
+    margin-top: 5%;
+    margin-left: 30%;
+    border-radius: 10px;
 }
 #tableTitle{
     font-size: 32px;
