@@ -1,7 +1,5 @@
 const fs = require('fs');
 const csv = require('csv-parser');
-const database = require('database.js');
-const inventoryCRUD = require('CRUD/inventory_entries.js');
 
 
 //CSV parsing functions
