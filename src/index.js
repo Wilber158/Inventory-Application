@@ -1,3 +1,14 @@
+async function loadSidebar() {
+    try {
+        const response = await fetch('./sidebar.html');
+        const content = await response.text();
+        document.getElementById('sidebar-container').innerHTML = content;
+    } catch (error) {
+        console.error('Failed to load sidebar:', error);
+    }
+}
+
+window.onload = loadSidebar;
 // Function to load HTML content from a file
 function loadContent(url, containerId) {
     fetch(url)

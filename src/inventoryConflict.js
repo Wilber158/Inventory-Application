@@ -1,3 +1,15 @@
+async function loadSidebar() {
+    try {
+        const response = await fetch('./sidebar.html');
+        const content = await response.text();
+        document.getElementById('sidebar-container').innerHTML = content;
+    } catch (error) {
+        console.error('Failed to load sidebar:', error);
+    }
+}
+
+window.onload = loadSidebar;
+
 const staticData2 = [
     { Part: 1, Quantity: 'Item 1', Location: 'Description 1'},
     { Part: 2, Quantity: 'Item 2', Location: 'Description 2' },

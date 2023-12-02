@@ -2,37 +2,33 @@ body{
     margin: 0;
 }
 
-a {
-    color: #173244; /* Set your desired color */
-    text-decoration: none; /* Remove underline */
-    font-family: "Lato", sans-serif;
-}
-
 a:hover {
     text-decoration: underline; /* Add underline on hover if desired */
 }
 
-.sidebar{
-    height: 100%;
-    width: 220px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: white;
-    padding: 5px;
-    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar li{
-    margin-bottom: 5px; /* Adjust the margin value according to your preference */
+.sidebar li {
+    margin-bottom: 5px;
     list-style-type: none;
     padding: 15px;
     display: flex;
-    padding-left: 0px;  
+    padding-left: 0px;
 }
 
-.sidebar li a{
+.sidebar li a {
     display: flex;
     align-items: center;
 }
 
+a {
+    color: #173244;
+    text-decoration: none;
+    font-family: "Lato", sans-serif;
+}
+
+
+
+.sidebar li a img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
