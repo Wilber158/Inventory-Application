@@ -49,7 +49,7 @@ const getSpecificInventoryEntry = (formData) => {
     console.log("formData in getSpecificInventoryEntry: ", formData);
 
     if(formData.prefix != undefined){
-        sql += `AND part_prefix = ?`;
+        sql += ` AND part_prefix = ?`;
         sqlParams.push(formData.prefix);
     }
 
@@ -64,6 +64,7 @@ const getSpecificInventoryEntry = (formData) => {
     }
 
     if(formData.quantity != undefined){
+        console.log("Quantity is defined in getSpecificInventoryEntry")
         sql += `AND quantity = ?`;
         sqlParams.push(formData.quantity);
     }
@@ -100,7 +101,7 @@ const getSpecificInventoryEntry = (formData) => {
     console.log("sql in getSpecificInventoryEntry: ", sql);
     console.log("sqlParams in getSpecificInventoryEntry: ", sqlParams);
     return new Promise((resolve, reject) => {
-        database.get(sql, sqlParams, (err, rows) => {
+        database.all(sql, sqlParams, (err, rows) => {
             if(err){
                 console.log(err)
                 reject(new Error(`Error retrieving Inventory Entry. Please try again later.`));
@@ -178,7 +179,7 @@ const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, ve
     }
 
     return new Promise((resolve, reject) => {
-        database.get(sql, sqlParams, (err, rows) => {
+        database.all(sql, sqlParams, (err, rows) => {
             if (err) {
                 reject(new Error(`Error retrieving Inventory Entry. Please try again later.`));
             } else {

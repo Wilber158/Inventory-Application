@@ -45,7 +45,7 @@ const getPartByNumber = (part_number) => {
     `;
     
     return new Promise((resolve, reject) => {
-        database.get(sql, [part_number], (err, row) => {
+        database.all(sql, [part_number], (err, row) => {
             if (err) {
                 console.error(`Error retrieving part details for part_number: ${part_number}`, err);
                 reject(new Error(`Error retrieving part details. Please try again later.`));
