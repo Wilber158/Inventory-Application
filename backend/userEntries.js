@@ -4,6 +4,7 @@ const partsCRUD = require('./CRUD/parts.js');
 const entriesCRUD = require('./CRUD/inventory_entries.js');
 const locationsCRUD = require('./CRUD/locations.js');
 const warehouseCRUD = require('./CRUD/warehouse.js');
+const zoneCRUD = require('./CRUD/zone.js');
 const vendorsCRUD = require('./CRUD/vendors.js');
 const sellPointCRUD = require('./CRUD/sellPoint.js');
 const additionsCRUD = require('./CRUD/additions.js');
@@ -13,7 +14,7 @@ async function createUserInventoryEntry(part_prefix, part_number, quantity, ware
     try{
         console.log("Currently in createUserInventoryEntry")
         let part_id = await getOrCreatePart(part_prefix, part_number);
-        let location_id = await getOrCreateLocation(null, zone_name, warehouse_name);
+        let location_id = await getOrCreateLocation(null, zone_name, warehouse_name, null);
         let vendor_id = await getOrCreateVendor(vendor_name);
 
         let date_last_updated = new Date().toISOString();
@@ -127,13 +128,37 @@ const getOrCreatePart = async (part_prefix, part_number, description, priority_f
 }
 
 const getOrCreateLocation = async (location_notes, zone_name, warehouse_name, single_part_only) => {
-    console.log("Currently in getOrCreateLocation checking if location exists")
-    let location_id = await locationsCRUD.getLocation_id(zone_name, warehouse_name);
-    console.log("Location_id returned: ", location_id)
+    let location_id, zone_id, warehouse_id; //Declare variables due to let scope
+    try{
+        zone_id = await getOrcreateZone(zone_name);
+        console.log("Zone_id returned: ", zone_id)
+    }
+    catch(err){
+        console.log(err);
+        throw new Error("Error performing getOrcreateZone in getOrCreateLocation")
+    }
+
+    try{
+        warehouse_id = await getOrCreateWarehouse(warehouse_name);
+        console.log("Warehouse_id returned in getOrCreateLocation: ", warehouse_id)
+    }
+    catch(err){
+        console.log(err);
+        throw new Error("Error performing getOrCreateWarehouse in getOrCreateLocation")
+    }
+
+   try{
+    location_id = await locationsCRUD.getLocation_id(zone_id, warehouse_id);
+    console.log("Location_id returned by getLocation_id: ", location_id)
+   }catch(err){
+    console.log(err);
+    throw new Error("Error performing getLocation_id in getOrCreateLocation")
+   }
+
     if(!location_id){
         console.log("Location does not exist, creating new location")
-        location_id = await locationsCRUD.createLocation(location_notes, zone_name, warehouse_name, single_part_only);
-        console.log("Location_id returned: ", location_id)
+        location_id = await locationsCRUD.createLocation(location_notes, zone_id, warehouse_id, single_part_only);
+        console.log("Location_id returned by createLocation: ", location_id)
     }
     return location_id
 }
@@ -141,10 +166,31 @@ const getOrCreateLocation = async (location_notes, zone_name, warehouse_name, si
 const getOrCreateVendor = async (vendor_name, vendor_notes) => {
     let vendor_id = await vendorsCRUD.getVendor_id(vendor_name);
     if(!vendor_id){
+        console.log("Vendor does not exist, creating new vendor")
         vendor_id = await vendorsCRUD.createVendor(vendor_name, vendor_notes);
     }
     return vendor_id
 }
+
+const getOrcreateZone = async (zone_name) => {
+    let zone_id = await zoneCRUD.getZone_id(zone_name);
+    if(!zone_id){
+        console.log("Zone does not exist, creating new zone")
+        zone_id = await zoneCRUD.createZone(zone_name);
+    }
+    return zone_id
+}
+
+const getOrCreateWarehouse = async (warehouse_name) => {
+    let warehouse_id = await warehouseCRUD.getWarehouse_id(warehouse_name);
+    if(!warehouse_id){
+        console.log("Warehouse does not exist, creating new warehouse")
+        warehouse_id = await warehouseCRUD.createWarehouse(warehouse_name);
+    }
+    console.log("Warehouse_id returned by getOrCreateWarehouse: ", warehouse_id)
+    return warehouse_id
+}
+    
 
 
 module.exports = {

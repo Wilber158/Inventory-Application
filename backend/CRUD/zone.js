@@ -96,7 +96,7 @@ const updateZoneNotes = (zone_id, zone_notes) => {
     });
 }
 
-updateZoneName = (zone_id, zone_name) => {
+const updateZoneName = (zone_id, zone_name) => {
     return new Promise((resolve, reject) => {
         database.run(`UPDATE Zones SET zone_name = ? WHERE zone_id = ?`, [zone_name, zone_id], function (err) {
             if (err) {
@@ -129,5 +129,6 @@ module.exports = {
     getZone_id,
     getZone_name,
     updateZoneNotes,
-    deleteZone
+    deleteZone,
+    updateZoneName
 }

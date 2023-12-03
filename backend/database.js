@@ -1,6 +1,14 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
+
+
+/* Future improvements:
+    All tables should only reference IDs from other tables, not names. This will allow for easier renaming of parts, vendors, etc.
+*/
+
+
+
 // Path to where your database file will be located. 
 // You can place it in the same directory or a dedicated data directory.
 const dbPath = path.join(__dirname, 'inventory.db');
@@ -81,11 +89,11 @@ function setupDatabase() {
         CREATE TABLE IF NOT EXISTS Locations (
             location_id INTEGER PRIMARY KEY AUTOINCREMENT,
             location_notes TEXT, 
-            zone_name TEXT,
-            warehouse_name TEXT,
+            zone_id INTEGER,
+            warehouse_id INTEGER,
             single_part_only BOOLEAN DEFAULT FALSE,
-            FOREIGN KEY (zone_name) REFERENCES Zones(zone_name),
-            FOREIGN KEY (warehouse_name) REFERENCES Warehouse(warehouse_name)
+            FOREIGN KEY (zone_id) REFERENCES Zones(zone_id),
+            FOREIGN KEY (warehouse_id) REFERENCES Warehouse(warehouse_id)
         )
     `;
 

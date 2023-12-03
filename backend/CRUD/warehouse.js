@@ -11,7 +11,7 @@ const createWarehouse = (warehouse_name, warehouse_notes) => {
                 console.error('Error creating warehouse', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });

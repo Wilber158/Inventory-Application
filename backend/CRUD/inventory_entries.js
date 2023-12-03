@@ -42,6 +42,12 @@ const createInventoryEntry = (part_id, location_id, quantity, date_last_updated,
     });
 }
 
+
+const getSpecificInventoryEntry = (part_prefix) => {
+}
+
+
+
 const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_note, sell_price, part_type) => {
     const sql = `SELECT * FROM InventoryEntries WHERE 1=1 j`;
     let sqlParams = [];
