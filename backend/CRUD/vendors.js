@@ -25,6 +25,10 @@ const getVendor_id = (vendor_name) => {
                 console.error('Error getting vendor id', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.vendor_id);
             }
         });
@@ -38,6 +42,9 @@ const getVendor_name = (vendor_id) => {
                 console.error('Error getting vendor name', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                }
                 resolve(row.vendor_name);
             }
         });
@@ -51,6 +58,10 @@ const getVendor_notes = (vendor_name) => {
                 console.error('Error getting vendor notes', err.message);
                 reject(err);
             } else {
+               if(row == undefined){
+                   resolve(row);
+                   return;
+               }
                 resolve(row.vendor_notes);
             }
         });
@@ -64,6 +75,10 @@ const getAllVendors = () => {
                 console.error('Error getting all vendors', err.message);
                 reject(err);
             } else {
+                if(rows == undefined){
+                    resolve(rows);
+                    return;
+                }
                 resolve(rows);
             }
         });
@@ -77,7 +92,7 @@ const updateVendorName = (vendor_id, vendor_name_new) => {
                 console.error('Error updating vendor name', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -90,7 +105,7 @@ const updateVendorNotes = (vendor_id, vendor_notes) => {
                 console.error('Error updating vendor notes', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -103,7 +118,7 @@ const deleteVendor = (vendor_id) => {
                 console.error('Error deleting vendor', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });

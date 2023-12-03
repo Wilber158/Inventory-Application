@@ -38,6 +38,10 @@ const getZone = (zone_id) => {
                 console.error('Error getting zone', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row);
             }
         });
@@ -52,6 +56,10 @@ const getZone_id = (zone_name) => {
                 console.error('Error getting zone id', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.zone_id);
             }
         });
@@ -65,6 +73,10 @@ const getZone_name = (zone_id) => {
                 console.error('Error getting zone name', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.zone_name);
             }
         });
@@ -110,3 +122,12 @@ const deleteZone = (zone_id) => {
     });
 }
 
+module.exports = {
+    createZone,
+    getAllZones,
+    getZone,
+    getZone_id,
+    getZone_name,
+    updateZoneNotes,
+    deleteZone
+}

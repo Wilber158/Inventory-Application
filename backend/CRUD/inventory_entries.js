@@ -4,12 +4,33 @@ const database = require('../database.js');
 
 //Create a new Inventory Entry
 
-const createInventoryEntry = (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price) => {
-    const sql = `INSERT INTO InventoryEntries (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    
+const createInventoryEntry = (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type) => {
+    const sql = `INSERT INTO InventoryEntries (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    console.log("Part_id in createInventoryEntry: ", part_id);
+    console.log("Type of part_id in createInventoryEntry: ", typeof part_id);
+    console.log("Location_id in createInventoryEntry: ", location_id);
+    console.log("Type of location_id in createInventoryEntry: ", typeof location_id);
+    console.log("Quantity in createInventoryEntry: ", quantity);
+    console.log("Type of quantity in createInventoryEntry: ", typeof quantity);
+    console.log("Date_last_updated in createInventoryEntry: ", date_last_updated);
+    console.log("Type of date_last_updated in createInventoryEntry: ", typeof date_last_updated);
+    console.log("Vendor_id in createInventoryEntry: ", vendor_id);
+    console.log("Type of vendor_id in createInventoryEntry: ", typeof vendor_id);
+    console.log("Manufacturer in createInventoryEntry: ", manufacturer);
+    console.log("Type of manufacturer in createInventoryEntry: ", typeof manufacturer);
+    console.log("Condition in createInventoryEntry: ", condition);
+    console.log("Type of condition in createInventoryEntry: ", typeof condition);
+    console.log("Unit_cost in createInventoryEntry: ", unit_cost);
+    console.log("Type of unit_cost in createInventoryEntry: ", typeof unit_cost);
+    console.log("Entry_notes in createInventoryEntry: ", entry_notes);
+    console.log("Type of entry_notes in createInventoryEntry: ", typeof entry_notes);
+    console.log("Sell_price in createInventoryEntry: ", sell_price);
+    console.log("Type of sell_price in createInventoryEntry: ", typeof sell_price);
+    console.log("Part_type in createInventoryEntry: ", part_type);
+    console.log("Type of part_type in createInventoryEntry: ", typeof part_type);
     return new Promise((resolve, reject) => {
-        database.run(sql, [part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price], (err) => {
+        database.run(sql, [part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type], (err) => {
             if (err) {
                 console.error(`Error creating Inventory Entry for part: ${part_id}`, err);
                 reject(new Error(`Error creating Inventory Enrty. Please try again later`));
@@ -21,7 +42,7 @@ const createInventoryEntry = (part_id, location_id, quantity, date_last_updated,
     });
 }
 
-const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_note, sell_price) => {
+const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_note, sell_price, part_type) => {
     const sql = `SELECT * FROM InventoryEntries WHERE 1=1 j`;
     let sqlParams = [];
     if (part_id != undefined) {
@@ -73,12 +94,20 @@ const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, ve
         sql += `AND sell_price = ?`;
         sqlParams.push(sell_price);
     }
+    if (part_type != undefined) {
+        sql += `AND part_type = ?`;
+        sqlParams.push(part_type);
+    }
 
     return new Promise((resolve, reject) => {
         database.get(sql, sqlParams, (err, rows) => {
             if (err) {
                 reject(new Error(`Error retrieving Inventory Entry. Please try again later.`));
             } else {
+                if (rows == undefined) {
+                    resolve(rows);
+                    return;
+                }
                 resolve(rows);
             }
         });
@@ -103,7 +132,7 @@ const updateInventoryEntry = (inventory_entry_id, updateFields) => {
             if (err) {
                 reject(new Error(`Error updating Inventory Entry. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -248,6 +277,21 @@ const softDeleteInventoryEntry = (inventory_entry_id, delete_reason) => {
         });
     });
 }
+
+const updateInventoryEntryPartType = (inventory_entry_id, part_type) => {
+    const sql = `UPDATE InventoryEntries SET part_type = ? WHERE inventory_entry_id = ?`;
+    return new Promise((resolve, reject) => {
+        database.run(sql, [part_type, inventory_entry_id], (err) => {
+            if (err) {
+                reject(new Error(`Error updating Inventory Entry part type. Please try again later.`));
+            } else {
+                resolve(null);
+            }
+        });
+    }
+    );
+}
+
 
 
 const recoverDeletedPart = (inventory_entry_id) => {

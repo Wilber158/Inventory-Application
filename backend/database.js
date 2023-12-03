@@ -24,7 +24,7 @@ function setupDatabase() {
     const createPartsTable = `
         CREATE TABLE IF NOT EXISTS Parts (
             part_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            part_number TEXT UNIQUE NOT NULL,
+            part_number TEXT NOT NULL,
             description TEXT,
             creation_date TEXT,
             priority_flag BOOLEAN,
@@ -80,10 +80,10 @@ function setupDatabase() {
     const createLocationsTable = `
         CREATE TABLE IF NOT EXISTS Locations (
             location_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            location_notes TEXT UNIQUE, 
+            location_notes TEXT, 
             zone_name TEXT,
             warehouse_name TEXT,
-            single_part_only BOOLEAN NOT NULL DEFAULT FALSE,
+            single_part_only BOOLEAN DEFAULT FALSE,
             FOREIGN KEY (zone_name) REFERENCES Zones(zone_name),
             FOREIGN KEY (warehouse_name) REFERENCES Warehouse(warehouse_name)
         )
@@ -137,13 +137,14 @@ function setupDatabase() {
             part_id INTEGER NOT NULL,
             location_id INTEGER NOT NULL,
             quantity INTEGER NOT NULL,
-            data_last_updated DATE NOT NULL,
+            date_last_updated DATE NOT NULL,
             vendor_id INTEGER,
             manufacturer TEXT,
             condition TEXT NOT NULL,
             unit_cost REAL,
             entry_notes TEXT,
             sell_price REAL,
+            part_type TEXT,
             FOREIGN KEY (part_id) REFERENCES Parts(part_id),
             FOREIGN KEY (location_id) REFERENCES Locations(location_id),
             FOREIGN KEY (vendor_id) REFERENCES Vendors(vendor_id)
@@ -239,6 +240,7 @@ function setupDatabase() {
             unit_cost REAL,
             inventory_entry_notes TEXT,
             sell_price REAL,
+            part_type TEXT,
             deleted_date DATE,
             deleted_reason INTEGER,
             FOREIGN KEY (part_id) REFERENCES Parts(part_id),

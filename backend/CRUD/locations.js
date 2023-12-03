@@ -1,3 +1,4 @@
+const { LIMIT_SQL_LENGTH } = require('sqlite3');
 const database = require('../database.js');
 
 
@@ -6,10 +7,13 @@ const database = require('../database.js');
 
 //Create
 
-const createLocation = (locations_notes, zone_name, warehouse_name, single_part_only) => {
+const createLocation = (locations_notes, zone_name, warehouse_name, single_part_only=false) => {
+    const sql = `INSERT INTO Locations (location_notes, zone_name, warehouse_name, single_part_only) VALUES (?, ?, ?, ?)`;
     return new Promise((resolve, reject) => {
-        database.run(`INSERT INTO Locations (locations_notes, zone_name, warehouse_name, single_part_only) VALUES (?, ?, ?, ?)`, [locations_notes, zone_name, warehouse_name, single_part_only], function (err) {
+        database.run(sql, [locations_notes, zone_name, warehouse_name, single_part_only], function (err) {
             if (err) {
+                console.log("Location_notes: ", locations_notes);
+                console.log("Type of location_notes: ", typeof locations_notes);
                 console.error('Error creating location', err.message);
                 reject(err);
             } else {
@@ -26,7 +30,11 @@ const getLocation_id = (zone_name, warehouse_name) => {
                 console.error('Error getting location id', err.message);
                 reject(err);
             } else {
-                resolve(row.location_id);
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
+                resolve(row);
             }
         });
     });
@@ -39,6 +47,10 @@ const getLocation_notes = (location_id) => {
                 console.error('Error getting location notes', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.location_notes);
             }
         });
@@ -52,6 +64,10 @@ const getZone_name = (location_id) => {
                 console.error('Error getting zone name', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.zone_name);
             }
         });
@@ -65,6 +81,10 @@ const getWarehouse_name = (location_id) => {
                 console.error('Error getting warehouse name', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.warehouse_name);
             }
         });
@@ -78,6 +98,10 @@ const getSingle_part_only = (location_id) => {
                 console.error('Error getting single part only', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.single_part_only);
             }
         });
@@ -91,6 +115,9 @@ const getAllLocations = () => {
                 console.error('Error getting all locations', err.message);
                 reject(err);
             } else {
+                if(rows == undefined){
+                    resolve(rows);
+                }
                 resolve(rows);
             }
         });
@@ -104,7 +131,7 @@ const updateLocation_notes = (location_id, location_notes) => {
                 console.error('Error updating location notes', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -117,7 +144,7 @@ const updateLocation_zone_name = (location_id, zone_name) => {
                 console.error('Error updating zone name', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -130,7 +157,7 @@ const updateLocation_warehouse_name = (location_id, warehouse_name) => {
                 console.error('Error updating warehouse name', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -143,7 +170,7 @@ const updateLocation_single_part_only = (location_id, single_part_only) => {
                 console.error('Error updating single part only', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -158,7 +185,7 @@ const deleteLocation = (location_id) => {
                 console.error('Error deleting location', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -171,7 +198,7 @@ const deleteAllLocations = () => {
                 console.error('Error deleting all locations', err.message);
                 reject(err);
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });

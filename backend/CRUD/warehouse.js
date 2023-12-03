@@ -24,6 +24,10 @@ const getWarehouse_id = (warehouse_name) => {
                 console.error('Error getting warehouse id', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.warehouse_id);
             }
         });
@@ -37,6 +41,10 @@ const getWarehouse_name = (warehouse_id) => {
                 console.error('Error getting warehouse name', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
                 resolve(row.warehouse_name);
             }
         });
@@ -50,6 +58,10 @@ const getWarehouse_notes = (warehouse_id) => {
                 console.error('Error getting warehouse notes', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                     resolve(row);
+                     return;
+                }
                 resolve(row.warehouse_notes);
             }
         });
@@ -63,6 +75,9 @@ const getAllWarehouses = () => {
                 console.error('Error getting all warehouses', err.message);
                 reject(err);
             } else {
+                if(row == undefined){
+                    resolve(row);
+                }
                 resolve(rows);
             }
         });

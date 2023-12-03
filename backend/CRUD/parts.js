@@ -68,7 +68,13 @@ const getPartid = (part_prefix, part_number) => {
                 console.error(`Error retrieving part details for part_number: ${part_number}`, err);
                 reject(new Error(`Error retrieving part details. Please try again later.`));
             } else {
-                resolve(row);
+                console.log("Row returned in getPartid: ", row)
+                if(!row){
+                    resolve(row);
+                    return;
+                }
+                console.log("getPartid:", row.part_id)
+                resolve(row.part_id);
             }
         });
     });
@@ -87,6 +93,7 @@ const getAllPriorityParts = () => {
                 console.error(`Error retrieving priority parts`, err);
                 reject(new Error(`Error retrieving priority parts. Please try again later.`));
             } else {
+                console.log("getAllPriorityParts:", rows)
                 resolve(rows);
             }
         });
@@ -105,6 +112,7 @@ const getAllNonPriorityParts = () => {
                 console.error(`Error retrieving non-priority parts`, err);
                 reject(new Error(`Error retrieving non-priority parts. Please try again later.`));
             } else {
+                console.log("getAllNonPriorityParts:", rows)
                 resolve(rows);
             }
         });
@@ -123,6 +131,7 @@ const getAllPartsByDate = () => {
                 console.error(`Error retrieving parts by date`, err);
                 reject(new Error(`Error retrieving parts by date. Please try again later.`));
             } else {
+                console.log("getAllPartsByDate:", rows)
                 resolve(rows);
             }
         });
@@ -141,6 +150,7 @@ const getPartByDate = (date) => {
                 console.error(`Error retrieving part details for date: ${date}`, err);
                 reject(new Error(`Error retrieving part details. Please try again later.`));
             } else {
+                console.log("getPartByDate:", rows)
                 resolve(rows);
             }
         });
@@ -159,6 +169,7 @@ const createNewPart = (part_number, description, creation_date, priority_flag, p
                 console.error(`Error creating new part with part_number: ${part_number}`, err);
                 reject(new Error(`Error creating new part. Please try again later.`));
             } else {
+                console.log("createNewPart:", this.lastID)
                 resolve(this.lastID); //Resolves the promise with the part_id of the newly created part (returns part_id)
             }
         });
@@ -184,7 +195,7 @@ const updatePart = (part_id, updateFields) => {
                 console.error(`Error updating part with part_id: ${part_id}`, err);
                 reject(new Error(`Error updating part. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -205,7 +216,7 @@ const updatePartNumber = (partId, part_number) => {
                 console.error(`Error updating part_number for part_id: ${partId}`, err);
                 reject(new Error(`Error updating part_number. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -224,7 +235,7 @@ const updatePartDescription = (partId, description) => {
                 console.error(`Error updating description for part_id: ${partId}`, err);
                 reject(new Error(`Error updating description. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -243,7 +254,7 @@ const updatePartNotes = (partId, part_notes) => {
                 console.error(`Error updating part_notes for part_id: ${partId}`, err);
                 reject(new Error(`Error updating part_notes. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -262,7 +273,7 @@ const updatePartAbbreviation = (partId, part_abbreviation) => {
                 console.error(`Error updating part_abbreviation for part_id: ${partId}`, err);
                 reject(new Error(`Error updating part_abbreviation. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -281,7 +292,7 @@ const updatePartPrefix = (partId, part_prefix) => {
                 console.error(`Error updating part_prefix for part_id: ${partId}`, err);
                 reject(new Error(`Error updating part_prefix. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -300,7 +311,7 @@ const updatePartPriority = (partId, priority_flag) => {
                 console.error(`Error updating priority_flag for part_id: ${partId}`, err);
                 reject(new Error(`Error updating priority_flag. Please try again later.`));
             } else {
-                resolve(null);
+                resolve(this.lastID);
             }
         });
     });
@@ -333,7 +344,7 @@ const softDeletePart = (part_number, deleteReason) => {
                     if (err) {
                         return reject(err);
                     }
-                    resolve(partId);
+                    resolve(this.lastID)
                 });
             });
         });
@@ -366,7 +377,7 @@ const recoverDeletedPart = (part_number) => {
                     if (err) {
                         return reject(err);
                     }
-                    resolve(partId);
+                    resolve(this.lastID);
                 });
             });
         });
@@ -391,5 +402,6 @@ module.exports = {
     updatePartPriority,
     softDeletePart,
     recoverDeletedPart,
-    getPartid
+    getPartid,
+    updatePart
 }
