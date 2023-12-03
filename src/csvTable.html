@@ -1,0 +1,123 @@
+<head>
+    <style>
+        /* Table settings */
+        .container {
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed; /* Fixed table layout */
+        }
+        #dataTable {
+            width: 100%;
+            max-width: none;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            word-wrap: break-word; /* Ensures text wraps inside cells */
+        }
+
+        .edit-btn, .delete-btn {
+            cursor: pointer;
+            padding: 5px;
+            margin-right: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Part Number</th>
+                    <th>Quantity</th>
+                    <th>Type</th>
+                    <th>Location</th>
+                    <th>Condition</th>
+                    <th>Manufacturer</th>
+                    <th>Vendor</th>
+                    <th>Unit Cost</th>
+                    <th>Entry Notes</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically populated here -->
+            </tbody>
+        </table>
+    </form>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const staticData = [
+                { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%', Random:'12', other:'67',more:'99' },
+                { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' , Random:'123', other:'678',more:'999' },
+                // ... more static data
+            ];
+
+            const table = document.getElementById('dataTable');
+
+            if (table) {
+                renderTable(staticData);
+            }
+        });
+
+        function renderTable(data) {
+            const table = document.getElementById('dataTable');
+
+            // Clear existing table rows
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+
+            // Populate the table with data
+            data.forEach(item => {
+                const row = table.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                const cell4 = row.insertCell(3);
+                const cell5 = row.insertCell(4);
+                const cell6 = row.insertCell(5);
+                const cell7 = row.insertCell(6);
+                const cell8 = row.insertCell(7);
+                const cell9 = row.insertCell(8);
+                const cell10 = row.insertCell(9);
+
+                cell1.textContent = item.Part;
+                cell2.textContent = item.Quantity;
+                cell3.textContent = item.Location;
+                cell4.textContent = item.Manufacturer;
+                cell5.textContent = item.Seller;
+                cell6.textContent = item.UnitCost;
+                cell7.textContent = item.Random;
+                cell8.textContent = item.other;
+                cell9.textContent = item.more;
+
+                const editBtn = document.createElement('span');
+                editBtn.className = 'edit-btn';
+                editBtn.textContent = 'Edit';
+                // editBtn.onclick = function () { editRow(item.Part); };
+
+                const deleteBtn = document.createElement('span');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = 'Delete';
+                // deleteBtn.onclick = function () { deleteRow(item.Part, row); };
+
+                cell10.appendChild(editBtn);
+                cell10.appendChild(deleteBtn);
+            });
+        }
+
+        // Implement functions like deleteRow, editRow, etc., as needed
+    </script>
+</body>
+</html>

@@ -100,32 +100,72 @@ function renderTable(data) {
     });
 }
 
-function editRow(id) {
-    const editedQuantity = prompt('Enter the new quantity:');
-    const editedLocation = prompt('Enter the new location:');
-
-    if (editedQuantity !== null && editedLocation !== null) {
-        // Find the item in staticData array with the matching id
-        const editedItem = staticData.find(item => item.Part === id);
-
-        if (editedItem) {
-            // Update the values in the staticData array
-            editedItem.Quantity = editedQuantity;
-            editedItem.Location = editedLocation;
-
-            // Update the corresponding table cell content
-            const rowIndex = staticData.indexOf(editedItem);
-            const row = table.rows[rowIndex + 1]; // Adding 1 to compensate for the header row
-            row.cells[1].textContent = editedQuantity;
-            row.cells[2].textContent = editedLocation;
-        }
-    }
-}
-
 function deleteRow(id, row) {
     // Implement delete logic here
     console.log('Delete row with ID ' + id);
 
     // Remove the row visually from the HTML table
     row.remove();
+}
+
+function editRow(id) {
+    const row = findConflictRowById(id);
+
+    // Store the original values
+    const originalLocation = row.cells[2].textContent;
+    const originalQuantity = row.cells[1].textContent;
+
+    // Create input elements
+    const editedLocationInput = createInput(originalLocation);
+    const editedQuantityInput = createInput(originalQuantity);
+
+    // Replace cell content with input elements
+    row.cells[2].innerHTML = '';
+    row.cells[2].appendChild(editedLocationInput);
+
+    row.cells[1].innerHTML = '';
+    row.cells[1].appendChild(editedQuantityInput);
+
+    // Add event listener for the Enter key to apply changes
+    document.addEventListener('keydown', function onKeyPress(event) {
+        if (event.key === 'Enter') {
+            applyChanges(id, editedQuantityInput.value, editedLocationInput.value);
+            document.removeEventListener('keydown', onKeyPress); // Remove the event listener
+        } else if (event.key === 'Escape') {
+            // Restore the original values and remove the event listener
+            row.cells[2].textContent = originalLocation;
+            row.cells[1].textContent = originalQuantity;
+            document.removeEventListener('keydown', onKeyPress); // Remove the event listener
+        }
+    });
+}
+
+function applyChanges(id, editedQuantity, editedLocation) {
+    const editedItem = staticData.find(item => item.Part === id);
+
+    if (editedItem) {
+        editedItem.Location = editedLocation;
+        editedItem.Quantity = editedQuantity;
+
+        // Update the corresponding table cell content
+        const rowIndex = staticData.indexOf(editedItem);
+        const row = table.rows[rowIndex + 1]; // Adding 1 to compensate for the header row
+        row.cells[2].textContent = editedLocation;
+        row.cells[1].textContent = editedQuantity;
+    }
+}
+
+function createInput(value) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = value;
+    return input;
+}
+function findConflictRowById(id) {
+    // Find the row index in the HTML table
+    const editedItem = staticData.find(item => item.Part === id);
+    const rowIndex = staticData.indexOf(editedItem);
+
+    // Get the corresponding row in the HTML table
+    return table.rows[rowIndex + 1]; // Adding 1 to compensate for the header row
 }

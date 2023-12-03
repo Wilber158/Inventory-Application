@@ -57,41 +57,32 @@ function renderConflictTable(data) {
 
 function editConflictRow(id) {
     const row = findConflictRowById(id);
-
-    // Store the original values
     const originalLocation = row.cells[1].textContent;
 
-    // Create input elements
-    const editedLocationInput = createInput(row.cells[1].textContent);
+    const editedLocationInput = createInput(originalLocation);
 
-    // Replace cell content with input elements
-    row.cells[1].textContent = '';
-    row.cells[1].appendChild(editedQuantityInput);
-    
+    row.cells[1].innerHTML = '';
+    row.cells[1].appendChild(editedLocationInput);
 
-    // Add event listener for the Enter key to apply changes
     document.addEventListener('keydown', function onKeyPress(event) {
         if (event.key === 'Enter') {
-            applyConflictChanges(id, editedQuantityInput.value, editedLocationInput.value);
-            document.removeEventListener('keydown', onKeyPress); // Remove the event listener
+            applyConflictChanges(id, editedLocationInput.value);
+            document.removeEventListener('keydown', onKeyPress);
         } else if (event.key === 'Escape') {
-            // Restore the original values and remove the event listener
             row.cells[1].textContent = originalLocation;
-            document.removeEventListener('keydown', onKeyPress); // Remove the event listener
+            document.removeEventListener('keydown', onKeyPress);
         }
     });
 }
 
-
-function applyConflictChanges(id, editedLocation, editedLocation) {
+function applyConflictChanges(id, editedLocation) {
     const editedItem = staticData2.find(item => item.Part === id);
 
     if (editedItem) {
         editedItem.Location = editedLocation;
 
-        // Update the corresponding table cell content
         const rowIndex = staticData2.indexOf(editedItem);
-        const row = conflictTable.rows[rowIndex + 1]; // Adding 1 to compensate for the header row
+        const row = conflictTable.rows[rowIndex + 1];
         row.cells[1].textContent = editedLocation;
     }
 }

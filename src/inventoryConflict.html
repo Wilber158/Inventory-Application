@@ -12,30 +12,31 @@
     <header>
         <div id="sidebar-container"></div>
     </header>
-    
+    <h1>Inventory Conflicts</h1>
+    <div class="title-line"></div>
     <main class="container">
-        <div id="tableTitle">
-            Inventory
-        </div>
+        
         <div class="tableOptions"> 
             <a href="./inventory.html">All</a>
             <a href="./inventoryConflict.html">Conflicts</a>
         </div>
+        <form>
+            <table class="conflictsTable" id="conflictsTable">
+                <thead>
+                    <tr>
+                        <th>Part</th>
+                        <th>Location</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Table rows will be dynamically populated here -->
+                </tbody>
+                
+            </table>
+            <button id="submitButton">Submit</button>
+        </form>
         
-        <table class="conflictsTable" id="conflictsTable">
-            <thead>
-                <tr>
-                    <th>Part</th>
-                    <th>Location</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Table rows will be dynamically populated here -->
-            </tbody>
-            
-        </table>
-        <button id="submitButton">Submit</button>
     </main>
     
     
