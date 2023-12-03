@@ -50,10 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(result);
                 console.log("Holy shit it worked")
             });
-            }
-            else{
-                console.log("Form is not valid")
-                form.reportValidity()
-            }
+        }
+        else{
+            console.log("Form is not valid")
+            form.reportValidity()
+        }
     });
 });

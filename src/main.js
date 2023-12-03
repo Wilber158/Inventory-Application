@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain} = require('electron')
+const { app, BrowserWindow, ipcMain, Notification} = require('electron')
 const db = require('../backend/database.js');
 const csvParsing = require('../backend/csv_parsing.js');
 const userEntries = require('../backend/userEntries.js');
@@ -37,12 +37,20 @@ app.on('window-all-closed', () => {
   }
 })
 
+const NOTIFICATION_TITLE = 'Entry Successfully Made'
+const NOTIFICATION_BODY = 'The entry has been successfully made, and put into the database'
+
 ipcMain.on('submit_Add_Entry', async (event, formData) => {
   try {
       console.log("calling createUserInventoryEntry...")
       console.log(formData);
       const result = await userEntries.createUserInventoryEntry(formData.prefix, formData.partNumber, formData.quantity, formData.warehouse, formData.zone, formData.seller, formData.manufacturer, formData.condition, formData.unitCost, formData.notes, null, formData.type);
       event.reply('submit_Add_Entry_Response', result);
+      new Notification({
+        title: NOTIFICATION_TITLE,
+        body: NOTIFICATION_BODY
+      }).show()
+            
   } catch (error) {
       // Handle the error
       console.error('Error in submit_Add_Entry:', error);
