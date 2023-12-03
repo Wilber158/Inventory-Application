@@ -10,9 +10,6 @@ async function loadSidebar() {
 
 window.onload = loadSidebar;
 
-const { ipcRenderer } = require('electron');
-const csv_parsing = require('./backend/csv_parsing.js');
-
 document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('fileInput');
@@ -63,7 +60,7 @@ function handleFile(file) {
     }
 
     // Read the CSV file
-    let csvData = csv_parsing.parseCSV(file.path);
+    let csvData = parseCSV(file.path);
     // Send the CSV data to main process via IPC for further processing
     ipcRenderer.send('process-csv', csvData);
 }
