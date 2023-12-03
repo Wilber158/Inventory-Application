@@ -15,7 +15,7 @@ header {
     background: #4796BD;
     position: relative;
 }
-/* sidebar adjustments */
+
 h1 {
     font-size: 32px;
     color: #122E40;
@@ -24,7 +24,6 @@ h1 {
     margin-bottom: 20px;
     margin-top: 5%;
 }
-
 
 .title-line {
     border-top: 2px solid #000; /* Adjust color and thickness */

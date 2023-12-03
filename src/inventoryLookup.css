@@ -1,11 +1,12 @@
 /* Reset some default styles */
 body, h1, ul, li {
     margin: 0;
-    padding-bottom: 20px;
+    padding: 0;
 }
 
 body {
     font-family: 'Lato', sans-serif;
+    padding-bottom: 20px;
 }
 
 /* Header Styles */
@@ -26,10 +27,11 @@ h1 {
 }
 
 .title-line {
-    border-top: 2px solid #000; /* Adjust color and thickness */
-    width: 50%; /* Adjust width */
-    margin: 10px auto; /* Centers the line and adds space around it */
+    border-top: 2px solid #000;
+    width: 50%;
+    margin: 10px auto;
 }
+
 /* Main Content Styles */
 #content {
     background: #ffffff;
@@ -38,22 +40,14 @@ h1 {
     padding: 20px;
     margin: 30px auto;
     width: 80%;
-    max-width: 900px;
+    max-width: 1000px;
     height: auto;
+    overflow-x: auto; /* Add horizontal scrollbar if necessary */
 }
 
-#submitButton {
-    background-color: rgb(96, 141, 253);
-    padding: 7px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-
-
-/* table settings */
+/* Table settings */
 .container {
-    max-width: auto;
+    width: 100%;
     margin: 20px auto;
 }
 
@@ -61,51 +55,47 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    table-layout: fixed; /* Fixed table layout */
 }
 
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+    word-wrap: break-word; /* Ensures text wraps inside cells */
 }
 
-th {
-    background-color: #f2f2f2;
-}
+
 
 .edit-btn, .delete-btn {
     cursor: pointer;
     padding: 5px;
     margin-right: 5px;
+    display: inline-block;
 }
 
-
-/* Add this to your existing CSS file or create a new one */
+/* Additional styles */
 label {
     font-weight: bold;
     margin-bottom: 5px;
 }
 
 input {
-    width: 60px;
+    width: 60px; /* Adjust as needed */
 }
 
 .search_inputs {
     display: flex;
+    flex-wrap: wrap; /* Allow items to wrap in smaller screens */
 }
 
-.input_pair{
-    display: flex; /* Use flexbox to align label and input */
-    align-items: center; /* Align items vertically */
-}
-
-.input_pair label {
-    margin-right: 0px; /* Space between the label and the input */
+.input_pair {
+    display: flex;
+    align-items: center;
+    margin-right: 0px;
     white-space: nowrap;
-}
-
-.search_inputs .input_pair {
-    margin-bottom: 20px; /* Space between rows */
+    margin-bottom: 20px;
+    width: 180px;
 }
 
 #prefix, #partNumber, #type, #totalQuantity {
@@ -114,4 +104,11 @@ input {
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #dddadaa8;
+}
+
+#submitButton {
+    background-color: rgb(96, 141, 253);
+    padding: 7px;
+    border-radius: 10px;
+    cursor: pointer;
 }

@@ -1,19 +1,68 @@
-async function loadSidebar() {
+async function loadContent() {
     try {
-        const response = await fetch('./sidebar.html');
-        const content = await response.text();
-        document.getElementById('sidebar-container').innerHTML = content;
+        const sidebarResponse = await fetch('./sidebar.html');
+        const sidebarContent = await sidebarResponse.text();
+        document.getElementById('sidebar-container').innerHTML = sidebarContent;
     } catch (error) {
         console.error('Failed to load sidebar:', error);
     }
+
+    try {
+        const csvResponse = await fetch('./csvTable.html');
+        const csvContent = await csvResponse.text();
+        document.getElementById('csv-container').innerHTML = csvContent;
+        afterCsvContentLoaded();
+    } catch (error) {
+        console.error('Failed to load CSV table:', error);
+    }
 }
 
-window.onload = loadSidebar;
+function afterCsvContentLoaded() {
+    // Example static data array
+    const staticData = [
+        { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%', Random:'12', other:'67',more:'99' },
+        { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' , Random:'123', other:'678',more:'999' },
+        // ... more static data ...
+    ];
+
+    const table = document.getElementById('dataTable');
+    if (table) {
+        renderTable(staticData);
+    }
+
+    // Attach other event listeners and functionalities that depend on the CSV content
+    // ... (like event listeners for addButton, fileInput, etc.) ...
+}
+
+function renderTable(data) {
+    const table = document.getElementById('dataTable');
+    // Clear existing table rows
+    while (table.rows.length > 1) {
+        table.deleteRow(1);
+    }
+    // Populate the table with data
+    data.forEach(item => {
+        const row = table.insertRow();
+        // Example of populating row cells
+        Object.values(item).forEach(text => {
+            const cell = row.insertCell();
+            cell.textContent = text;
+        });
+    });
+    // Add any additional functionalities like edit buttons, delete buttons, etc.
+}
+
+// Ensure window.onload is set to loadContent
+window.onload = loadContent;
+
+// Rest of your code for handling file inputs, drag-and-drop, etc.
+// ... (like handleFile function, IPC communication, etc.) ...
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('fileInput');
-    const fileSelectBtn = document.getElementById('fileSelectBtn');
+    const fileSelectBtn = document.getElementById('addButton');
     const addButton = document.getElementById('addButton');
 
     dropZone.addEventListener('dragover', (event) => {
@@ -65,14 +114,3 @@ function handleFile(file) {
     ipcRenderer.send('process-csv', csvData);
 }
 
-
-// Listening for the response from main process
-ipcRenderer.on('process-csv-response', (event, { success, error }) => {
-    if (success) {
-        console.log('CSV processed successfully');
-        // Do something on success
-    } else {
-        console.error('Error processing CSV:', error);
-        // Display error message to the user
-    }
-});
