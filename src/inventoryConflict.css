@@ -95,7 +95,7 @@ label {
 }
 
 input {
-    width: 90px;
+    width: 90%;
 }
 
 /*456456464564645646456*/
@@ -104,11 +104,3 @@ input {
     display: flex;
 }
 
-#submitButton {
-    background-color: rgb(96, 141, 253);
-    padding: 7px;
-    border-radius: 10px;
-    cursor: pointer;
-    width: 90px;
-
-}

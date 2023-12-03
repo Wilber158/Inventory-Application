@@ -17,21 +17,18 @@ async function loadContent() {
     }
 }
 
-function afterCsvContentLoaded() {
-    // Example static data array
-    const staticData = [
-        { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%', Random:'12', other:'67',more:'99' },
-        { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' , Random:'123', other:'678',more:'999' },
-        // ... more static data ...
-    ];
+const staticData = [
+    { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%', Random:'12', other:'67',more:'99' },
+    { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' , Random:'123', other:'678',more:'999' },
+    // ... more static data ...
+];
 
+function afterCsvContentLoaded() {
     const table = document.getElementById('dataTable');
     if (table) {
         renderTable(staticData);
+        table.addEventListener('click', onTableClick);
     }
-
-    // Attach other event listeners and functionalities that depend on the CSV content
-    // ... (like event listeners for addButton, fileInput, etc.) ...
 }
 
 function renderTable(data) {
@@ -40,10 +37,10 @@ function renderTable(data) {
     while (table.rows.length > 1) {
         table.deleteRow(1);
     }
+
     // Populate the table with data
     data.forEach(item => {
         const row = table.insertRow();
-        // Example of populating row cells
         Object.values(item).forEach(text => {
             const cell = row.insertCell();
             cell.textContent = text;
@@ -53,16 +50,10 @@ function renderTable(data) {
         const editBtn = document.createElement('span');
         editBtn.className = 'edit-btn';
         editBtn.textContent = 'Edit';
-        editBtn.onclick = function () {
-            editRow(item.Part);
-        };
 
         const deleteBtn = document.createElement('span');
         deleteBtn.className = 'delete-btn';
         deleteBtn.textContent = 'Delete';
-        deleteBtn.onclick = function () {
-            deleteRow(item.Part, row);
-        };
 
         const btnCell = row.insertCell();
         btnCell.appendChild(editBtn);
@@ -70,12 +61,86 @@ function renderTable(data) {
     });
 }
 
+function onTableClick(event) {
+    const target = event.target;
+    const row = target.closest('tr');
 
-// Ensure window.onload is set to loadContent
-window.onload = loadContent;
+    if (target.classList.contains('edit-btn')) {
+        editRow(row);
+    } else if (target.classList.contains('delete-btn')) {
+        deleteRow(row);
+    }
+}
 
-// Rest of your code for handling file inputs, drag-and-drop, etc.
-// ... (like handleFile function, IPC communication, etc.) ...
+function editRow(row) {
+    const originalValues = [];
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        originalValues[i] = row.cells[i].textContent;
+        const input = createInput(row.cells[i].textContent);
+        row.cells[i].innerHTML = '';
+        row.cells[i].appendChild(input);
+
+        if (i === 1) input.focus();
+
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                applyChanges(row);
+                removeInputEventListeners(row);
+            } else if (event.key === 'Escape') {
+                restoreOriginalValues(row, originalValues);
+                removeInputEventListeners(row);
+            }
+        });
+    }
+}
+
+function applyChanges(row) {
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        const input = row.cells[i].querySelector('input');
+        row.cells[i].textContent = input.value;
+        // Update staticData or other data sources as necessary
+    }
+}
+
+function removeInputEventListeners(row) {
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        const input = row.cells[i].querySelector('input');
+        if (input) {
+            input.removeEventListener('keydown', arguments.callee);
+        }
+    }
+}
+
+function restoreOriginalValues(row, originalValues) {
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        row.cells[i].textContent = originalValues[i];
+    }
+}
+
+function deleteRow(row) {
+    // Implement delete logic here
+    console.log('Delete row with ID ' + row.cells[0].textContent);
+
+    // Remove the row visually from the HTML table
+    row.remove();
+}
+
+
+function findRowById(id) {
+    // Find the row index in the HTML table
+    const editedItem = staticData.find(item => item.Part === id);
+    const rowIndex = staticData.indexOf(editedItem);
+
+    // Get the corresponding row in the HTML table
+    return table.rows[rowIndex + 1]; // Adding 1 to compensate for the header row
+}
+
+function createInput(value) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = value;
+    return input;
+}
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -133,3 +198,5 @@ function handleFile(file) {
     ipcRenderer.send('process-csv', csvData);
 }
 
+// Ensure window.onload is set to loadContent
+window.onload = loadContent;

@@ -15,12 +15,34 @@ const staticData2 = [
     { Part: 2, Quantity: 'Item 2', Location: 'Description 2' },
     // ... more static data
 ];
-const submitButton = document.getElementById('submitButton');
-const conflictTable = document.getElementById('conflictsTable');
-renderConflictTable(staticData2)
+
+document.addEventListener('DOMContentLoaded', () => {
+    const conflictTable = document.getElementById('conflictsTable');
+    if (conflictTable) {
+        renderConflictTable(staticData2);
+        conflictTable.addEventListener('click', onConflictTableClick);
+    }
+
+    const submitButton = document.getElementById('submitButton');
+    submitButton.addEventListener('click', function() {
+        const partNumber = document.getElementById('partNumber').value.toLowerCase();
+        const type = document.getElementById('type').value.toLowerCase();
+        const totalQuantity = document.getElementById('totalQuantity').value.toLowerCase();
+
+        const filteredData = staticData2.filter(item =>
+            item.Quantity.toLowerCase().includes(partNumber) ||
+            item.Location.toLowerCase().includes(type)
+        );
+
+        renderConflictTable(filteredData);
+    });
+});
+
 
 // Function to render the conflictTable////////////////////////////////////////////////////////////////////////////////
 function renderConflictTable(data) {
+    const conflictTable = document.getElementById('conflictsTable');
+
     // Clear existing table rows
     while (conflictTable.rows.length > 1) {
         conflictTable.deleteRow(1);
@@ -39,72 +61,71 @@ function renderConflictTable(data) {
         const editBtn = document.createElement('span');
         editBtn.className = 'edit-btn';
         editBtn.textContent = 'Edit';
-        editBtn.onclick = function () {
-            editConflictRow(item.Part);
-        };
 
         const deleteBtn = document.createElement('span');
         deleteBtn.className = 'delete-btn';
         deleteBtn.textContent = 'Delete';
-        deleteBtn.onclick = function () {
-            deleteRow(item.Part, row);
-        };
 
         cell3.appendChild(editBtn);
         cell3.appendChild(deleteBtn);
     });
 }
 
-function editConflictRow(id) {
-    const row = findConflictRowById(id);
-    const originalLocation = row.cells[1].textContent;
+function onConflictTableClick(event) {
+    const target = event.target;
+    const row = target.closest('tr');
 
-    const editedLocationInput = createInput(originalLocation);
-
-    row.cells[1].innerHTML = '';
-    row.cells[1].appendChild(editedLocationInput);
-
-    document.addEventListener('keydown', function onKeyPress(event) {
-        if (event.key === 'Enter') {
-            applyConflictChanges(id, editedLocationInput.value);
-            document.removeEventListener('keydown', onKeyPress);
-        } else if (event.key === 'Escape') {
-            row.cells[1].textContent = originalLocation;
-            document.removeEventListener('keydown', onKeyPress);
-        }
-    });
-}
-
-function applyConflictChanges(id, editedLocation) {
-    const editedItem = staticData2.find(item => item.Part === id);
-
-    if (editedItem) {
-        editedItem.Location = editedLocation;
-
-        const rowIndex = staticData2.indexOf(editedItem);
-        const row = conflictTable.rows[rowIndex + 1];
-        row.cells[1].textContent = editedLocation;
+    if (target.classList.contains('edit-btn')) {
+        editConflictRow(row);
+    } else if (target.classList.contains('delete-btn')) {
+        deleteRow(row);
     }
 }
 
-// Event listener for submit button
-submitButton.addEventListener('click', function () {
-    // Get input values
-    const partNumber = document.getElementById('partNumber').value.toLowerCase();
-    const type = document.getElementById('type').value.toLowerCase();
-    const totalQuantity = document.getElementById('totalQuantity').value.toLowerCase();
+function editConflictRow(row) {
+    const originalValues = [];
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        originalValues[i] = row.cells[i].textContent;
+        const input = createInput(row.cells[i].textContent);
+        row.cells[i].innerHTML = '';
+        row.cells[i].appendChild(input);
 
-    // Filter the data based on input values
-    const filteredData = staticData.filter(item =>
-        item.Quantity.toLowerCase().includes(partNumber) ||
-        item.Location.toLowerCase().includes(type) ||
-        item.Manufacturer.toLowerCase().includes(totalQuantity)
-    );
+        if (i === 1) input.focus();
 
-    // Update the table with filtered data
-    renderConflictTable(filteredData);
-});
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                applyConflictChanges(row);
+                removeInputEventListeners(row);
+            } else if (event.key === 'Escape') {
+                restoreOriginalValues(row, originalValues);
+                removeInputEventListeners(row);
+            }
+        });
+    }
+}
 
+function applyConflictChanges(row) {
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        const input = row.cells[i].querySelector('input');
+        row.cells[i].textContent = input.value;
+        // Update staticData2 or other data sources as necessary
+    }
+}
+
+function removeInputEventListeners(row) {
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        const input = row.cells[i].querySelector('input');
+        if (input) {
+            input.removeEventListener('keydown', arguments.callee);
+        }
+    }
+}
+
+function restoreOriginalValues(row, originalValues) {
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        row.cells[i].textContent = originalValues[i];
+    }
+}
 
 function createInput(value) {
     const input = document.createElement('input');
@@ -113,19 +134,12 @@ function createInput(value) {
     return input;
 }
 
-function deleteRow(id, row) {
-    // Implement delete logic here
-    console.log('Delete row with ID ' + id);
-
-    // Remove the row visually from the HTML table
+function deleteRow(row) {
+    const partId = row.cells[0].textContent;
+    const index = staticData2.findIndex(item => item.Part == partId);
+    if (index > -1) {
+        staticData2.splice(index, 1);
+    }
     row.remove();
-}
-
-function findConflictRowById(id) {
-    // Find the row index in the HTML table
-    const editedItem = staticData2.find(item => item.Part === id);
-    const rowIndex = staticData2.indexOf(editedItem);
-
-    // Get the corresponding row in the HTML table
-    return conflictTable.rows[rowIndex + 1]; // Adding 1 to compensate for the header row
+    console.log('Deleted row with Part ID:', partId);
 }
