@@ -20,16 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // Get values from the form inputs
         if(form.checkValidity()){
             const formData = {
-                prefix: document.getElementById('prefix').value,
-                partNumber: document.getElementById('partNumber').value,
-                type: document.getElementById('type').value,
-                condition: document.getElementById('condition').value,
-                warehouse: document.getElementById('warehouse').value,
-                zone: document.getElementById('zone').value,
-                quantity: document.getElementById('quantity').value,
-                seller: document.getElementById('seller').value,
-                unitCost: document.getElementById('cost').value,
-                manufacturer: document.getElementById('manufacturer').value,
+                prefix: document.getElementById('prefix').value.toUpperCase(),
+                partNumber: document.getElementById('partNumber').value.toUpperCase(),
+                type: document.getElementById('type').value.toUpperCase(),
+                condition: document.getElementById('condition').value.toUpperCase(),
+                warehouse: document.getElementById('warehouse').value.toUpperCase(),
+                zone: document.getElementById('zone').value.toUpperCase(),
+                quantity: document.getElementById('quantity').value.toUpperCase(),
+                seller: document.getElementById('seller').value.toUpperCase(),
+                unitCost: document.getElementById('cost').value.toUpperCase(),
+                manufacturer: document.getElementById('manufacturer').value.toUpperCase(),
+
                 notes: document.getElementById('notes').value
             };
                  //loop over formData and print to console type and value
