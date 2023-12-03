@@ -1,5 +1,3 @@
-const { rmSync } = require("original-fs");
-
 async function loadSidebar() {
     try {
         const response = await fetch('./sidebar.html');
