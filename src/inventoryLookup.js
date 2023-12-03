@@ -1,3 +1,5 @@
+const { rmSync } = require("original-fs");
+
 async function loadSidebar() {
     try {
         const response = await fetch('./sidebar.html');
@@ -9,6 +11,8 @@ async function loadSidebar() {
 }
 
 window.onload = loadSidebar;
+
+let currentData = [];
 
 
 
@@ -46,16 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
             await window.electronAPI.get_Inventory_Entries(formData);
 
             // Listen for the response from the main process
-            window.electronAPI.get_Inventory_Entries((result) => {
-                //handle the response, ex: send to a new page
-                console.log(result);
-                console.log("Inventory entries received from main process")
+            window.electronAPI.get_Inventory_Entries_Response((result) => {
+                if(result.error){
+                    console.log(result.error);
+                    return;
+                }
+                else{
+                    currentData = result;
+                  renderTable(result);
+                }
             });
-            }
-            else{
-                console.log("Form is not valid")
-                form.reportValidity()
-            }
+        } else{
+            console.log("Form is not valid")
+            form.reportValidity()
+        }
     });
 });
 
