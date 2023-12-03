@@ -62,7 +62,7 @@ ipcMain.on('get_Inventory_Entries', async (event, formData) => {
   try{
     console.log("calling getInventoryEntries...");
     console.log(formData);
-    const result = await userEntries.getInventoryEntry(formData.prefix, formData.partNumber, formData.type, formData.quantity);
+    const result = await userEntries.getInventoryEntry(formData);
   }catch(error){
     console.error('Error in get_Inventory_Entries:', error);
     event.reply('get_Inventory_Entries_Response', { error: error.message });
