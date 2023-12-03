@@ -114,6 +114,7 @@ const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, ve
     });
 }
 
+
 const updateInventoryEntry = (inventory_entry_id, updateFields) => {
     const fields = [];
     const values = [];

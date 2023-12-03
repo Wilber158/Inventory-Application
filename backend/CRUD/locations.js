@@ -34,7 +34,7 @@ const getLocation_id = (zone_name, warehouse_name) => {
                     resolve(row);
                     return;
                 }
-                resolve(row);
+                resolve(row.location_id);
             }
         });
     });

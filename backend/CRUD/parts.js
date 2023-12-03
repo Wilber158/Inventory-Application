@@ -71,6 +71,7 @@ const getPartid = (part_prefix, part_number) => {
                 console.log("Row returned in getPartid: ", row)
                 if(!row){
                     resolve(row);
+                    console.log("getPartid: row is null")
                     return;
                 }
                 console.log("getPartid:", row.part_id)

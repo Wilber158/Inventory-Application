@@ -11,36 +11,54 @@ async function loadSidebar() {
 window.onload = loadSidebar;
 
 
-const staticData = [
-    { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%', Random:'12', other:'67',more:'99' },
-    { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' , Random:'123', other:'678',more:'999' },
-    // ... more static data
-];
 
-// Process the static data and update the HTML
 const table = document.getElementById('dataTable');
 const submitButton = document.getElementById('submitButton');
+const form = document.getElementById('inventoryForm');
+
 
 // Initial rendering of the table
-renderTable(staticData);
 
 // Event listener for submit button
-submitButton.addEventListener('click', function () {
-    // Get input values
-    const partNumber = document.getElementById('partNumber').value.toLowerCase();
-    const type = document.getElementById('type').value.toLowerCase();
-    const totalQuantity = document.getElementById('totalQuantity').value.toLowerCase();
+document.addEventListener('DOMContentLoaded', () => {
+    submitButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+        
+        // Get values from the form inputs
+        if(form.checkValidity()){
+            const formData = {
+                prefix: document.getElementById('prefix').value,
+                partNumber: document.getElementById('partNumber').value,
+                type: document.getElementById('type').value,
+                quantity: document.getElementById('quantity').value,
+            };
 
-    // Filter the data based on input values
-    const filteredData = staticData.filter(item =>
-        item.Quantity.toLowerCase().includes(partNumber) ||
-        item.Location.toLowerCase().includes(type) ||
-        item.Manufacturer.toLowerCase().includes(totalQuantity)
-    );
 
-    // Update the table with filtered data
-    renderTable(filteredData);
+            for (const property in formData) {
+                console.log(`${property}: ${formData[property]}`);
+            }
+
+
+            //validate the form data
+            //TODO
+
+            // Send the form data to the main process
+            await window.electronAPI.get_Inventory_Entries(formData);
+
+            // Listen for the response from the main process
+            window.electronAPI.get_Inventory_Entries((result) => {
+                //handle the response, ex: send to a new page
+                console.log(result);
+                console.log("Inventory entries received from main process")
+            });
+            }
+            else{
+                console.log("Form is not valid")
+                form.reportValidity()
+            }
+    });
 });
+
 
 document.addEventListener('keydown', function(e) {
     // Check if 'Ctrl' and 'F' were pressed together

@@ -49,3 +49,14 @@ ipcMain.on('submit_Add_Entry', async (event, formData) => {
       event.reply('submit_Add_Entry_Response', { error: error.message });
   }
 });
+
+ipcMain.on('get_Inventory_Entries', async (event, formData) => {
+  try{
+    console.log("calling getInventoryEntries...");
+    console.log(formData);
+    const result = await userEntries.getInventoryEntry(formData.prefix, formData.partNumber, formData.type, formData.quantity);
+  }catch(error){
+    console.error('Error in get_Inventory_Entries:', error);
+    event.reply('get_Inventory_Entries_Response', { error: error.message });
+  }
+});
