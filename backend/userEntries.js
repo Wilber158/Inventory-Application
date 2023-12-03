@@ -74,7 +74,12 @@ async function updateUserInventoryEntry(inventory_entry_id, part_prefix, part_nu
 //this function will validate the user input and return the inventory entry
 const getInventoryEntry = async (formData) => {
     let inventory_entry;
-
+    //loop through the formData and validate the data
+    for (const property in formData) {
+        if(formData[property] == "" || formData[property] == null){
+            formData[property] = null;
+        }
+    }
     try{
         inventory_entry = await entriesCRUD.getSpecificInventoryEntry(formData);
     }catch(err){
