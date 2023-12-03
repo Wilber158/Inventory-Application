@@ -71,45 +71,19 @@ async function updateUserInventoryEntry(inventory_entry_id, part_prefix, part_nu
     }
 }
 
-const getInventoryEntry = async (part_prefix, part_number, quantity, warehouse_name, zone_name, vendor_name, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type) => {
-    //getting part_id if user provided part_prefix and part_number
-    try{
-        let part_id = await partsCRUD.getPartid(part_prefix, part_number);
-        if(!part_id){
-            throw new Error("Part does not exist")
-        }
-    }catch(err){
-        console.log(err);
-        throw new Error("Error performing getPartid")
-    }
-    //getting location_id if user provided warehouse_name and zone_name
-    try{
-        let location_id = await locationsCRUD.getLocation_id(zone_name, warehouse_name);
-        if(!location_id){
-            throw new Error("Location does not exist")
-        }
-    }catch(err){
-        console.log(err);
-        throw new Error("Error performing getLocation_id")
-    }
-    //getting vendor_id if user provided vendor_name
-    try{
-        let vendor_id = await vendorsCRUD.getVendor_id(vendor_name);
-        if(!vendor_id){
-            throw new Error("Vendor does not exist")
-        }
-    }catch(err){
-        console.log(err);
-        throw new Error("Error performing getVendor_id")
-    }
+//this function will validate the user input and return the inventory entry
+const getInventoryEntry = async (formData) => {
+    let inventory_entry;
 
     try{
-        let rows = await entriesCRUD.getInventoryEntry(part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type);
-        return rows;
+        inventory_entry = await entriesCRUD.getSpecificInventoryEntry(formData);
     }catch(err){
         console.log(err);
-        throw new Error("Error performing getInventoryEntry")
+        throw new Error("Error getting inventory entry from user input")
     }
+
+    console.log("inventory_entry returned by getInventoryEntry: ", inventory_entry)
+    return inventory_entry;
 }
 
 

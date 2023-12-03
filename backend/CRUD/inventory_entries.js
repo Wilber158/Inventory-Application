@@ -43,13 +43,85 @@ const createInventoryEntry = (part_id, location_id, quantity, date_last_updated,
 }
 
 
-const getSpecificInventoryEntry = (part_prefix) => {
+const getSpecificInventoryEntry = (formData) => {
+    let sql = `SELECT * FROM InventoryEntries NATURAL JOIN Parts NATURAL JOIN Vendors NATURAL JOIN Locations Natural JOIN Warehouse Natural JOIN Zones WHERE 1=1 `;
+    let sqlParams = [];
+    console.log("formData in getSpecificInventoryEntry: ", formData);
+
+    if(formData.prefix != undefined){
+        sql += `AND part_prefix = ?`;
+        sqlParams.push(formData.prefix);
+    }
+
+    if(formData.partNumber != undefined){
+        sql += `AND part_number = ?`;
+        sqlParams.push(formData.partNumber);
+    }
+
+    if(formData.type != undefined){
+        sql += `AND part_type = ?`;
+        sqlParams.push(formData.type);
+    }
+
+    if(formData.quantity != undefined){
+        sql += `AND quantity = ?`;
+        sqlParams.push(formData.quantity);
+    }
+
+    if(formData.warehouse_name != undefined){
+        sql += `AND warehouse_name = ?`;
+        sqlParams.push(formData.warehouse_name);
+    }
+
+    if(formData.zone_name != undefined){
+        sql += `AND zone_name = ?`;
+        sqlParams.push(formData.zone_name);
+    }
+
+    if(formData.vendor_name != undefined){
+        sql += `AND vendor_name = ?`;
+        sqlParams.push(formData.vendor_name);
+    }
+
+    if(formData.manufacturer != undefined){
+        sql += `AND manufacturer = ?`;
+        sqlParams.push(formData.manufacturer);
+    }
+
+    if(formData.condition != undefined){
+        sql += `AND condition = ?`;
+        sqlParams.push(formData.condition);
+    }
+
+    if(formData.unit_cost != undefined){
+        sql += `AND unit_cost = ?`;
+        sqlParams.push(formData.unit_cost);
+    }
+    console.log("sql in getSpecificInventoryEntry: ", sql);
+    console.log("sqlParams in getSpecificInventoryEntry: ", sqlParams);
+    return new Promise((resolve, reject) => {
+        database.get(sql, sqlParams, (err, rows) => {
+            if(err){
+                console.log(err)
+                reject(new Error(`Error retrieving Inventory Entry. Please try again later.`));
+            } else {
+                if(rows == undefined){
+                    console.log("rows is undefined in getSpecificInventoryEntry");
+                    resolve(rows);
+                    return;
+                }
+                console.log("Returned rows in getSpecificInventoryEntry: ", rows);
+                resolve(rows);
+            }
+        });
+    });
+
 }
 
 
 
 const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_note, sell_price, part_type) => {
-    const sql = `SELECT * FROM InventoryEntries WHERE 1=1 j`;
+    let sql = `SELECT * FROM InventoryEntries WHERE 1=1`;
     let sqlParams = [];
     if (part_id != undefined) {
         sql += `AND part_id = ?`;
@@ -346,7 +418,8 @@ module.exports = {
     updateInventoryEntrySellPrice,
     updateInventoryEntry,
     softDeleteInventoryEntry,
-    recoverDeletedPart
+    recoverDeletedPart,
+    getSpecificInventoryEntry
 }
 
 
