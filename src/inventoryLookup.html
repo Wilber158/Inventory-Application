@@ -3,26 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Part</title>
+    <title>Lookup</title>
     <link rel="stylesheet" href="inventoryLookup.css">
     <script src="inventoryLookup.js" defer></script>
 </head>
 <body>
     
     <header>
-        <div id="logo">LOGO</div>
+        <div id="sidebar-container"> </div>
     </header>
-    <section>
-        <aside>
-            <div id="sidebar-container"> 
-
-            </div>
-            
-        </aside>
-    </section>
+    <h1>Inventory Lookup</h1>
+    <div class="title-line"></div>
     <section id="content">
         <div class="container">
-            <h2>Inventory Lookup</h2>
             <form id="inventoryForm">
                 <div class="search_inputs">
                     <div class="input_pair">
@@ -42,11 +35,12 @@
 
                     <div class="input_pair">
                         <label for="totalQuantity">Total Quantity:</label>
-                        <div id="quantity_box"></div>
+                        <input type="text" id="totalQuantity" name="totalQuantity" required>
                     </div>
 
-                    <button type="submit">Submit</button>
                 </div>
+                <button type="submit">Submit</button>
+
             </form>
             <!-- Table for displaying search results -->
             <table id="dataTable">
@@ -61,6 +55,7 @@
                         <th>Vendor</th>
                         <th>Unit Cost</th>
                         <th>Entry Notes</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>

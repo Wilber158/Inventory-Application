@@ -1,3 +1,15 @@
+async function loadSidebar() {
+    try {
+        const response = await fetch('./sidebar.html');
+        const content = await response.text();
+        document.getElementById('sidebar-container').innerHTML = content;
+    } catch (error) {
+        console.error('Failed to load sidebar:', error);
+    }
+}
+
+window.onload = loadSidebar;
+
 const { ipcRenderer } = require('electron');
 const csv_parsing = require('./backend/csv_parsing.js');
 

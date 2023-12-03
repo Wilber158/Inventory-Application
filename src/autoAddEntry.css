@@ -3,7 +3,14 @@ body, html {
     margin: 0;
     font-family: Arial, sans-serif;
 }
-
+/* Header Styles */
+header {
+    width: 100%;
+    height: 90px;
+    background: #4796BD;
+    position: relative;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+}
 #content {
     width: 100%;
     max-width: 600px;

@@ -1,5 +1,5 @@
 /* Reset some default styles */
-body, h1, h2, h3, p, ul, li {
+body, ul, li {
     margin: 0;
     padding: 0;
 }
@@ -14,48 +14,21 @@ header {
     height: 90px;
     background: #4796BD;
     position: relative;
-}
-
-#logo {
-    width: 115.58px;
-    height: 60.16px;
-    position: absolute;
-    left: 50px;
-    top: 15px;
-    background: #F4FAF8;
-    border-radius: 3px;
-}
-
-/* Sidebar styles */
-aside {
-    width: 11%;
-    height: 100%;
-    background: white;
-    position: absolute;
-    left: 0;
     box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
 }
-
-aside div {
-    padding: 10px;
-    text-align: center;
-    color: #122E40;
-    font-size: 24px;
-    font-weight: 400;
-    word-wrap: break-word;
-}
-
 
 /* main table styles */
 
 .container {
-    
-    width: 50%;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    background-color: rgba(248, 238, 224, 0.406);
-    margin-top: 5%;
-    margin-left: 30%;
-    border-radius: 10px;
+    margin: 30px auto;
+    margin-top: 10%;
+    width: 80%;
+    max-width: 800px;
+    height: auto;
 }
 #tableTitle{
     font-size: 32px;
@@ -115,9 +88,7 @@ input {
 
 /*456456464564645646456*/
 
-.inventoryOptions{
-    display: flex;
-}
+
 
 #submitButton {
     background-color: rgb(96, 141, 253);
@@ -126,4 +97,23 @@ input {
     cursor: pointer;
     width: 90px;
 
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-group input[type="text"] {
+      width: calc(50% - 10px);
+    }
+}
+  
+@media (max-width: 480px) {
+    .form-group input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    button {
+      width: 100%;
+    }
 }

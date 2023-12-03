@@ -12,8 +12,8 @@ window.onload = loadSidebar;
 
 
 const staticData = [
-    { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%' },
-    { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' },
+    { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%', Random:'12', other:'67',more:'99' },
+    { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' , Random:'123', other:'678',more:'999' },
     // ... more static data
 ];
 
@@ -66,6 +66,9 @@ function renderTable(data) {
         const cell5 = row.insertCell(4);
         const cell6 = row.insertCell(5);
         const cell7 = row.insertCell(6);
+        const cell8 = row.insertCell(7);
+        const cell9 = row.insertCell(8);
+        const cell10 = row.insertCell(9);
 
         cell1.textContent = item.Part;
         cell2.textContent = item.Quantity;
@@ -73,6 +76,10 @@ function renderTable(data) {
         cell4.textContent = item.Manufacturer;
         cell5.textContent = item.Seller;
         cell6.textContent = item.UnitCost;
+        cell7.textContent = item.Random;
+        cell8.textContent = item.other;
+        cell9.textContent = item.more;
+
 
         const editBtn = document.createElement('span');
         editBtn.className = 'edit-btn';
@@ -88,8 +95,8 @@ function renderTable(data) {
             deleteRow(item.Part, row);
         };
 
-        cell7.appendChild(editBtn);
-        cell7.appendChild(deleteBtn);
+        cell10.appendChild(editBtn);
+        cell10.appendChild(deleteBtn);
     });
 }
 

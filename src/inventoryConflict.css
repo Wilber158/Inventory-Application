@@ -15,39 +15,8 @@ header {
     background: #4796BD;
     position: relative;
 }
-#logo {
-    width: 115.58px;
-    height: 60.16px;
-    position: absolute;
-    left: 50px;
-    top: 15px;
-    background: #F4FAF8;
-    border-radius: 3px;
-}
-
-/* Sidebar styles */
-aside {
-    width: 11%;
-    height: 100%;
-    background: white;
-    position: absolute;
-    left: 0;
-    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
-}
-
-aside div {
-    padding: 10px;
-    text-align: center;
-    color: #122E40;
-    font-size: 24px;
-    font-weight: 400;
-    word-wrap: break-word;
-}
-
 
 /* main table styles */
-
-
 .container {
     
     width: 50%;

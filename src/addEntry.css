@@ -15,16 +15,6 @@ header {
     background: #4796BD;
     position: relative;
 }
-
-#logo {
-    width: 115.58px;
-    height: 60.16px;
-    position: absolute;
-    left: 50px;
-    top: 15px;
-    background: #F4FAF8;
-    border-radius: 3px;
-}
 /* sidebar adjustments */
 h1 {
     font-size: 32px;
@@ -40,24 +30,6 @@ h1 {
     border-top: 2px solid #000; /* Adjust color and thickness */
     width: 50%; /* Adjust width */
     margin: 10px auto; /* Centers the line and adds space around it */
-}
-
-aside {
-    width: 11%;
-    height: 100%;
-    background: white;
-    position: absolute;
-    left: 0;
-    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
-}
-
-aside div {
-    padding: 10px;
-    text-align: center;
-    color: #122E40;
-    font-size: 24px;
-    font-weight: 400;
-    word-wrap: break-word;
 }
 
 /* Main Content Styles */
@@ -105,7 +77,7 @@ section{
 .partNum2, .location2, .vendor2, .manu2 {
     width: calc(20% - 10px);
     margin-right: 10px;
-    padding: 10px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #dddadaa8;
