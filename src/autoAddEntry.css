@@ -22,6 +22,10 @@ h2 {
     color: #333;
 }
 
+th {
+    background-color: #f2f2f2;
+}
+
 #drop-zone {
     border: 2px dashed #ccc;
     border-radius: 5px;
@@ -58,4 +62,20 @@ h2 {
 
 #fileSelectBtn:hover {
     background-color: #bbb;
+}
+#csv-container {
+    width: 100%;       /* Full width */
+    max-width: 1200px; /* Maximum width, adjust as needed */
+    margin: auto;      /* Center the container */
+    overflow-x: auto;
+}
+
+#container{
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: auto;
+    max-width: 1200px;
+    height: auto;
 }

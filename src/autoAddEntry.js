@@ -48,9 +48,28 @@ function renderTable(data) {
             const cell = row.insertCell();
             cell.textContent = text;
         });
+
+        // Add edit and delete buttons
+        const editBtn = document.createElement('span');
+        editBtn.className = 'edit-btn';
+        editBtn.textContent = 'Edit';
+        editBtn.onclick = function () {
+            editRow(item.Part);
+        };
+
+        const deleteBtn = document.createElement('span');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.onclick = function () {
+            deleteRow(item.Part, row);
+        };
+
+        const btnCell = row.insertCell();
+        btnCell.appendChild(editBtn);
+        btnCell.appendChild(deleteBtn);
     });
-    // Add any additional functionalities like edit buttons, delete buttons, etc.
 }
+
 
 // Ensure window.onload is set to loadContent
 window.onload = loadContent;

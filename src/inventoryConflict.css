@@ -1,5 +1,5 @@
 /* Reset some default styles */
-body, h1, h2, h3, p, ul, li {
+body, h1,ul, li {
     margin: 0;
     padding: 0;
 }
@@ -14,21 +14,39 @@ header {
     height: 90px;
     background: #4796BD;
     position: relative;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* main table styles */
 .container {
-    
-    width: 50%;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    background-color: rgba(248, 238, 224, 0.406);
-    margin-top: 5%;
-    margin-left: 30%;
-    border-radius: 10px;
+    margin: 30px auto;
+    width: 80%;
+    max-width: 1000px;
+    height: auto;
+    overflow-x: auto; /* Add horizontal scrollbar if necessary */
 }
-#tableTitle{
+
+h1 {
     font-size: 32px;
-    font-weight: bold;
+    color: #122E40;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 5%;
+}
+
+.title-line {
+    border-top: 2px solid #000;
+    width: 50%;
+    margin: 10px auto;
+}
+
+th {
+    background-color: #f2f2f2;
 }
 
 .invSelect{
@@ -52,22 +70,21 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    table-layout: fixed; /* Fixed table layout */
 }
 
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
+    word-wrap: break-word; /* Ensures text wraps inside cells */
 }
 
 .edit-btn, .delete-btn {
     cursor: pointer;
     padding: 5px;
     margin-right: 5px;
+    display: inline-block;
 }
 
 /* js variables */
