@@ -8,6 +8,11 @@ async function loadSidebar() {
     }
 }
 
+const table = document.getElementById('dataTable');
+const submitButton = document.getElementById('submitButton');
+const form = document.getElementById('inventoryForm');
+
+
 window.onload = loadSidebar;
 
 let currentData = [];
@@ -30,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
             for (const property in formData) {
                 console.log(`${property}: ${formData[property]}`);
             }
-
 
             //validate the form data
             //TODO
