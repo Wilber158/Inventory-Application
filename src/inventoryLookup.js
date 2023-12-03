@@ -1,5 +1,3 @@
-const { rmSync } = require("original-fs");
-
 async function loadSidebar() {
     try {
         const response = await fetch('./sidebar.html');
@@ -9,6 +7,11 @@ async function loadSidebar() {
         console.error('Failed to load sidebar:', error);
     }
 }
+
+const table = document.getElementById('dataTable');
+const submitButton = document.getElementById('submitButton');
+const form = document.getElementById('inventoryForm');
+
 
 window.onload = loadSidebar;
 
@@ -32,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
             for (const property in formData) {
                 console.log(`${property}: ${formData[property]}`);
             }
-
 
             //validate the form data
             //TODO
