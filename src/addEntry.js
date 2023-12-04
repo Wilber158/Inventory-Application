@@ -11,6 +11,22 @@ async function loadSidebar() {
 window.onload = loadSidebar;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // List of input field IDs
+    const inputIds = ['prefix', 'partNumber', 'type', 'condition', 'warehouse', 'zone', 'quantity', 'seller', 'cost', 'manufacturer'];
+
+    // Function to attach uppercase conversion on keyup
+    const convertToUpperCase = (elementId) => {
+        const inputElement = document.getElementById(elementId);
+        if (inputElement) {
+            inputElement.addEventListener('keyup', function() {
+                this.value = this.value.toUpperCase();
+            });
+        }
+    };
+
+    // Attach the event listener to each input field
+    inputIds.forEach(convertToUpperCase);
+
     const submitButton = document.getElementById('submitButton');
     const form = document.querySelector('form');
 
