@@ -11,17 +11,24 @@ async function loadSidebar() {
 const table = document.getElementById('dataTable');
 const submitButton = document.getElementById('submitButton');
 const form = document.getElementById('inventoryForm');
-
-
 window.onload = loadSidebar;
-
 let currentData = [];
+let currentlyEditingRow = null;
+
+
+
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && currentlyEditingRow) {
+        restoreOriginalValues(currentlyEditingRow);
+        currentlyEditingRow = null; // Reset the currently editing row
+    }
+});
 
 window.electronAPI.get_Inventory_Entries_Response((event, response) => {
     if (response.error) {
         console.log("Error:", response.error);
     } else {
-        currentData = response;
         console.log("Current data has been set to result of search function");
         renderTable(response);
     }
@@ -68,38 +75,49 @@ function renderTable(data) {
     console.log("Type of data: " + typeof data)
     // Populate the table with data
     data.forEach(item => {
+        let set = {};
         const row = tableBody.insertRow();
         
         // Mapping data to table columns
         let partNumber = item.part_prefix + '' + item.part_number;
         const cellPartNumber = row.insertCell();
         cellPartNumber.textContent = partNumber;
+        set.partNumber = partNumber;
 
         const cellType = row.insertCell();
         cellType.textContent = item.part_type;
+        set.type = item.part_type;
 
         const cellQuantity = row.insertCell();
         cellQuantity.textContent = item.quantity;
+        set.quantity = item.quantity;
 
         const cellLocation = row.insertCell();
         const location = item.warehouse_name + ' ' + item.zone_name;
         cellLocation.textContent = location; // Adjust this if there's a specific location field
+        set.location = location;
 
         const cellCondition = row.insertCell();
         cellCondition.textContent = item.condition;
+        set.condition = item.condition;
 
         const cellManufacturer = row.insertCell();
         cellManufacturer.textContent = item.manufacturer;
+        set.manufacturer = item.manufacturer;
 
         const cellVendor = row.insertCell();
         cellVendor.textContent = item.vendor_name;
+        set.vendor = item.vendor_name;
 
         const cellUnitCost = row.insertCell();
         cellUnitCost.textContent = item.unit_cost;
+        set.unitCost = item.unit_cost;
 
         const cellEntryNotes = row.insertCell();
         cellEntryNotes.textContent = item.entry_notes;
-
+        set.entryNotes = item.entry_notes;
+        
+        currentData.push(set);
         // Edit and Delete buttons
         const btnCell = row.insertCell();
         const editBtn = createButton('Edit', 'edit-btn');
@@ -136,27 +154,35 @@ function onTableClick(event) {
     }
 }
 
-function editRow(row, item) {
-    const originalValues = [];
+function editRow(row) {
+    // If there's already a row being edited, restore its original values before editing another row
+    if (currentlyEditingRow && currentlyEditingRow !== row) {
+        restoreOriginalValues(currentlyEditingRow);
+    }
+
+    // Check if the current row is already in edit mode
+    const isEditing = row.querySelector('input');
+    if (isEditing) {
+        // Row is already in edit mode
+        return;
+    }
+
+    // Set the currently editing row
+    currentlyEditingRow = row;
+
+    // Replace each cell (except the last one with buttons) with an input element
     for (let i = 1; i < row.cells.length - 1; i++) {
-        originalValues[i] = row.cells[i].textContent;
-        const input = createInput(originalValues[i]);
+        const cellValue = row.cells[i].textContent;
+        const input = createInput(cellValue);
         row.cells[i].innerHTML = '';
         row.cells[i].appendChild(input);
 
-        if (i === 0) input.focus();
-
-        input.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                applyChanges(row, item); // Pass the item data to applyChanges
-                removeInputEventListeners(row);
-            } else if (event.key === 'Escape') {
-                restoreOriginalValues(row, originalValues);
-                removeInputEventListeners(row);
-            }
-        });
+        if (i === 0) {
+            input.focus();
+        }
     }
 }
+
 
 
 function applyChanges(row) {
@@ -175,10 +201,20 @@ function removeInputEventListeners(row) {
     }
 }
 
-function restoreOriginalValues(row, originalValues) {
-    for (let i = 1; i < row.cells.length - 1; i++) {
-        row.cells[i].textContent = originalValues[i];
+function restoreOriginalValues(row) {
+    const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+    const originalData = currentData[rowIndex];
+    if (!originalData) {
+        return; // If no original data found, do nothing
     }
+
+    // Replace input fields with the original data
+    const keys = Object.keys(originalData);
+    for (let i = 0; i < keys.length; i++) { // Assuming the last key is for the action buttons
+        row.cells[i].textContent = originalData[keys[i]];
+    }
+
+    currentlyEditingRow = null; // Clear the editing state
 }
 
 function createInput(value) {
