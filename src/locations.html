@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lookup</title>
+    <link rel="stylesheet" href="inventoryLookup.css">
+    <script src="inventoryLookup.js" defer></script>
+</head>
+<body>
+    <header>
+        <div id="sidebar-container"> </div>
+    </header>
+    <h1>Manage Locations</h1>
+    <div class="title-line"></div>
+    <div class="container">
+        <form id="inventoryForm">
+            <div class="search_inputs">
+                <div class="input_pair">
+                    <label for="prefix">Warehouse Name:</label>
+                    <input type="text" id="prefix" name="prefix">
+                </div>
+
+                <div class="input_pair">
+                    <label for="partNumber">Zone Name:</label>
+                    <input type="text" id="partNumber" name="partNumber">
+                </div>
+            </div>
+            <button id="submitButton" type="submit">Submit</button>
+
+        </form>
+        <!-- Table for displaying search results -->
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Warehouse Name</th>
+                    <th>Zone Name</th>
+                    <th>Location Notes</th>
+                    <th>Single Parts Location</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically populated here -->
+            </tbody>
+        </table>
+    </div>
+    
+
+</body>
+</html>
