@@ -17,6 +17,7 @@
   "dependencies": {
     "csv-parser": "^3.0.0",
     "electron": "^27.0.4",
+    "fs-extra": "^11.2.0",
     "sqlite3": "^5.1.6"
   }
 }

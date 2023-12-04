@@ -9,8 +9,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     get_CSV_Data_Response: (callback) => ipcRenderer.on('get_CSV_Data_Response', callback),
     get_locations: (formData) => ipcRenderer.send('get_locations', formData),
     get_locations_Response: (callback) => ipcRenderer.on('get_locations_Response', callback),
-    copy_directory: (directoryPath) => ipcRenderer.send('copy_directory', directoryPath),
-    copy_directory_Response: (callback) => ipcRenderer.on('copy_directory_Response',callback)
+    selectDirectory: () => ipcRenderer.send('open-directory-dialog'),
+    onDirectorySelected: (callback) => ipcRenderer.on('selected-directory', callback),
+    copy_file: (destination) => ipcRenderer.invoke('copy_file', destination),
 
 });
 

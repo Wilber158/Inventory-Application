@@ -8,29 +8,36 @@ async function loadContent() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const fileSelectBtn = document.getElementById('addButton');
-    const fileInput = document.getElementById('fileInput');
+const directoryDiv = document.getElementById('directory');
 
-    fileSelectBtn.addEventListener('click', () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener('change', () => {
-        const directory = fileInput.files;
-        handleDirectorySelection(directory);
-    });
+document.getElementById('addButton').addEventListener('click', () => {
+    window.electronAPI.selectDirectory();
 });
 
-function handleDirectorySelection(directory) {
-    if (!directory.length) {
-        alert('Please select a directory.');
-        return;
-    }
+window.electronAPI.onDirectorySelected((event, paths) => {
+    console.log('Selected directory:', paths[0]);
+    // Do something with the selected directory path
+    directoryDiv.innerHTML = paths[0];
 
-    // Send the directory path to the main process
-    // Assuming the directory's path is in the first file's path attribute
-    window.electronAPI.copy_directory(directory);
-}
+    try{
+        window.electronAPI.copy_file(paths[0])
+        .then(result => {
+            if (result.success) {
+                console.log('File copied successfully');
+            } else {
+                console.error('Error copying file:', result.message);
+            }
+        })
+        .catch(err => {
+            console.error('Error:', err);
+        });
+
+    }catch(err){
+        console.error('Error:', err);
+    }
+});
+
+
+
 
 window.onload = loadContent;

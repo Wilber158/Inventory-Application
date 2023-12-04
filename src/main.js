@@ -1,10 +1,11 @@
-const { app, BrowserWindow, ipcMain, ipcRenderer} = require('electron')
+const { app, BrowserWindow, ipcMain, ipcRenderer, dialog} = require('electron')
 const db = require('../backend/database.js');
 const csvParsing = require('../backend/csv_parsing.js');
 const userEntries = require('../backend/userEntries.js');
 const userLocations = require('../backend/userLocations.js');
 const userPartEntries = require('../backend/userPartEntries.js');
 const path = require('path');
+const fs = require('fs');
 
 
 const createWindow = () => {
@@ -54,14 +55,29 @@ ipcMain.on('submit_Add_Entry', async (event, formData) => {
   }
 });
 
-ipcMain.on('copy_directory', async (event, directoryPath) => {
+ipcMain.on('open-directory-dialog', (event) => {
+  dialog.showOpenDialog({
+      properties: ['openDirectory']
+  }).then(result => {
+      if (!result.canceled) {
+          event.sender.send('selected-directory', result.filePaths);
+      }
+  }).catch(err => {
+      console.log(err);
+  });
+});
+
+ipcMain.handle('copy_file', async (event, destination) => {
   try {
-      await fs.copy('../backend/inventory.db', directoryPath); // Copy the 'backend' directory to user's selected location
-      console.log('success')
+      const source = path.join(__dirname, '../backend/inventory.db')
+      await fs.promises.copyFile(source, destination);
+      return 'File copied successfully';
   } catch (error) {
-      console.error('Error copying directory:', error);
+      console.error('Failed to copy file:', error);
+      return 'Error copying file';
   }
 });
+
 
 ipcMain.on('get_Inventory_Entries', async (event, formData) => {
   try{
