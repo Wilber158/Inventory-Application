@@ -91,7 +91,7 @@ input {
 .input_pair {
     display: flex;
     align-items: center;
-    margin-right: 0px;
+    margin-right: 20px;
     white-space: nowrap;
     margin-bottom: 20px;
     width: 180px;
