@@ -9,7 +9,9 @@ async function loadSidebar() {
 }
 
 window.onload = loadSidebar;
-
+document.getElementById('myInput').addEventListener('keyup', function() {
+    this.value = this.value.toUpperCase();
+});
 document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.getElementById('submitButton');
     const form = document.querySelector('form');
