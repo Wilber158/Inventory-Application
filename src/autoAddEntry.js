@@ -10,7 +10,7 @@ async function loadContent() {
 }
 
 const table = document.getElementById('dataTable');
-const submitButton = document.getElementById('submitButton');
+const submitButton = document.getElementById('addButton');
 let currentData = [];
 let currentlyEditingRow = null;
 
@@ -18,23 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     submitButton.addEventListener('click', async (event) => {
         event.preventDefault();
         
-        // Get values from the form inputs
-        if(form.checkValidity()){
-            const formData = {
-                prefix: document.getElementById('prefix').value,
-                partNumber: document.getElementById('partNumber').value,
-                type: document.getElementById('type').value,
-                quantity: document.getElementById('quantity').value,
-            };
-            for (const property in formData) {
-                console.log(`${property}: ${formData[property]}`);
-            }
-            // Send the form data to the main process
-            await window.electronAPI.get_Inventory_Entries(formData);
-        } else{
-            console.log("Form is not valid")
-            form.reportValidity()
+        const formData = {
+            partNumber: document.getElementById('partNumber').value
+        };
+        for (const property in formData) {
+            console.log(`${property}: ${formData[property]}`);
         }
+        // Send the form data to the main process
+        await window.electronAPI.get_Inventory_Entries(formData);
+
     });
 });
 
@@ -77,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     addButton.addEventListener('click', () => {
         // Trigger IPC event to main process to add the inventory entry
-        ipcRenderer.send('add-inventory-entry', {/* CSV Data or file path */});
+        //ipcRenderer.send('add-inventory-entry', {/* CSV Data or file path */});
     });
 });
 

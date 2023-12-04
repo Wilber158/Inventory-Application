@@ -18,6 +18,10 @@ header {
     text-align: center;
 }
 
+#partNumber, #fileInput{
+    display: none;
+}
+
 h2 {
     color: #333;
 }
