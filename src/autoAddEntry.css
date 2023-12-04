@@ -79,3 +79,37 @@ th {
     max-width: 1200px;
     height: auto;
 }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed; /* Fixed table layout */
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word; /* Ensures text wraps inside cells */
+}
+
+.edit-btn, .delete-btn {
+    cursor: pointer;
+    padding: 5px;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+/* Additional styles */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 60px; /* Adjust as needed */
+}
