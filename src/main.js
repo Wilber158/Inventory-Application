@@ -66,3 +66,23 @@ ipcMain.on('get_Inventory_Entries', async (event, formData) => {
     event.reply('get_Inventory_Entries_Response', { error: error.message });
   }
 });
+
+//get_CSV_Data: (filePath) => ipcRenderer.send('get_CSV_Data', filePath),
+//get_CSV_Data_Response: (callback) => ipcRenderer.on('get_CSV_Data_Response', callback),
+
+ipcMain.on('get_CSV_Data', async (event, filePath) => {
+  try{
+    console.log("calling getCSVData...");
+    console.log(filePath);
+    const result = await csvParsing.getCSVData(filePath);
+
+    console.log("result of getCSVData: ", result);
+
+    event.reply('get_CSV_Data_Response', result);
+  }catch(error){
+    console.error('Error in get_CSV_Data:', error);
+    event.reply('get_CSV_Data_Response', { error: error.message });
+  }
+}
+);
+
