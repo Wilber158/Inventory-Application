@@ -116,7 +116,6 @@ const getSpecificInventoryEntry = (formData) => {
             }
         });
     });
-
 }
 
 

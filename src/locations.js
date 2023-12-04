@@ -25,7 +25,7 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
-window.electronAPI.get_Inventory_Entries_Response((event, response) => {
+window.electronAPI.get_locations_Response((event, response) => {
     if (response.error) {
         console.log("Error:", response.error);
     } else {
@@ -43,19 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Get values from the form inputs
         if(form.checkValidity()){
             const formData = {
-                prefix: document.getElementById('prefix').value,
-                partNumber: document.getElementById('partNumber').value,
-                type: document.getElementById('type').value,
-                quantity: document.getElementById('quantity').value,
+                warehouse_name: document.getElementById('warehouse_name').value,
+                partNumber: document.getElementById('zone_name').value,
             };
-
 
             for (const property in formData) {
                 console.log(`${property}: ${formData[property]}`);
             }
 
             // Send the form data to the main process
-            await window.electronAPI.get_Inventory_Entries(formData);
+            await window.electronAPI.get_locations(formData);
 
         } else{
             console.log("Form is not valid")
@@ -79,43 +76,22 @@ function renderTable(data) {
         const row = tableBody.insertRow();
         
         // Mapping data to table columns
-        let partNumber = item.part_prefix + '' + item.part_number;
         const cellPartNumber = row.insertCell();
-        cellPartNumber.textContent = partNumber;
-        set.partNumber = partNumber;
+        cellPartNumber.textContent = item.warehouse_name;
+        set.warehouse_name = warehouse_name;
 
         const cellType = row.insertCell();
-        cellType.textContent = item.part_type;
-        set.type = item.part_type;
+        cellType.textContent = item.zone_name;
+        set.zone_name = item.zone_name;
 
         const cellQuantity = row.insertCell();
-        cellQuantity.textContent = item.quantity;
-        set.quantity = item.quantity;
+        cellQuantity.textContent = item.location_notes;
+        set.location_notes = item.location_notes;
 
         const cellLocation = row.insertCell();
-        const location = item.warehouse_name + ' ' + item.zone_name;
-        cellLocation.textContent = location; // Adjust this if there's a specific location field
+        cellLocation.textContent = item.single_part_only; // Adjust this if there's a specific location field
         set.location = location;
 
-        const cellCondition = row.insertCell();
-        cellCondition.textContent = item.condition;
-        set.condition = item.condition;
-
-        const cellManufacturer = row.insertCell();
-        cellManufacturer.textContent = item.manufacturer;
-        set.manufacturer = item.manufacturer;
-
-        const cellVendor = row.insertCell();
-        cellVendor.textContent = item.vendor_name;
-        set.vendor = item.vendor_name;
-
-        const cellUnitCost = row.insertCell();
-        cellUnitCost.textContent = item.unit_cost;
-        set.unitCost = item.unit_cost;
-
-        const cellEntryNotes = row.insertCell();
-        cellEntryNotes.textContent = item.entry_notes;
-        set.entryNotes = item.entry_notes;
         
         currentData.push(set);
         // Edit and Delete buttons

@@ -1,10 +1,5 @@
 const partsCRUD = require('./CRUD/parts.js');
-const entriesCRUD = require('./CRUD/inventory_entries.js');
-const locationsCRUD = require('./CRUD/locations.js');
-const warehouseCRUD = require('./CRUD/warehouse.js');
-const vendorsCRUD = require('./CRUD/vendors.js');
-const sellPointCRUD = require('./CRUD/sellPoint.js');
-const additionsCRUD = require('./CRUD/additions.js');
+
 
 
 //part_id, part_number, description, creation_date, priority_flag, part_notes, part_abbreviation, quantity_sold

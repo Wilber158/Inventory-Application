@@ -2,8 +2,10 @@ const { app, BrowserWindow, ipcMain} = require('electron')
 const db = require('../backend/database.js');
 const csvParsing = require('../backend/csv_parsing.js');
 const userEntries = require('../backend/userEntries.js');
+const userLocations = require('../backend/userLocations.js');
 const userPartEntries = require('../backend/userPartEntries.js');
 const path = require('path');
+
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -83,6 +85,20 @@ ipcMain.on('get_CSV_Data', async (event, filePath) => {
     console.error('Error in get_CSV_Data:', error);
     event.reply('get_CSV_Data_Response', { error: error.message });
   }
-}
-);
+});
+
+ipcMain.on('get_locations', async (event, formData) => {
+  try{
+    console.log("calling getLocations...");
+    console.log(formData);
+    const result = await userLocations.getLocationRows(formData);
+
+    console.log("result of getLocations: ", result);
+
+    event.reply('get_locations_Response', result);
+  }catch(error){
+    console.error('Error in get_locations:', error);
+    event.reply('get_locations_Response', { error: error.message });
+  }
+});
 

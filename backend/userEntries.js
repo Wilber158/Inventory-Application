@@ -6,8 +6,6 @@ const locationsCRUD = require('./CRUD/locations.js');
 const warehouseCRUD = require('./CRUD/warehouse.js');
 const zoneCRUD = require('./CRUD/zone.js');
 const vendorsCRUD = require('./CRUD/vendors.js');
-const sellPointCRUD = require('./CRUD/sellPoint.js');
-const additionsCRUD = require('./CRUD/additions.js');
 
 //part_id, location_id, quantity, data_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price
 async function createUserInventoryEntry(part_prefix, part_number, quantity, warehouse_name, zone_name, vendor_name, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type){

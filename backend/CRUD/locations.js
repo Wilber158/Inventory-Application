@@ -23,6 +23,40 @@ const createLocation = (locations_notes, zone_id, warehouse_id, single_part_only
     });
 }
 
+const getSpecificLocation = async (formData) => {
+    let sql = `SELECT * FROM Locations NATURAL JOIN Warehouse NATURAL JOIN Zones WHERE 1=1 `;
+    let sqlParams = [];
+    console.log("formData in getSpecificLocation: ", formData);
+
+    if(formData.warehouse_name != undefined){
+        sql += ` AND warehouse_name = ?`;
+        sqlParams.push(formData.warehouse_name);
+    }
+
+    if(formData.zone_name != undefined){
+        sql += ` AND zone_name = ?`;
+        sqlParams.push(formData.zone_name);
+    }
+
+    
+    return new Promise((resolve, reject) => {
+        database.all(sql, sqlParams, (err, rows) => {
+            if(err){
+                console.log(err)
+                reject(new Error(`Error getting location: ${err.message}`));
+            } else {
+                if(rows == undefined){
+                    console.log("rows is undefined in getSpecificLocation");
+                    resolve(rows);
+                    return;
+                }
+                console.log("Returned rows in getSpecificLocation: ", rows);
+                resolve(rows);
+            }
+        });
+    });
+}
+
 const getLocation_id = (zone_id, warehouse_id) => {
     return new Promise((resolve, reject) => {
         database.get(`SELECT location_id FROM Locations WHERE zone_id = ? AND warehouse_id = ?`, [zone_id, warehouse_id], function (err, row) {
@@ -217,7 +251,8 @@ module.exports = {
     updateLocation_Warehouse_id,
     updateLocation_single_part_only,
     deleteLocation,
-    deleteAllLocations
+    deleteAllLocations,
+    getSpecificLocation
 }
 
 // Path: backend/locations.js

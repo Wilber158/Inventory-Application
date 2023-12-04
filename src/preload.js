@@ -7,5 +7,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     get_Inventory_Entries_Response: (callback) => ipcRenderer.on('get_Inventory_Entries_Response', callback),
     get_CSV_Data: (filePath) => ipcRenderer.send('get_CSV_Data', filePath),
     get_CSV_Data_Response: (callback) => ipcRenderer.on('get_CSV_Data_Response', callback),
+    get_locations: (formData) => ipcRenderer.send('get_locations', formData),
+    get_locations_Response: (callback) => ipcRenderer.on('get_locations_Response', callback)
 });
 
