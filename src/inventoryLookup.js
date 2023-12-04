@@ -106,6 +106,15 @@ function renderTable(data) {
         const deleteBtn = createButton('Delete', 'delete-btn');
         btnCell.appendChild(editBtn);
         btnCell.appendChild(deleteBtn);
+        // Add event listeners to the edit and delete buttons
+        editBtn.addEventListener('click', () => {
+            editRow(row, item); // Pass the item data to the editRow function
+        });
+
+        deleteBtn.addEventListener('click', () => {
+            deleteRow(row, item); // Pass the item data to the deleteRow function
+        });
+
     });
 }
 
@@ -127,19 +136,19 @@ function onTableClick(event) {
     }
 }
 
-function editRow(row) {
+function editRow(row, item) {
     const originalValues = [];
     for (let i = 1; i < row.cells.length - 1; i++) {
         originalValues[i] = row.cells[i].textContent;
-        const input = createInput(row.cells[i].textContent);
+        const input = createInput(originalValues[i]);
         row.cells[i].innerHTML = '';
         row.cells[i].appendChild(input);
 
-        if (i === 1) input.focus();
+        if (i === 0) input.focus();
 
         input.addEventListener('keydown', function(event) {
             if (event.key === 'Enter') {
-                applyChanges(row);
+                applyChanges(row, item); // Pass the item data to applyChanges
                 removeInputEventListeners(row);
             } else if (event.key === 'Escape') {
                 restoreOriginalValues(row, originalValues);
@@ -148,6 +157,7 @@ function editRow(row) {
         });
     }
 }
+
 
 function applyChanges(row) {
     for (let i = 1; i < row.cells.length - 1; i++) {
@@ -178,11 +188,14 @@ function createInput(value) {
     return input;
 }
 
-function deleteRow(row) {
-    const partId = row.cells[0].textContent;
-    const index = staticData.findIndex(item => item.Part == partId);
-    if (index > -1) {
-        staticData.splice(index, 1);
-    }
-    row.remove();
+function deleteRow(row, item) {
+    // Assuming you have a function window.electronAPI.deleteInventoryEntry
+    window.electronAPI.deleteInventoryEntry(item.id, (response) => {
+        if (response.error) {
+            console.error('Error deleting inventory entry:', response.error);
+        } else {
+            // Remove the row from the table
+            row.remove();
+        }
+    });
 }
