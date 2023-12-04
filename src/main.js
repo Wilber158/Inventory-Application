@@ -42,6 +42,7 @@ ipcMain.on('submit_Add_Entry', async (event, formData) => {
       console.log("calling createUserInventoryEntry...")
       console.log(formData);
       const result = await userEntries.createUserInventoryEntry(formData.prefix, formData.partNumber, formData.quantity, formData.warehouse, formData.zone, formData.seller, formData.manufacturer, formData.condition, formData.unitCost, formData.notes, null, formData.type);
+      console.log("result of createUserInventoryEntry: ", result);
       event.reply('submit_Add_Entry_Response', result);
             
   } catch (error) {
@@ -56,6 +57,8 @@ ipcMain.on('get_Inventory_Entries', async (event, formData) => {
     console.log("calling getInventoryEntries...");
     console.log(formData);
     const result = await userEntries.getInventoryEntry(formData);
+
+    console.log("result of getInventoryEntries: ", result);
 
     event.reply('get_Inventory_Entries_Response', result);
   }catch(error){

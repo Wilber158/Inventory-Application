@@ -17,6 +17,17 @@ window.onload = loadSidebar;
 
 let currentData = [];
 
+window.electronAPI.get_Inventory_Entries_Response((event, response) => {
+    if (response.error) {
+        console.log("Error:", response.error);
+    } else {
+        currentData = response;
+        console.log("Current data has been set to result of search function");
+        renderTable(response);
+    }
+});
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     submitButton.addEventListener('click', async (event) => {
@@ -36,23 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`${property}: ${formData[property]}`);
             }
 
-            //validate the form data
-            //TODO
-
             // Send the form data to the main process
             await window.electronAPI.get_Inventory_Entries(formData);
 
-            // Listen for the response from the main process
-            window.electronAPI.get_Inventory_Entries_Response((result) => {
-                if(result.error){
-                    console.log(result.error);
-                    return;
-                }
-                else{
-                    currentData = result;
-                  renderTable(result);
-                }
-            });
         } else{
             console.log("Form is not valid")
             form.reportValidity()
@@ -60,31 +57,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+
+
 function renderTable(data) {
-    const table = document.getElementById('dataTable');
-    while (table.rows.length > 1) {
-        table.deleteRow(1);
+    const tableBody = document.getElementById('dataTable').querySelector('tbody');
+    // Clear existing table rows
+    while (tableBody.rows.length > 0) {
+        tableBody.deleteRow(0);
     }
-
+    console.log("Type of data: " + typeof data)
+    // Populate the table with data
     data.forEach(item => {
-        const row = table.insertRow();
-        Object.values(item).forEach(text => {
-            const cell = row.insertCell();
-            cell.textContent = text;
-        });
+        const row = tableBody.insertRow();
+        
+        // Mapping data to table columns
+        let partNumber = item.part_prefix + '' + item.part_number;
+        const cellPartNumber = row.insertCell();
+        cellPartNumber.textContent = partNumber;
 
-        const editBtn = document.createElement('span');
-        editBtn.className = 'edit-btn';
-        editBtn.textContent = 'Edit';
+        const cellType = row.insertCell();
+        cellType.textContent = item.part_type;
 
-        const deleteBtn = document.createElement('span');
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.textContent = 'Delete';
+        const cellQuantity = row.insertCell();
+        cellQuantity.textContent = item.quantity;
 
+        const cellLocation = row.insertCell();
+        const location = item.warehouse_name + ' ' + item.zone_name;
+        cellLocation.textContent = location; // Adjust this if there's a specific location field
+
+        const cellCondition = row.insertCell();
+        cellCondition.textContent = item.condition;
+
+        const cellManufacturer = row.insertCell();
+        cellManufacturer.textContent = item.manufacturer;
+
+        const cellVendor = row.insertCell();
+        cellVendor.textContent = item.vendor_name;
+
+        const cellUnitCost = row.insertCell();
+        cellUnitCost.textContent = item.unit_cost;
+
+        const cellEntryNotes = row.insertCell();
+        cellEntryNotes.textContent = item.entry_notes;
+
+        // Edit and Delete buttons
         const btnCell = row.insertCell();
+        const editBtn = createButton('Edit', 'edit-btn');
+        const deleteBtn = createButton('Delete', 'delete-btn');
         btnCell.appendChild(editBtn);
         btnCell.appendChild(deleteBtn);
     });
+}
+
+function createButton(text, className) {
+    const btn = document.createElement('span');
+    btn.className = className;
+    btn.textContent = text;
+    return btn;
 }
 
 function onTableClick(event) {

@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 //handle the response, ex: send to a new page
                 console.log(result);
                 console.log("Holy shit it worked")
-                alert('Entry Succesful!')
             });
         }
         else{
