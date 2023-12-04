@@ -7,29 +7,12 @@ async function loadContent() {
         console.error('Failed to load sidebar:', error);
     }
 
-    try {
-        const csvResponse = await fetch('./csvTable.html');
-        const csvContent = await csvResponse.text();
-        document.getElementById('csv-container').innerHTML = csvContent;
-        afterCsvContentLoaded();
-    } catch (error) {
-        console.error('Failed to load CSV table:', error);
-    }
 }
 
-const staticData = [
-    { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%', Random:'12', other:'67',more:'99' },
-    { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' , Random:'123', other:'678',more:'999' },
-    // ... more static data ...
-];
-
-function afterCsvContentLoaded() {
-    const table = document.getElementById('dataTable');
-    if (table) {
-        renderTable(staticData);
-        table.addEventListener('click', onTableClick);
-    }
-}
+const table = document.getElementById('dataTable');
+const submitButton = document.getElementById('submitButton');
+let currentData = [];
+let currentlyEditingRow = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     const dropZone = document.getElementById('drop-zone');
@@ -86,6 +69,129 @@ function handleFile(file) {
     ipcRenderer.send('process-csv', csvData);
 }
 
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape' && currentlyEditingRow) {
+        restoreOriginalValues(currentlyEditingRow);
+        currentlyEditingRow = null; // Reset the currently editing row
+    }
+});
+
+window.electronAPI.get_Inventory_Entries_Response((event, response) => {
+    if (response.error) {
+        console.log("Error:", response.error);
+    } else {
+        console.log("Current data has been set to result of search function");
+        renderTable(response);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    submitButton.addEventListener('click', async (event) => {
+        event.preventDefault();
+        
+        // Get values from the form inputs
+        if(form.checkValidity()){
+            const formData = {
+                prefix: document.getElementById('prefix').value,
+                partNumber: document.getElementById('partNumber').value,
+                type: document.getElementById('type').value,
+                quantity: document.getElementById('quantity').value,
+            };
+
+
+            for (const property in formData) {
+                console.log(`${property}: ${formData[property]}`);
+            }
+
+            // Send the form data to the main process
+            await window.electronAPI.get_Inventory_Entries(formData);
+
+        } else{
+            console.log("Form is not valid")
+            form.reportValidity()
+        }
+    });
+});
+
+
+
+function renderTable(data) {
+    const tableBody = document.getElementById('dataTable').querySelector('tbody');
+    // Clear existing table rows
+    while (tableBody.rows.length > 0) {
+        tableBody.deleteRow(0);
+    }
+    console.log("Type of data: " + typeof data)
+    // Populate the table with data
+    data.forEach(item => {
+        let set = {};
+        const row = tableBody.insertRow();
+        
+        // Mapping data to table columns
+        let partNumber = item.part_prefix + '' + item.part_number;
+        const cellPartNumber = row.insertCell();
+        cellPartNumber.textContent = partNumber;
+        set.partNumber = partNumber;
+
+        const cellType = row.insertCell();
+        cellType.textContent = item.part_type;
+        set.type = item.part_type;
+
+        const cellQuantity = row.insertCell();
+        cellQuantity.textContent = item.quantity;
+        set.quantity = item.quantity;
+
+        const cellLocation = row.insertCell();
+        const location = item.warehouse_name + ' ' + item.zone_name;
+        cellLocation.textContent = location; // Adjust this if there's a specific location field
+        set.location = location;
+
+        const cellCondition = row.insertCell();
+        cellCondition.textContent = item.condition;
+        set.condition = item.condition;
+
+        const cellManufacturer = row.insertCell();
+        cellManufacturer.textContent = item.manufacturer;
+        set.manufacturer = item.manufacturer;
+
+        const cellVendor = row.insertCell();
+        cellVendor.textContent = item.vendor_name;
+        set.vendor = item.vendor_name;
+
+        const cellUnitCost = row.insertCell();
+        cellUnitCost.textContent = item.unit_cost;
+        set.unitCost = item.unit_cost;
+
+        const cellEntryNotes = row.insertCell();
+        cellEntryNotes.textContent = item.entry_notes;
+        set.entryNotes = item.entry_notes;
+        
+        currentData.push(set);
+        // Edit and Delete buttons
+        const btnCell = row.insertCell();
+        const editBtn = createButton('Edit', 'edit-btn');
+        const deleteBtn = createButton('Delete', 'delete-btn');
+        btnCell.appendChild(editBtn);
+        btnCell.appendChild(deleteBtn);
+        // Add event listeners to the edit and delete buttons
+        editBtn.addEventListener('click', () => {
+            editRow(row, item); // Pass the item data to the editRow function
+        });
+
+        deleteBtn.addEventListener('click', () => {
+            deleteRow(row, item); // Pass the item data to the deleteRow function
+        });
+
+    });
+}
+
+function createButton(text, className) {
+    const btn = document.createElement('span');
+    btn.className = className;
+    btn.textContent = text;
+    return btn;
+}
+
 function onTableClick(event) {
     const target = event.target;
     const row = target.closest('tr');
@@ -97,63 +203,41 @@ function onTableClick(event) {
     }
 }
 
-function renderTable(data) {
-    const table = document.getElementById('dataTable');
-    // Clear existing table rows
-    while (table.rows.length > 1) {
-        table.deleteRow(1);
+function editRow(row) {
+    // If there's already a row being edited, restore its original values before editing another row
+    if (currentlyEditingRow && currentlyEditingRow !== row) {
+        restoreOriginalValues(currentlyEditingRow);
     }
 
-    // Populate the table with data
-    data.forEach(item => {
-        const row = table.insertRow();
-        Object.values(item).forEach(text => {
-            const cell = row.insertCell();
-            cell.textContent = text;
-        });
+    // Check if the current row is already in edit mode
+    const isEditing = row.querySelector('input');
+    if (isEditing) {
+        // Row is already in edit mode
+        return;
+    }
 
-        // Add edit and delete buttons
-        const editBtn = document.createElement('span');
-        editBtn.className = 'edit-btn';
-        editBtn.textContent = 'Edit';
+    // Set the currently editing row
+    currentlyEditingRow = row;
 
-        const deleteBtn = document.createElement('span');
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.textContent = 'Delete';
-
-        const btnCell = row.insertCell();
-        btnCell.appendChild(editBtn);
-        btnCell.appendChild(deleteBtn);
-    });
-}
-
-function editRow(row) {
-    const originalValues = [];
+    // Replace each cell (except the last one with buttons) with an input element
     for (let i = 1; i < row.cells.length - 1; i++) {
-        originalValues[i] = row.cells[i].textContent;
-        const input = createInput(row.cells[i].textContent);
+        const cellValue = row.cells[i].textContent;
+        const input = createInput(cellValue);
         row.cells[i].innerHTML = '';
         row.cells[i].appendChild(input);
 
-        if (i === 1) input.focus();
-
-        input.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                applyChanges(row);
-                removeInputEventListeners(row);
-            } else if (event.key === 'Escape') {
-                restoreOriginalValues(row, originalValues);
-                removeInputEventListeners(row);
-            }
-        });
+        if (i === 0) {
+            input.focus();
+        }
     }
 }
+
+
 
 function applyChanges(row) {
     for (let i = 1; i < row.cells.length - 1; i++) {
         const input = row.cells[i].querySelector('input');
         row.cells[i].textContent = input.value;
-        // Update staticData or other data sources as necessary
     }
 }
 
@@ -166,28 +250,20 @@ function removeInputEventListeners(row) {
     }
 }
 
-function restoreOriginalValues(row, originalValues) {
-    for (let i = 1; i < row.cells.length - 1; i++) {
-        row.cells[i].textContent = originalValues[i];
+function restoreOriginalValues(row) {
+    const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+    const originalData = currentData[rowIndex];
+    if (!originalData) {
+        return; // If no original data found, do nothing
     }
-}
 
-function deleteRow(row) {
-    // Implement delete logic here
-    console.log('Delete row with ID ' + row.cells[0].textContent);
+    // Replace input fields with the original data
+    const keys = Object.keys(originalData);
+    for (let i = 0; i < keys.length; i++) { // Assuming the last key is for the action buttons
+        row.cells[i].textContent = originalData[keys[i]];
+    }
 
-    // Remove the row visually from the HTML table
-    row.remove();
-}
-
-
-function findRowById(id) {
-    // Find the row index in the HTML table
-    const editedItem = staticData.find(item => item.Part === id);
-    const rowIndex = staticData.indexOf(editedItem);
-
-    // Get the corresponding row in the HTML table
-    return table.rows[rowIndex + 1]; // Adding 1 to compensate for the header row
+    currentlyEditingRow = null; // Clear the editing state
 }
 
 function createInput(value) {
@@ -197,5 +273,16 @@ function createInput(value) {
     return input;
 }
 
-// Ensure window.onload is set to loadContent
+function deleteRow(row, item) {
+    // Assuming you have a function window.electronAPI.deleteInventoryEntry
+    window.electronAPI.deleteInventoryEntry(item.id, (response) => {
+        if (response.error) {
+            console.error('Error deleting inventory entry:', response.error);
+        } else {
+            // Remove the row from the table
+            row.remove();
+        }
+    });
+}
+
 window.onload = loadContent;
