@@ -74,7 +74,7 @@ function renderTable(data) {
     data.forEach(item => {
         let set = {};
         const row = tableBody.insertRow();
-        
+        console.log("Currently editing location "+ item.location_id)
         // Mapping data to table columns
         const cellPartNumber = row.insertCell();
         cellPartNumber.textContent = item.warehouse_name;
@@ -88,9 +88,9 @@ function renderTable(data) {
         cellQuantity.textContent = item.location_notes;
         set.location_notes = item.location_notes;
 
-        const cellLocation = row.insertCell();
-        cellLocation.textContent = item.single_part_only; // Adjust this if there's a specific location field
-        set.location = location;
+        const singlePartsCell = row.insertCell();
+        singlePartsCell.appendChild(createDropdown(item.single_part_only));
+        set.single_part_only = item.single_part_only;
 
         
         currentData.push(set);
@@ -112,6 +112,29 @@ function renderTable(data) {
     });
 }
 
+function createDropdown(selectedValue) {
+    const select = document.createElement('select');
+    
+    // Add a default option for when selectedValue is null
+    const defaultOption = new Option('Select', '', false, false);
+    select.appendChild(defaultOption);
+
+    // True and False options
+    const trueOption = new Option('true', 'true', selectedValue === 'true', selectedValue === 'true');
+    const falseOption = new Option('false', 'false', selectedValue === 'false', selectedValue === 'false');
+
+    select.appendChild(trueOption);
+    select.appendChild(falseOption);
+
+    // If selectedValue is null, set the default option as selected
+    if (selectedValue === null) {
+        select.value = '';
+    }
+
+    return select;
+}
+
+
 function createButton(text, className) {
     const btn = document.createElement('span');
     btn.className = className;
@@ -131,6 +154,7 @@ function onTableClick(event) {
 }
 
 function editRow(row) {
+    console.log("Editing row!!!")
     // If there's already a row being edited, restore its original values before editing another row
     if (currentlyEditingRow && currentlyEditingRow !== row) {
         restoreOriginalValues(currentlyEditingRow);
@@ -147,7 +171,7 @@ function editRow(row) {
     currentlyEditingRow = row;
 
     // Replace each cell (except the last one with buttons) with an input element
-    for (let i = 0; i < row.cells.length-1; i++) {
+    for (let i = 0; i < row.cells.length-2; i++) {
         const cellValue = row.cells[i].textContent;
         const input = createInput(cellValue);
         row.cells[i].innerHTML = '';
@@ -186,7 +210,7 @@ function restoreOriginalValues(row) {
 
     // Replace input fields with the original data
     const keys = Object.keys(originalData);
-    for (let i = 0; i < keys.length; i++) { // Assuming the last key is for the action buttons
+    for (let i = 0; i < keys.length-1; i++) { // Assuming the last key is for the action buttons
         row.cells[i].textContent = originalData[keys[i]];
     }
 
