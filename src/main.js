@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain} = require('electron')
+const { app, BrowserWindow, ipcMain, ipcRenderer} = require('electron')
 const db = require('../backend/database.js');
 const csvParsing = require('../backend/csv_parsing.js');
 const userEntries = require('../backend/userEntries.js');
@@ -51,6 +51,15 @@ ipcMain.on('submit_Add_Entry', async (event, formData) => {
       // Handle the error
       console.error('Error in submit_Add_Entry:', error);
       event.reply('submit_Add_Entry_Response', { error: error.message });
+  }
+});
+
+ipcMain.on('copy_directory', async (event, directoryPath) => {
+  try {
+      await fs.copy('../backend/inventory.db', directoryPath); // Copy the 'backend' directory to user's selected location
+      console.log('success')
+  } catch (error) {
+      console.error('Error copying directory:', error);
   }
 });
 
