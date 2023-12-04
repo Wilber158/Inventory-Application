@@ -147,7 +147,7 @@ function editRow(row) {
     currentlyEditingRow = row;
 
     // Replace each cell (except the last one with buttons) with an input element
-    for (let i = 1; i < row.cells.length - 1; i++) {
+    for (let i = 0; i < row.cells.length; i++) {
         const cellValue = row.cells[i].textContent;
         const input = createInput(cellValue);
         row.cells[i].innerHTML = '';
