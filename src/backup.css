@@ -1,0 +1,49 @@
+body, html {
+    height: 50%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+/* Header Styles */
+header {
+    width: 100%;
+    height: 90px;
+    background: #4796BD;
+    position: relative;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.1);
+}
+#content {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
+a{
+    align-items: center;
+}
+
+h2 {
+    color: #333;
+}
+
+#fileInput{
+    display: none;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+
+#addButton {
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 20px;
+    margin: 20px 0;
+    cursor: pointer;
+}
+
+#addButton:hover {
+    background-color: #0056b3;
+}
