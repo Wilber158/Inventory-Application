@@ -24,6 +24,28 @@ const createWindow = () => {
   win.loadFile('src/addEntry.html')
 }
 
+
+
+// Example function that triggers a dialog
+function showSuccessInfoDialog() {
+  dialog.showMessageBox({
+      type: 'info',
+      title: 'Success!',
+      message: 'Your Entry Has Been Successfully Added!',
+      buttons: ['OK']
+  });
+}
+
+// Example function that triggers a dialog
+function showErrorInfoDialog() {
+  dialog.showMessageBox({
+      type: 'info',
+      title: 'ERROR!',
+      message: 'Your Entry Has Not Been Added!',
+      buttons: ['OK']
+  });
+}
+
 app.whenReady().then(() => {
   createWindow()
 
@@ -47,11 +69,13 @@ ipcMain.on('submit_Add_Entry', async (event, formData) => {
       const result = await userEntries.createUserInventoryEntry(formData.prefix, formData.partNumber, formData.quantity, formData.warehouse, formData.zone, formData.seller, formData.manufacturer, formData.condition, formData.unitCost, formData.notes, null, formData.type);
       console.log("result of createUserInventoryEntry: ", result);
       event.reply('submit_Add_Entry_Response', result);
+      showSuccessInfoDialog()
             
   } catch (error) {
       // Handle the error
       console.error('Error in submit_Add_Entry:', error);
       event.reply('submit_Add_Entry_Response', { error: error.message });
+      showErrorInfoDialog()
   }
 });
 
