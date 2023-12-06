@@ -17,9 +17,6 @@ let currentlyEditingRow = null;
 
 
 
-
-
-
 window.electronAPI.get_Inventory_Entries_Response((event, response) => {
     if (response.error) {
         console.log("Error:", response.error);
@@ -85,50 +82,77 @@ function renderTable(data) {
     console.log("Type of data: " + typeof data)
 
     // Populate the table with data
-    data.forEach(item => {
-        console.log("Item: ", item);
+    data.forEach(item=> {
         let set = {};
         const row = tableBody.insertRow();
-        row.dataset.inventory_entry_id = item.inventory_entry_id;
+        console.log("inventory_entry_id: ", item.inventory_entry_id);
+        row.dataset.index = item.inventory_entry_id;
         
         // Mapping data to table columns
-        let partNumber = item.part_prefix + '' + item.part_number;
-        const cellPartNumber = row.insertCell();
-        cellPartNumber.textContent = partNumber;
-        set.partNumber = partNumber;
+        let part_prefix = item.part_prefix
+        const cellPartPrefix = row.insertCell();
+        cellPartPrefix.textContent = part_prefix;
+        cellPartPrefix.setAttribute('name', 'part_prefix');
+        set.part_prefix = part_prefix;
 
-        const cellType = row.insertCell();
-        cellType.textContent = item.part_type;
-        set.type = item.part_type;
+        let part_number = item.part_number;
+        const cellPartNumber = row.insertCell();
+        cellPartNumber.textContent = part_number;
+        cellPartNumber.setAttribute('name', 'part_number');
+        set.part_number = part_number;
+
+        let part_type = item.part_type;
+        const cellPartType = row.insertCell();
+        cellPartType.textContent = part_type;
+        cellPartType.setAttribute('name', 'part_type');
+        set.part_type = part_type;
 
         const cellQuantity = row.insertCell();
         cellQuantity.textContent = item.quantity;
+        cellQuantity.setAttribute('name', 'quantity');
         set.quantity = item.quantity;
 
-        const cellLocation = row.insertCell();
-        const location = item.warehouse_name + ' ' + item.zone_name;
-        cellLocation.textContent = location; // Adjust this if there's a specific location field
-        set.location = location;
+        const cellWarehouse = row.insertCell();
+        const warehouse_name = item.warehouse_name;
+        cellWarehouse.textContent = warehouse_name;
+        cellWarehouse.setAttribute('name', 'warehouse_name');
+        set.warehouse_name = warehouse_name;
+
+        const cellZone = row.insertCell();
+        let zone_name = item.zone_name;
+        cellZone.textContent = zone_name;
+        cellZone.setAttribute('name', 'zone_name');
+        set.zone = zone_name;
 
         const cellCondition = row.insertCell();
-        cellCondition.textContent = item.condition;
-        set.condition = item.condition;
+        let condition = item.condition;
+        cellCondition.textContent = condition;
+        cellCondition.setAttribute('name', 'condition');
+        set.condition = condition;
 
         const cellManufacturer = row.insertCell();
-        cellManufacturer.textContent = item.manufacturer;
-        set.manufacturer = item.manufacturer;
+        let manufacturer = item.manufacturer;
+        cellManufacturer.textContent = manufacturer;
+        cellManufacturer.setAttribute('name', 'manufacturer');
+        set.manufacturer = manufacturer;
 
         const cellVendor = row.insertCell();
-        cellVendor.textContent = item.vendor_name;
-        set.vendor = item.vendor_name;
+        let vendor_name = item.vendor_name;
+        cellVendor.textContent = vendor_name;
+        cellVendor.setAttribute('name', 'vendor_name');
+        set.vendor_name = vendor_name;
 
         const cellUnitCost = row.insertCell();
-        cellUnitCost.textContent = item.unit_cost;
-        set.unitCost = item.unit_cost;
+        let unit_cost = item.unit_cost;
+        cellUnitCost.textContent = unit_cost;
+        cellUnitCost.setAttribute('name', 'unit_cost');
+        set.unit_cost = unit_cost;
 
         const cellEntryNotes = row.insertCell();
-        cellEntryNotes.textContent = item.entry_notes;
-        set.entryNotes = item.entry_notes;
+        let entry_notes = item.entry_notes;
+        cellEntryNotes.textContent = entry_notes;
+        cellEntryNotes.setAttribute('name', 'entry_notes');
+        set.entry_notes = entry_notes;
         
         currentData.push(set);
         // Edit and Delete buttons
@@ -167,15 +191,27 @@ function onTableClick(event) {
     }
 }
 
-function applyChanges(row) {
-    for (let i = 1; i < row.cells.length - 1; i++) {
+async function applyChanges(row) {
+    console.log("Row before apply changes: ", row);
+    const data = {};
+    for (let i = 0; i < row.cells.length - 1; i++) {
         const input = row.cells[i].querySelector('input');
         row.cells[i].textContent = input.value;
+        const cellName = row.cells[i].getAttribute('name');
+        data[cellName] = input.value;
     }
+    data.inventory_entry_id = row.dataset.index;
+    try{
+        await window.electronAPI.update_Inventory_Entry(data);
+    }catch(err){
+        console.log(err);
+    }
+    currentlyEditingRow = null; // Clear the editing state
+    console.log("Row after apply changes: ", row);
 }
 
 function removeInputEventListeners(row) {
-    for (let i = 1; i < row.cells.length - 1; i++) {
+    for (let i = 0; i < row.cells.length - 1; i++) {
         const input = row.cells[i].querySelector('input');
         if (input) {
             input.removeEventListener('keydown', arguments.callee);
@@ -208,7 +244,8 @@ function createInput(value) {
 
 async function deleteRow(row) {
     console.log("row being deleted: ", row);
-    const inventoryEntryId = row.dataset.inventory_entry_id;
+    console.log("row.dataset.index: ", row.dataset.index);
+    const inventoryEntryId = row.dataset.index;
     // Assuming you have a  window.electronAPI.deleteInventoryEntry
     try{
         console.log("Deleting inventory entry with id: ", inventoryEntryId)
@@ -220,6 +257,9 @@ async function deleteRow(row) {
     } catch (err) {
         console.log(err);
     }
+    if(currentlyEditingRow === row){
+        currentlyEditingRow = null;
+    }
 }
 
 function editRow(row) {
@@ -227,19 +267,11 @@ function editRow(row) {
     if (currentlyEditingRow && currentlyEditingRow !== row) {
         restoreOriginalValues(currentlyEditingRow);
     }
-
-    // Check if the current row is already in edit mode
-    const isEditing = row.querySelector('input');
-    if (isEditing) {
-        // Row is already in edit mode
-        return;
-    }
-
     // Set the currently editing row
     currentlyEditingRow = row;
 
     // Replace each cell (except the last one with buttons) with an input element
-    for (let i = 1; i < row.cells.length - 1; i++) {
+    for (let i = 0; i < row.cells.length - 1; i++) {
         const cellValue = row.cells[i].textContent;
         const input = createInput(cellValue);
         row.cells[i].innerHTML = '';

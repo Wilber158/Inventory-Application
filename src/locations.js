@@ -17,7 +17,6 @@ let currentlyEditingRow = null;
 
 
 
-
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape' && currentlyEditingRow) {
         restoreOriginalValues(currentlyEditingRow);
@@ -75,6 +74,7 @@ function renderTable(data) {
         let set = {};
         const row = tableBody.insertRow();
         console.log("Currently editing location "+ item.location_id)
+        row.dataset.id = item.location_id
         // Mapping data to table columns
         const cellPartNumber = row.insertCell();
         cellPartNumber.textContent = item.warehouse_name;
@@ -97,16 +97,10 @@ function renderTable(data) {
         // Edit and Delete buttons
         const btnCell = row.insertCell();
         const editBtn = createButton('Edit', 'edit-btn');
-        const deleteBtn = createButton('Delete', 'delete-btn');
         btnCell.appendChild(editBtn);
-        btnCell.appendChild(deleteBtn);
         // Add event listeners to the edit and delete buttons
         editBtn.addEventListener('click', () => {
             editRow(row, item); // Pass the item data to the editRow function
-        });
-
-        deleteBtn.addEventListener('click', () => {
-            deleteRow(row, item); // Pass the item data to the deleteRow function
         });
 
     });
