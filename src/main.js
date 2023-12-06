@@ -239,18 +239,32 @@ ipcMain.on('get_CSV_Data', async (event, filePath) => {
   }
 });
 
-ipcMain.on('get_locations', async (event, formData) => {
-  try{
-    console.log("calling getLocations...");
-    console.log(formData);
-    const result = await userLocations.getLocationRows(formData);
+ipcMain.on('deleteInventoryEntry', async (event, id) => {
+  try {
+    // Show a confirmation dialog before proceeding
+    const response = await dialog.showMessageBox({
+      type: 'question',
+      buttons: ['Cancel', 'Delete'],
+      defaultId: 0,
+      title: 'Confirm Delete',
+      message: 'Are you sure you want to delete this entry?',
+    });
 
-    console.log("result of getLocations: ", result);
+    // Check if the user clicked 'Delete'
+    if (response.response === 1) {
+      console.log("calling deleteInventoryEntry...");
+      console.log(id);
+      const result = await userEntries.deleteInventoryEntry(id);
 
-    event.reply('get_locations_Response', result);
-  }catch(error){
-    console.error('Error in get_locations:', error);
-    event.reply('get_locations_Response', { error: error.message });
+      console.log("result of deleteInventoryEntry: ", result);
+      event.reply('deleteInventoryEntry_Response', result);
+    } else {
+      // User cancelled the operation
+      event.reply('deleteInventoryEntry_Response', { cancelled: true });
+    }
+  } catch (error) {
+    console.error('Error in deleteInventoryEntry:', error);
+    event.reply('deleteInventoryEntry_Response', { error: error.message });
   }
 });
 
