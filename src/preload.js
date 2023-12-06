@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     selectDirectory: () => ipcRenderer.send('open-directory-dialog'),
     onDirectorySelected: (callback) => ipcRenderer.on('selected-directory', callback),
     copy_file: (destination) => ipcRenderer.invoke('copy_file', destination),
-
+    deleteInventoryEntry: (id) => ipcRenderer.send('deleteInventoryEntry', id),
+    deleteInventoryEntry_Response: (callback) => ipcRenderer.on('deleteInventoryEntry_Response', callback),
 });
 

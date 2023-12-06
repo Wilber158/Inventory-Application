@@ -14,6 +14,11 @@ const submitButton = document.getElementById('addButton');
 let currentData = [];
 let currentlyEditingRow = null;
 
+
+window.electronAPI.get_CSV_Data_Reponse((event, response) => {
+
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     submitButton.addEventListener('click', async (event) => {
         event.preventDefault();
@@ -36,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileSelectBtn = document.getElementById('addButton');
     const addButton = document.getElementById('addButton');
 
+    console.log("This runs when file is added");
     dropZone.addEventListener('dragover', (event) => {
         event.stopPropagation();
         event.preventDefault();
@@ -55,7 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         dropZone.classList.remove('dragover');
         const file = event.dataTransfer.files[0];
-        handleFile(file);
+        console.log("File: ", file.path);
+        handleFile(file.path);
     });
 
     fileSelectBtn.addEventListener('click', () => {
@@ -64,40 +71,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fileInput.addEventListener('change', () => {
         const file = fileInput.files[0];
-        handleFile(file);
+        console.log("File: ", file.path);
+        handleFile(file.path);
     });
 
     addButton.addEventListener('click', () => {
-        // Trigger IPC event to main process to add the inventory entry
-        //ipcRenderer.send('add-inventory-entry', {/* CSV Data or file path */});
+        
     });
 });
 
-function handleFile(file) {
-    if (!file || !file.type.match('text/csv')) {
-        alert('Please provide a CSV file.');
-        return;
-    }
+async function handleFile(file) {
 
-    // Read the CSV file
-    let csvData = parseCSV(file.path);
+    console.log("Calling get_CSV_Data from main process")
     // Send the CSV data to main process via IPC for further processing
-    ipcRenderer.send('process-csv', csvData);
+    await window.electronAPI.get_CSV_Data(file);  
 }
 
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape' && currentlyEditingRow) {
         restoreOriginalValues(currentlyEditingRow);
         currentlyEditingRow = null; // Reset the currently editing row
-    }
-});
-
-window.electronAPI.get_Inventory_Entries_Response((event, response) => {
-    if (response.error) {
-        console.log("Error:", response.error);
-    } else {
-        console.log("Current data has been set to result of search function");
-        renderTable(response);
     }
 });
 
@@ -115,18 +108,18 @@ function renderTable(data) {
         const row = tableBody.insertRow();
         
         // Mapping data to table columns
-        let partNumber = item.part_prefix + '' + item.part_number;
+        let partNumber = item['Part Prefix'] + '' + item['Part Number']
         const cellPartNumber = row.insertCell();
         cellPartNumber.textContent = partNumber;
         set.partNumber = partNumber;
 
         const cellType = row.insertCell();
-        cellType.textContent = item.part_type;
-        set.type = item.part_type;
+        cellType.textContent = item['Part Type'];
+        set.type = item['Part Type'];
 
         const cellQuantity = row.insertCell();
-        cellQuantity.textContent = item.quantity;
-        set.quantity = item.quantity;
+        cellQuantity.textContent = item['Quantity'];
+        set.quantity = item['Quantity'];
 
         const cellLocation = row.insertCell();
         const location = item.warehouse_name + ' ' + item.zone_name;
@@ -241,16 +234,15 @@ function restoreOriginalValues(row) {
     const rowIndex = Array.from(row.parentNode.children).indexOf(row);
     const originalData = currentData[rowIndex];
     if (!originalData) {
-        return; // If no original data found, do nothing
+        return; 
     }
 
-    // Replace input fields with the original data
     const keys = Object.keys(originalData);
-    for (let i = 0; i < keys.length; i++) { // Assuming the last key is for the action buttons
+    for (let i = 0; i < keys.length; i++) { 
         row.cells[i].textContent = originalData[keys[i]];
     }
 
-    currentlyEditingRow = null; // Clear the editing state
+    currentlyEditingRow = null;
 }
 
 function createInput(value) {
@@ -261,7 +253,6 @@ function createInput(value) {
 }
 
 function deleteRow(row, item) {
-    // Assuming you have a function window.electronAPI.deleteInventoryEntry
     window.electronAPI.deleteInventoryEntry(item.id, (response) => {
         if (response.error) {
             console.error('Error deleting inventory entry:', response.error);

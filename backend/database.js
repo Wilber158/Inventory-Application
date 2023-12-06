@@ -9,7 +9,6 @@ const path = require('path');
 
 
 
-// Path to where your database file will be located. 
 // You can place it in the same directory or a dedicated data directory.
 const dbPath = path.join(__dirname, 'inventory.db');
 
@@ -21,7 +20,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
     } else {
         console.log('Connected to the SQLite database.');
 
-        // Call your function to setup the database (e.g., create tables)
         setupDatabase();
     }
 });
@@ -235,22 +233,23 @@ function setupDatabase() {
     }
     );
 
+
     const createDeletedInventoryEntriesTable = `
         CREATE TABLE IF NOT EXISTS DeletedInventoryEntries (
             inventory_entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
             part_id INTEGER,
             location_id INTEGER,
             quantity INTEGER NOT NULL,
-            date_quantity_added DATE NOT NULL,
+            date_last_updated DATE NOT NULL,
             vendor_id INTEGER,
             manufacturer TEXT,
             condition TEXT,
             unit_cost REAL,
-            inventory_entry_notes TEXT,
+            entry_notes TEXT,
             sell_price REAL,
             part_type TEXT,
             deleted_date DATE,
-            deleted_reason INTEGER,
+            delete_reason INTEGER,
             FOREIGN KEY (part_id) REFERENCES Parts(part_id),
             FOREIGN KEY (location_id) REFERENCES Locations(location_id),
             FOREIGN KEY (vendor_id) REFERENCES Vendors(vendor_id)

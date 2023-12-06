@@ -167,13 +167,23 @@ const getOrCreateWarehouse = async (warehouse_name) => {
     console.log("Warehouse_id returned by getOrCreateWarehouse: ", warehouse_id)
     return warehouse_id
 }
+
+const deleteInventoryEntry = async (inventory_entry_id) => {
+    try{
+        await entriesCRUD.softDeleteInventoryEntry(inventory_entry_id);
+    }catch(err){
+        console.log(err);
+        throw new Error("Error performing deleteInventoryEntry")
+    }
+}
     
 
 
 module.exports = {
     createUserInventoryEntry,
     updateUserInventoryEntry,
-    getInventoryEntry
+    getInventoryEntry,
+    deleteInventoryEntry
 }
 
 

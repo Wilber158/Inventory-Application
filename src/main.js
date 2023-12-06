@@ -27,7 +27,7 @@ const createWindow = () => {
 
 
 
-// Example function that triggers a dialog
+// example function that triggers a dialog
 function showSuccessInfoDialog() {
   dialog.showMessageBox({
       type: 'info',
@@ -37,7 +37,7 @@ function showSuccessInfoDialog() {
   });
 }
 
-// Example function that triggers a dialog
+// example function that triggers a dialog
 function showErrorInfoDialog() {
   dialog.showMessageBox({
       type: 'info',
@@ -71,11 +71,11 @@ app.on('before-quit', (event) => {
       return;
   }
 
-  // Prevent the app from quitting immediately
+  // prevent the app from quitting immediately
   event.preventDefault();
   backUpInprogress = true;
   
-  // Perform the backup in an async IIFE (Immediately Invoked Function Expression)
+  // perform the backup in an async IIFE (Immediately Invoked Function Expression)
   (async () => {
       try {
           const backupMessage = await backup_Database();
@@ -83,7 +83,7 @@ app.on('before-quit', (event) => {
       } catch (error) {
           console.error('Error during backup:', error);
       } finally {
-          // After backup is complete or fails, quit the app
+          // pfter backup is complete or fails, quit the app
           app.quit();
       }
   })();
@@ -215,10 +215,9 @@ ipcMain.on('get_CSV_Data', async (event, filePath) => {
   try{
     console.log("calling getCSVData...");
     console.log(filePath);
-    const result = await csvParsing.getCSVData(filePath);
+    const result = await csvParsing.parseCSV(filePath);
 
     console.log("result of getCSVData: ", result);
-
     event.reply('get_CSV_Data_Response', result);
   }catch(error){
     console.error('Error in get_CSV_Data:', error);
@@ -241,3 +240,17 @@ ipcMain.on('get_locations', async (event, formData) => {
   }
 });
 
+ipcMain.on('deleteInventoryEntry', async (event, id) => {
+  try{
+    console.log("calling deleteInventoryEntry...");
+    console.log(id);
+    const result = await userEntries.deleteInventoryEntry(id);
+
+    console.log("result of deleteInventoryEntry: ", result);
+
+    event.reply('deleteInventoryEntry_Response', result);
+  }catch(error){
+    console.error('Error in deleteInventoryEntry:', error);
+    event.reply('deleteInventoryEntry_Response', { error: error.message });
+  }
+});

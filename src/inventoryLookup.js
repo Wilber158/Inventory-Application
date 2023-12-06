@@ -87,6 +87,7 @@ function renderTable(data) {
     data.forEach(item => {
         let set = {};
         const row = tableBody.insertRow();
+        row.dataset.inventory_entry_id = item.inventory_entry_id;
         
         // Mapping data to table columns
         let partNumber = item.part_prefix + '' + item.part_number;
@@ -140,7 +141,7 @@ function renderTable(data) {
         });
 
         deleteBtn.addEventListener('click', () => {
-            deleteRow(row, item); // Pass the item data to the deleteRow function
+            deleteRow(row); // Pass the item data to the deleteRow function
         });
 
     });
@@ -203,16 +204,18 @@ function createInput(value) {
     return input;
 }
 
-function deleteRow(row, item) {
-    // Assuming you have a function window.electronAPI.deleteInventoryEntry
-    window.electronAPI.deleteInventoryEntry(item.id, (response) => {
-        if (response.error) {
-            console.error('Error deleting inventory entry:', response.error);
-        } else {
-            // Remove the row from the table
-            row.remove();
-        }
-    });
+async function deleteRow(row) {
+    const inventoryEntryId = rofunctionw.dataset.inventory_entry_id;
+    // Assuming you have a  window.electronAPI.deleteInventoryEntry
+    try{
+        await window.electronAPI.deleteInventoryEntry(inventoryEntryId);
+        const rowIndex = Array.from(row.parentNode.children).indexOf(row);
+        currentData.splice(rowIndex, 1);
+        console.log("Current data after deletion: ", currentData);
+        row.remove();
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 function editRow(row) {

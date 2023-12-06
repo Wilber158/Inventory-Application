@@ -193,7 +193,7 @@ const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, ve
 }
 
 
-const updateInventoryEntry = (inventory_entry_id, updateFields) => {
+const updateInventoryEntry = async(inventory_entry_id, updateFields) => {
     const fields = [];
     const values = [];
 
@@ -326,7 +326,7 @@ const updateInventoryEntrySellPrice = (inventory_entry_id, sell_price) => {
     });
 }
 
-const softDeleteInventoryEntry = (inventory_entry_id, delete_reason) => {
+const softDeleteInventoryEntry = async(inventory_entry_id, delete_reason) => {
     return new Promise((resolve, reject) => {
         database.get(`SELECT * FROM InventoryEntries WHERE inventory_entry_id = ?`, [inventory_entry_id], (err, rows) => {
             if(err){
@@ -338,7 +338,7 @@ const softDeleteInventoryEntry = (inventory_entry_id, delete_reason) => {
 
             //Insert the deleted row into the DeletedInventoryEntries table
             const sqlInsert = `INSERT INTO DeletedInventoryEntries 
-                               (inventory_entry_id, part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, deleted date, delete_reason)
+                               (inventory_entry_id, part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, deleted_date, delete_reason)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             database.run(sqlInsert, [...Object.values(rows), new Date().toISOString, delete_reason], (err) => {
                 if(err){
