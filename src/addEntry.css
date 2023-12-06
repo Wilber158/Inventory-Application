@@ -118,11 +118,11 @@ tr{
 }
 
 .notes-input {
-  width: 50%; /* Or any other width as per your design */
-  height: 10px; /* Or any other height */
+  width: 50%; 
+  height: 10px; 
   padding: 10px;
-  margin-top: 5px; /* Spacing above the textarea */
+  margin-top: 5px; 
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-family: inherit; /* To ensure the font is consistent with the rest of the form */
+  font-family: inherit; 
 }

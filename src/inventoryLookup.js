@@ -225,7 +225,6 @@ function createInput(value) {
 }
 
 function deleteRow(row, item) {
-    // Assuming you have a function window.electronAPI.deleteInventoryEntry
     window.electronAPI.deleteInventoryEntry(item.id, (response) => {
         if (response.error) {
             console.error('Error deleting inventory entry:', response.error);

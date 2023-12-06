@@ -13,7 +13,6 @@ window.onload = loadSidebar;
 const staticData2 = [
     { Part: 1, Quantity: 'Item 1', Location: 'Description 1'},
     { Part: 2, Quantity: 'Item 2', Location: 'Description 2' },
-    // ... more static data
 ];
 
 document.addEventListener('keydown', function(event) {
@@ -223,7 +222,6 @@ function createInput(value) {
 }
 
 function deleteRow(row, item) {
-    // Assuming you have a function window.electronAPI.deleteInventoryEntry
     window.electronAPI.deleteInventoryEntry(item.id, (response) => {
         if (response.error) {
             console.error('Error deleting inventory entry:', response.error);

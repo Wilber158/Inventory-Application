@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.electronAPI.submit_Add_Entry_Response((result) => {
                 //handle the response, ex: send to a new page
                 console.log(result);
-                console.log("Holy shit it worked")
+                console.log("Holy it worked")
                 inputIds.forEach(id => document.getElementById(id).value = '');
                 document.getElementById('notes').value = ''; // Clear the notes field as well
             });

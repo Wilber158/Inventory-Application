@@ -69,7 +69,7 @@ th {
 }
 #csv-container {
     width: 100%;       /* Full width */
-    max-width: 1200px; /* Maximum width, adjust as needed */
+    max-width: 1200px; 
     margin: auto;      /* Center the container */
     overflow-x: auto;
 }
@@ -115,5 +115,5 @@ label {
 }
 
 input {
-    width: 60px; /* Adjust as needed */
+    width: 60px; 
 }
