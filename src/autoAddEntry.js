@@ -16,6 +16,7 @@ let currentlyEditingRow = null;
 let lastEditedRow = null;
 
 
+
 window.electronAPI.get_CSV_Data_Response((event, response) => {
     if (response.error) {
         console.log("Error:", response.error);
@@ -54,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const file = event.dataTransfer.files[0];
         console.log("File: ", file.path);
         handleFile(file.path);
+        confirmButton.style.display = 'inline-block';
     });
 
     fileSelectBtn.addEventListener('click', () => {
@@ -66,8 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
         handleFile(file.path);
     });
 
-    addButton.addEventListener('click', (event) => {
-        
+    addButton.addEventListener('click', (event) => { 
+
     });
 
     confirmButton.addEventListener('click', (event) => {
@@ -112,6 +114,9 @@ document.addEventListener('keydown', function(event) {
 });
 
 function renderTable(data) {
+    const confirmButton = document.getElementById('confirmButton');
+    confirmButton.style.display = 'inline-block';
+
     const tableBody = document.getElementById('dataTable').querySelector('tbody');
     // Clear existing table rows
     while (tableBody.rows.length > 0) {
