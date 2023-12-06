@@ -8,6 +8,7 @@ const path = require('path');
 const fs = require('fs');
 
 
+let backUpInprogress = false;
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 1024, // set the initial width
@@ -40,6 +41,83 @@ app.on('window-all-closed', () => {
   }
 })
 
+
+
+app.on('before-quit', (event) => {
+  if (backUpInprogress) {
+      console.log("Backup already in progress...");
+      return;
+  }
+
+  // Prevent the app from quitting immediately
+  event.preventDefault();
+  backUpInprogress = true;
+  
+  // Perform the backup in an async IIFE (Immediately Invoked Function Expression)
+  (async () => {
+      try {
+          const backupMessage = await backup_Database();
+          console.log(backupMessage);
+      } catch (error) {
+          console.error('Error during backup:', error);
+      } finally {
+          // After backup is complete or fails, quit the app
+          app.quit();
+      }
+  })();
+});
+
+
+
+
+//function to copy database onto user selected directory
+async function backup_Database() {
+  try {
+      const userSettingsPath = path.join(__dirname, '../backend/userSettings.json');
+      // Read the contents of the user settings file
+      const userSettingsData = await fs.promises.readFile(userSettingsPath);
+      // Parse the JSON data
+      const userSettings = JSON.parse(userSettingsData);
+
+      const destination = userSettings.backupLocation;
+      const source = path.join(__dirname, '../backend/inventory.db');
+      // Copy the file
+      fs.promises.copyFile(source, destination);
+      return 'Database backed up successfully';
+  } catch (error) {
+      console.error('Failed to backup database:', error);
+      return `Error copying file: ${error.message}`;
+  }
+}
+
+//funciton to write user settings to file given the data name
+async function write_User_Settings(data, dataname) {
+  try {
+      const userSettingsPath = path.join(__dirname, '../backend/userSettings.json');
+      
+      let dataToWrite = {};
+
+      // Check if the file exists
+      try {
+          const fileContent = await fs.readFile(userSettingsPath);
+          dataToWrite = JSON.parse(fileContent);
+      } catch (readError) {
+          // If the file doesn't exist, start with an empty object
+          console.log('File does not exist, creating new one');
+      }
+
+      // Update the data
+      dataToWrite[dataname] = data;
+
+      // Write the updated data to the file
+      await fs.promises.writeFile(userSettingsPath, JSON.stringify(dataToWrite));
+      return 'Settings saved successfully';
+  } catch (error) {
+      console.error('Failed to save settings:', error);
+      return 'Error saving settings';
+  }
+}
+
 ipcMain.on('submit_Add_Entry', async (event, formData) => {
   try {
       console.log("calling createUserInventoryEntry...")
@@ -66,9 +144,10 @@ ipcMain.on('open-directory-dialog', (event) => {
       console.log(err);
   });
 });
-
+/* 
 ipcMain.handle('copy_file', async (event, destination) => {
   try {
+      destination = path.join(destination, 'inventory_backup.db');
       const source = path.join(__dirname, '../backend/inventory.db')
       await fs.promises.copyFile(source, destination);
       return 'File copied successfully';
@@ -77,7 +156,18 @@ ipcMain.handle('copy_file', async (event, destination) => {
       return 'Error copying file';
   }
 });
+*/
 
+ipcMain.handle('copy_file', async (event, destination) => {
+  try{
+    destination = path.join(destination, 'inventory_backup.db');
+    await write_User_Settings(destination, 'backupLocation');
+    return 'File copied successfully';
+  }catch(error){
+    console.error('Failed to copy file:', error);
+    return 'Error copying file';
+  }
+});
 
 ipcMain.on('get_Inventory_Entries', async (event, formData) => {
   try{
