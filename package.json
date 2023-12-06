@@ -5,7 +5,7 @@
   "main": "src/main.js",
   "preload": "src/preload.js",
   "scripts": {
-    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\"",
+    "test": "jest",
     "start": "electron ."
   },
   "repository": {
@@ -19,5 +19,8 @@
     "electron": "^27.0.4",
     "fs-extra": "^11.2.0",
     "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
