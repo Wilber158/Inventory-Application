@@ -222,7 +222,7 @@ const getInventoryEntry = (part_id, location_id, quantity, date_last_updated, ve
 }
 
 
-const updateInventoryEntry = async(inventory_entry_id, updateFields) => {
+const updateInventoryEntry = async (inventory_entry_id, updateFields) => {
     const fields = [];
     const values = [];
 
@@ -233,18 +233,23 @@ const updateInventoryEntry = async(inventory_entry_id, updateFields) => {
     });
 
     const sql = `UPDATE InventoryEntries SET ${fields.join(', ')} WHERE inventory_entry_id = ?`;
+    console.log("Query in updateInventoryEntry in entries CRUD: ", sql);
     values.push(inventory_entry_id);
+    console.log("Values in updateInventoryEntry in entries CRUD: ", values);
 
     return new Promise((resolve, reject) => {
-        database.run(sql, values, (err) => {
+        database.run(sql, values, function(err) {
             if (err) {
+                console.error('Error in updateInventoryEntry:', err.message);
                 reject(new Error(`Error updating Inventory Entry. Please try again later.`));
             } else {
-                resolve(this.lastID);
+                console.log(`Row(s) updated: ${this.changes}`);
+                resolve(this.changes); // Resolves with the number of rows updated
             }
         });
     });
-}
+};
+
 
 
 const updateInventoryEntryQuantity = (inventory_entry_id, quantity) => {

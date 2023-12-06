@@ -182,19 +182,6 @@ ipcMain.on('open-directory-dialog', (event) => {
       console.log(err);
   });
 });
-/* 
-ipcMain.handle('copy_file', async (event, destination) => {
-  try {
-      destination = path.join(destination, 'inventory_backup.db');
-      const source = path.join(__dirname, '../backend/inventory.db')
-      await fs.promises.copyFile(source, destination);
-      return 'File copied successfully';
-  } catch (error) {
-      console.error('Failed to copy file:', error);
-      return 'Error copying file';
-  }
-});
-*/
 
 ipcMain.handle('copy_file', async (event, destination) => {
   try{
@@ -266,5 +253,20 @@ ipcMain.on('deleteInventoryEntry', async (event, id) => {
   }catch(error){
     console.error('Error in deleteInventoryEntry:', error);
     event.reply('deleteInventoryEntry_Response', { error: error.message });
+  }
+});
+
+ipcMain.on('update_Inventory_Entry', async (event, formData) => {
+  try{
+    console.log("calling updateInventoryEntry...");
+    console.log(formData);
+    const result = await userEntries.updateUserInventoryEntry(formData);
+
+    console.log("result of updateInventoryEntry: ", result);
+
+    event.reply('update_Inventory_Entry_Response', result);
+  }catch(error){
+    console.error('Error in update_Inventory_Entry:', error);
+    event.reply('update_Inventory_Entry_Response', { error: error.message });
   }
 });
