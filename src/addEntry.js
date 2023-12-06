@@ -66,7 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 //handle the response, ex: send to a new page
                 console.log(result);
                 console.log("Holy shit it worked")
+                inputIds.forEach(id => document.getElementById(id).value = '');
+                document.getElementById('notes').value = ''; // Clear the notes field as well
             });
+
+
+
         }
         else{
             console.log("Form is not valid")
