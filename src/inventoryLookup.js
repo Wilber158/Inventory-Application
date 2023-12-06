@@ -18,12 +18,7 @@ let currentlyEditingRow = null;
 
 
 
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape' && currentlyEditingRow) {
-        restoreOriginalValues(currentlyEditingRow);
-        currentlyEditingRow = null; // Reset the currently editing row
-    }
-});
+
 
 window.electronAPI.get_Inventory_Entries_Response((event, response) => {
     if (response.error) {
@@ -62,6 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
             form.reportValidity()
         }
     });
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && currentlyEditingRow) {
+            restoreOriginalValues(currentlyEditingRow);
+            currentlyEditingRow = null; // Reset the currently editing row
+        }
+    });
+    document.addEventListener('keydown', function(event) {
+        const activeElement = document.activeElement;
+        if (event.key === 'Enter' && currentlyEditingRow && activeElement.tagName === 'INPUT') {
+            event.preventDefault(); // Prevent default form submission
+            applyChanges(currentlyEditingRow);
+            currentlyEditingRow = null; // Reset the currently editing row
+        }
+    });
+
 });
 
 
@@ -154,37 +164,6 @@ function onTableClick(event) {
     }
 }
 
-function editRow(row) {
-    // If there's already a row being edited, restore its original values before editing another row
-    if (currentlyEditingRow && currentlyEditingRow !== row) {
-        restoreOriginalValues(currentlyEditingRow);
-    }
-
-    // Check if the current row is already in edit mode
-    const isEditing = row.querySelector('input');
-    if (isEditing) {
-        // Row is already in edit mode
-        return;
-    }
-
-    // Set the currently editing row
-    currentlyEditingRow = row;
-
-    // Replace each cell (except the last one with buttons) with an input element
-    for (let i = 1; i < row.cells.length - 1; i++) {
-        const cellValue = row.cells[i].textContent;
-        const input = createInput(cellValue);
-        row.cells[i].innerHTML = '';
-        row.cells[i].appendChild(input);
-
-        if (i === 0) {
-            input.focus();
-        }
-    }
-}
-
-
-
 function applyChanges(row) {
     for (let i = 1; i < row.cells.length - 1; i++) {
         const input = row.cells[i].querySelector('input');
@@ -234,4 +213,33 @@ function deleteRow(row, item) {
             row.remove();
         }
     });
+}
+
+function editRow(row) {
+    // If there's already a row being edited, restore its original values before editing another row
+    if (currentlyEditingRow && currentlyEditingRow !== row) {
+        restoreOriginalValues(currentlyEditingRow);
+    }
+
+    // Check if the current row is already in edit mode
+    const isEditing = row.querySelector('input');
+    if (isEditing) {
+        // Row is already in edit mode
+        return;
+    }
+
+    // Set the currently editing row
+    currentlyEditingRow = row;
+
+    // Replace each cell (except the last one with buttons) with an input element
+    for (let i = 1; i < row.cells.length - 1; i++) {
+        const cellValue = row.cells[i].textContent;
+        const input = createInput(cellValue);
+        row.cells[i].innerHTML = '';
+        row.cells[i].appendChild(input);
+
+        if (i === 0) {
+            input.focus();
+        }
+    }
 }
