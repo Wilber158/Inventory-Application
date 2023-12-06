@@ -254,17 +254,30 @@ ipcMain.on('get_locations', async (event, formData) => {
   }
 });
 
-ipcMain.on('deleteInventoryEntry', async (event, id) => {
-  try{
-    console.log("calling deleteInventoryEntry...");
-    console.log(id);
-    const result = await userEntries.deleteInventoryEntry(id);
-
-    console.log("result of deleteInventoryEntry: ", result);
-
-    event.reply('deleteInventoryEntry_Response', result);
-  }catch(error){
+ipcMain.on('deleteInventoryEntry', async (event, row) => {
+  try {
+    // Show a confirmation dialog before proceeding
+    const response = await dialog.showMessageBox({
+      type: 'question',
+      buttons: ['Cancel', 'Delete'],
+      defaultId: 0,
+      title: 'Confirm Delete',
+      message: 'Are you sure you want to delete this entry?',
+    });
+    // Check if the user clicked 'Delete'
+    if (response.response === 1) {
+      console.log("calling deleteInventoryEntry...");
+      console.log(id);
+      await userEntries.deleteInventoryEntry(row.dataset.index);
+      console.log("result of deleteInventoryEntry: ", result);
+      event.reply('deleteInventoryEntry_Response', row);
+    } else {
+      // User cancelled the operation
+      event.reply('deleteInventoryEntry_Response', true);
+    }
+  } catch (error) {
     console.error('Error in deleteInventoryEntry:', error);
     event.reply('deleteInventoryEntry_Response', { error: error.message });
   }
 });
+
