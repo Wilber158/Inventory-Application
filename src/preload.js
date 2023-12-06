@@ -14,5 +14,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     copy_file: (destination) => ipcRenderer.invoke('copy_file', destination),
     deleteInventoryEntry: (id) => ipcRenderer.send('deleteInventoryEntry', id),
     deleteInventoryEntry_Response: (callback) => ipcRenderer.on('deleteInventoryEntry_Response', callback),
+    auto_Add_Entry: (data) => ipcRenderer.send('auto_Add_Entry', data),
+    auto_Add_Entry_Response: (callback) => ipcRenderer.on('auto_Add_Entry_Response', callback)
 });
 

@@ -83,8 +83,10 @@ function renderTable(data) {
         tableBody.deleteRow(0);
     }
     console.log("Type of data: " + typeof data)
+
     // Populate the table with data
     data.forEach(item => {
+        console.log("Item: ", item);
         let set = {};
         const row = tableBody.insertRow();
         row.dataset.inventory_entry_id = item.inventory_entry_id;
@@ -205,9 +207,11 @@ function createInput(value) {
 }
 
 async function deleteRow(row) {
-    const inventoryEntryId = rofunctionw.dataset.inventory_entry_id;
+    console.log("row being deleted: ", row);
+    const inventoryEntryId = row.dataset.inventory_entry_id;
     // Assuming you have a  window.electronAPI.deleteInventoryEntry
     try{
+        console.log("Deleting inventory entry with id: ", inventoryEntryId)
         await window.electronAPI.deleteInventoryEntry(inventoryEntryId);
         const rowIndex = Array.from(row.parentNode.children).indexOf(row);
         currentData.splice(rowIndex, 1);

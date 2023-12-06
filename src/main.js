@@ -157,6 +157,20 @@ ipcMain.on('submit_Add_Entry', async (event, formData) => {
   }
 });
 
+
+ipcMain.on('auto_Add_Entry', async (event, data) => {
+  try {
+    console.log("calling bulkCreate in auto_Add_Entry with data: ", data);
+    await userEntries.bulkCreateUserInventoryEntry(data);
+            
+  } catch (error) {
+      // Handle the error
+      console.error('Error in auto_Add_Entry:', error);
+      event.reply('auto_Add_Entry_Response', { error: error.message });
+      showErrorInfoDialog()
+  }
+});
+
 ipcMain.on('open-directory-dialog', (event) => {
   dialog.showOpenDialog({
       properties: ['openDirectory']
@@ -213,11 +227,11 @@ ipcMain.on('get_Inventory_Entries', async (event, formData) => {
 
 ipcMain.on('get_CSV_Data', async (event, filePath) => {
   try{
-    console.log("calling getCSVData...");
+    console.log("calling get_CSV_Data...");
     console.log(filePath);
     const result = await csvParsing.parseCSV(filePath);
 
-    console.log("result of getCSVData: ", result);
+    console.log("result of get_CSV_Data: ", result);
     event.reply('get_CSV_Data_Response', result);
   }catch(error){
     console.error('Error in get_CSV_Data:', error);

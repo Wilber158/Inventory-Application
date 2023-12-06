@@ -13,26 +13,16 @@ const table = document.getElementById('dataTable');
 const submitButton = document.getElementById('addButton');
 let currentData = [];
 let currentlyEditingRow = null;
+let lastEditedRow = null;
 
 
-window.electronAPI.get_CSV_Data_Reponse((event, response) => {
-
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    submitButton.addEventListener('click', async (event) => {
-        event.preventDefault();
-        
-        const formData = {
-            partNumber: document.getElementById('partNumber').value
-        };
-        for (const property in formData) {
-            console.log(`${property}: ${formData[property]}`);
-        }
-        // Send the form data to the main process
-        await window.electronAPI.get_Inventory_Entries(formData);
-
-    });
+window.electronAPI.get_CSV_Data_Response((event, response) => {
+    if (response.error) {
+        console.log("Error:", response.error);
+    } else {
+        console.log("Current data has been set to result of CSV parsing function");
+        renderTable(response);
+    }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('fileInput');
     const fileSelectBtn = document.getElementById('addButton');
     const addButton = document.getElementById('addButton');
+    const confirmButton = document.getElementById('confirmButton');
 
     console.log("This runs when file is added");
     dropZone.addEventListener('dragover', (event) => {
@@ -75,16 +66,31 @@ document.addEventListener('DOMContentLoaded', () => {
         handleFile(file.path);
     });
 
-    addButton.addEventListener('click', () => {
+    addButton.addEventListener('click', (event) => {
         
     });
+
+    confirmButton.addEventListener('click', (event) => {
+        // Send the currentData array to main process via IPC for further processing
+
+        window.electronAPI.auto_Add_Entry(currentData);
+
+    
+    });
+
+    
 });
 
 async function handleFile(file) {
+    //return if not a csv file
+    if (!file.endsWith('.csv')) {
+        return;
+    }
 
+    document.getElementById('drop-zone').innerHTML = file;
     console.log("Calling get_CSV_Data from main process")
     // Send the CSV data to main process via IPC for further processing
-    await window.electronAPI.get_CSV_Data(file);  
+    await window.electronAPI.get_CSV_Data(file);
 }
 
 document.addEventListener('keydown', function(event) {
@@ -95,6 +101,16 @@ document.addEventListener('keydown', function(event) {
 });
 
 
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        if(!currentlyEditingRow){
+            return;
+        }
+        //add the elements in the row to the currentData array
+        applyChanges(currentlyEditingRow);
+    }
+});
+
 function renderTable(data) {
     const tableBody = document.getElementById('dataTable').querySelector('tbody');
     // Clear existing table rows
@@ -103,12 +119,18 @@ function renderTable(data) {
     }
     console.log("Type of data: " + typeof data)
     // Populate the table with data
-    data.forEach(item => {
+    data.forEach((item, index) => {
         let set = {};
         const row = tableBody.insertRow();
+        row.dataset.index = index;
         
         // Mapping data to table columns
-        let partNumber = item['Part Prefix'] + '' + item['Part Number']
+        let partPrefix = item['Part Prefix']
+        const cellPartPrefix = row.insertCell();
+        cellPartPrefix.textContent = partPrefix;
+        set.partPrefix = partPrefix;
+
+        let partNumber = item['Part Number'];
         const cellPartNumber = row.insertCell();
         cellPartNumber.textContent = partNumber;
         set.partNumber = partNumber;
@@ -121,30 +143,40 @@ function renderTable(data) {
         cellQuantity.textContent = item['Quantity'];
         set.quantity = item['Quantity'];
 
-        const cellLocation = row.insertCell();
-        const location = item.warehouse_name + ' ' + item.zone_name;
-        cellLocation.textContent = location; // Adjust this if there's a specific location field
-        set.location = location;
+        const cellWarehouse = row.insertCell();
+        const warehouse = item['Warehouse'];
+        cellWarehouse.textContent = warehouse;
+        set.warehouse = warehouse;
+
+        const cellZone = row.insertCell();
+        let zone = item['Zone'];
+        cellZone.textContent = zone;
+        set.zone = zone;
 
         const cellCondition = row.insertCell();
-        cellCondition.textContent = item.condition;
-        set.condition = item.condition;
+        let condition = item['Condition'];
+        cellCondition.textContent = condition;
+        set.condition = condition;
 
         const cellManufacturer = row.insertCell();
-        cellManufacturer.textContent = item.manufacturer;
-        set.manufacturer = item.manufacturer;
+        let manufacturer = item['Manufacturer'];
+        cellManufacturer.textContent = manufacturer;
+        set.manufacturer = manufacturer;
 
         const cellVendor = row.insertCell();
-        cellVendor.textContent = item.vendor_name;
-        set.vendor = item.vendor_name;
+        let vendor_name = item['Vendor Name'];
+        cellVendor.textContent = vendor_name;
+        set.vendor = vendor_name;
 
         const cellUnitCost = row.insertCell();
-        cellUnitCost.textContent = item.unit_cost;
-        set.unitCost = item.unit_cost;
+        let unit_cost = item['Unit Cost'];
+        cellUnitCost.textContent = unit_cost;
+        set.unitCost = unit_cost;
 
         const cellEntryNotes = row.insertCell();
-        cellEntryNotes.textContent = item.entry_notes;
-        set.entryNotes = item.entry_notes;
+        let entry_notes = item['Entry Notes'];
+        cellEntryNotes.textContent = entry_notes;
+        set.entryNotes = entry_notes;
         
         currentData.push(set);
         // Edit and Delete buttons
@@ -184,45 +216,43 @@ function onTableClick(event) {
 }
 
 function editRow(row) {
-    // If there's already a row being edited, restore its original values before editing another row
     if (currentlyEditingRow && currentlyEditingRow !== row) {
         restoreOriginalValues(currentlyEditingRow);
     }
 
-    // Check if the current row is already in edit mode
-    const isEditing = row.querySelector('input');
-    if (isEditing) {
-        // Row is already in edit mode
-        return;
-    }
+    if (!row.querySelector('input')) { // If row is not in edit mode
+        currentlyEditingRow = row;
+        lastEditedRow = row;
 
-    // Set the currently editing row
-    currentlyEditingRow = row;
-
-    // Replace each cell (except the last one with buttons) with an input element
-    for (let i = 1; i < row.cells.length - 1; i++) {
-        const cellValue = row.cells[i].textContent;
-        const input = createInput(cellValue);
-        row.cells[i].innerHTML = '';
-        row.cells[i].appendChild(input);
-
-        if (i === 0) {
-            input.focus();
+        // Replace each cell (except the last one with buttons) with an input element
+        for (let i = 0; i < row.cells.length - 1; i++) {
+            const cellValue = row.cells[i].textContent;
+            const input = createInput(cellValue);
+            row.cells[i].innerHTML = '';
+            row.cells[i].appendChild(input);
         }
     }
 }
 
 
-
+//reflect changes in table and currentData array
 function applyChanges(row) {
-    for (let i = 1; i < row.cells.length - 1; i++) {
+    console.log("Current Data before changes: ", currentData)
+    const index = row.dataset.index; 
+    const editedData = currentData[index]; 
+
+    for (let i = 0; i < row.cells.length - 1; i++) {
         const input = row.cells[i].querySelector('input');
-        row.cells[i].textContent = input.value;
+        const key = Object.keys(editedData)[i]; 
+        editedData[key] = input.value; 
+        row.cells[i].textContent = input.value; 
     }
+    console.log("Current Data after changes: ", currentData)
+    currentlyEditingRow = null; // Reset the currently editing row
 }
 
 function removeInputEventListeners(row) {
-    for (let i = 1; i < row.cells.length - 1; i++) {
+    for (let i = 0; i < row.cells.length - 1; i++) {
         const input = row.cells[i].querySelector('input');
         if (input) {
             input.removeEventListener('keydown', arguments.callee);
@@ -233,15 +263,12 @@ function removeInputEventListeners(row) {
 function restoreOriginalValues(row) {
     const rowIndex = Array.from(row.parentNode.children).indexOf(row);
     const originalData = currentData[rowIndex];
-    if (!originalData) {
-        return; 
+    if (originalData) {
+        const keys = Object.keys(originalData);
+        for (let i = 0; i < keys.length; i++) {
+            row.cells[i].textContent = originalData[keys[i]];
+        }
     }
-
-    const keys = Object.keys(originalData);
-    for (let i = 0; i < keys.length; i++) { 
-        row.cells[i].textContent = originalData[keys[i]];
-    }
-
     currentlyEditingRow = null;
 }
 
@@ -251,16 +278,17 @@ function createInput(value) {
     input.value = value;
     return input;
 }
-
+//remove the row from the table and the currentData array
 function deleteRow(row, item) {
-    window.electronAPI.deleteInventoryEntry(item.id, (response) => {
-        if (response.error) {
-            console.error('Error deleting inventory entry:', response.error);
-        } else {
-            // Remove the row from the table
-            row.remove();
-        }
-    });
+    if(currentlyEditingRow == row){
+        currentlyEditingRow = null;
+    }
+    row.remove();
+    console.log("Current Data before deletion: ", currentData)
+    let index = row.dataset.index;
+    currentlyEditingRow = null;
+    currentData[index] = null;
+    console.log("Current Data after deletion: ", currentData)
 }
 
 window.onload = loadContent;

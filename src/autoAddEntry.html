@@ -15,7 +15,7 @@
     <div id="content">
         <h2>Auto Add Inventory Entry</h2>
         <div id="drop-zone">
-            <p>Drag & drop files or in the upload section to get started</p>
+            <p id = "drop-zone">Drag & drop files or in the upload section to get started</p>
             <input type="file" id="fileInput" accept=".csv">
         </div>
         <button id="addButton">Add</button>
@@ -26,10 +26,12 @@
             <table id="dataTable">
                 <thead>
                     <tr>
+                        <th>Part Prefix</th>
                         <th>Part Number</th>
                         <th>Quantity</th>
                         <th>Type</th>
-                        <th>Location</th>
+                        <th>Warehouse</th>
+                        <th>Zone</th>
                         <th>Condition</th>
                         <th>Manufacturer</th>
                         <th>Vendor</th>
@@ -44,6 +46,8 @@
             </table>
         </form>
     </div>
+
+    <button id="confirmButton">Confirm Changes</button>
     
 </body>
 </html>

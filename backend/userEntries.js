@@ -13,21 +13,44 @@ async function createUserInventoryEntry(part_prefix, part_number, quantity, ware
         console.log("Currently in createUserInventoryEntry")
         let part_id = await getOrCreatePart(part_prefix, part_number);
         let location_id = await getOrCreateLocation(null, zone_name, warehouse_name, null);
-        let vendor_id = await getOrCreateVendor(vendor_name);
-
+        let vendor_id;
+        if (vendor_name){
+            let vendor_id = await getOrCreateVendor(vendor_name);
+        }
         let date_last_updated = new Date().toISOString();
-        console.log("part_id in createUserInventoryEntry: ", part_id)
-        console.log("type of part_id in createUserInventoryEntry: ", typeof part_id)
-        console.log("location_id in createUserInventoryEntry: ", location_id)
-        console.log("type of location_id in createUserInventoryEntry: ", typeof location_id)
-        console.log("vendor_id in createUserInventoryEntry: ", vendor_id)
-        console.log("type of vendor_id in createUserInventoryEntry: ", typeof vendor_id)
         let inventory_entry_id = await entriesCRUD.createInventoryEntry(part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type);
         console.log("created inventory entry");
         return inventory_entry_id;
     } catch (err) {
         console.log(err);
         throw new Error("Error creating inventory entry from user input")
+    }
+}
+
+//loops through data and calls createUserInventoryEntry for each row
+async function bulkCreateUserInventoryEntry(data) {
+    // Filter out null rows
+    const filteredData = data.filter(row => row != null);
+
+    for (const row of filteredData) {
+        for (const property in row) {
+            if (row[property] === "" || row[property] == null) {
+                row[property] = null;
+            }
+            if (property === "unitCost" && row[property] != null) {
+                row[property] = parseInt(row[property].replace('$', ''));
+            }
+        }
+    }
+
+    try {
+        const promises = filteredData.map(row => 
+            createUserInventoryEntry(row.partPrefix, row.partNumber, row.quantity, row.warehouse, row.zone, row.vendor, row.manufacturer, row.condition, row.unitCost, row.entryNotes, null, row.type)
+        );
+        await Promise.all(promises);
+    } catch (err) {
+        console.log(err);
+        throw new Error("Error creating inventory in bulkCreateUserInventoryEntry");
     }
 }
 
@@ -183,7 +206,8 @@ module.exports = {
     createUserInventoryEntry,
     updateUserInventoryEntry,
     getInventoryEntry,
-    deleteInventoryEntry
+    deleteInventoryEntry,
+    bulkCreateUserInventoryEntry
 }
 
 
