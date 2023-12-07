@@ -52,6 +52,17 @@ th {
     cursor: pointer;
 }
 
+#confirmButton{
+    display: none;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 20px;
+    margin: 20px 0;
+    cursor: pointer;   
+}
+
 #addButton:hover {
     background-color: #0056b3;
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lookup</title>
+    <link rel="stylesheet" href="inventoryLookup.css">
+    <script src="inventoryLookup.js" defer></script>
+</head>
+<body>
+    <header>
+        <div id="sidebar-container"> </div>
+    </header>
+    <h1>Inventory Lookup</h1>
+    <div class="title-line"></div>
+    <div class="container">
+        <form id="inventoryForm">
+            <div class="search_inputs">
+                <div class="input_pair">
+                    <label for="prefix">Prefix:</label>
+                    <input type="text" id="prefix" name="prefix" >
+                </div>
+
+                <div class="input_pair">
+                    <label for="partNumber">Part Number:</label>
+                    <input type="text" id="partNumber" name="partNumber" required>
+                </div>
+
+                <div class="input_pair">
+                    <label for="type">Type:</label>
+                    <input type="text" id="type" name="type" >
+                </div>
+                <div class="input_pair">
+                    <label for="totalQuantity">Quantity:</label>
+                    <input type="text" id="quantity" name="totalQuantity">
+                </div>
+            </div>
+            <button id="submitButton" type="submit">Submit</button>
+
+        </form>
+        <!-- Table for displaying search results -->
+        <form>
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>Part Prefix</th>
+                    <th>Part Number</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Warehouse</th>
+                    <th>Zone</th>
+                    <th>Condition</th>
+                    <th>Manufacturer</th>
+                    <th>Vendor</th>
+                    <th>Unit Cost</th>
+                    <th>Entry Notes</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be dynamically populated here -->
+            </tbody>
+        </table>
+        </form>
+    </div>
+    
+
+</body>
+</html>
