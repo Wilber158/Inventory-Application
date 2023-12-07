@@ -85,6 +85,23 @@ const getAllVendors = () => {
     });
 }
 
+const getVendor = async(vendor_id) => {
+    return new Promise((resolve, reject) => {
+        database.get(`SELECT * FROM Vendors WHERE vendor_id = ?`, [vendor_id], function (err, row) {
+            if (err) {
+                console.error('Error getting vendor', err.message);
+                reject(err);
+            } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
+                resolve(row);
+            }
+        });
+    });
+}
+
 const updateVendorName = (vendor_id, vendor_name_new) => {
     return new Promise((resolve, reject) => {
         database.run(`UPDATE Vendors SET vendor_name = ? WHERE vendor_id = ?`, [vendor_name_new, vendor_id], function (err) {
@@ -132,5 +149,6 @@ module.exports = {
     getAllVendors,
     updateVendorName,
     updateVendorNotes,
-    deleteVendor
+    deleteVendor,
+    getVendor
 }

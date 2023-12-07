@@ -17,7 +17,7 @@ let currentlyEditingRow = null;
 
 
 
-window.electronAPI.get_Inventory_Entries_Response((event, response) => {
+window.electronAPI.get_Deleted_Inventory_Entries_Response((event, response) => {
     if (response.error) {
         console.log("Error:", response.error);
     } else {
@@ -28,32 +28,14 @@ window.electronAPI.get_Inventory_Entries_Response((event, response) => {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    submitButton.addEventListener('click', async (event) => {
-        event.preventDefault();
-        
-        // Get values from the form inputs
-        if(form.checkValidity()){
-            const formData = {
-                prefix: document.getElementById('prefix').value,
-                partNumber: document.getElementById('partNumber').value,
-                type: document.getElementById('type').value,
-                quantity: document.getElementById('quantity').value,
-            };
-
-
-            for (const property in formData) {
-                console.log(`${property}: ${formData[property]}`);
-            }
-
-            // Send the form data to the main process
-            await window.electronAPI.get_Inventory_Entries(formData);
-
-        } else{
-            console.log("Form is not valid")
-            form.reportValidity()
-        }
-    });
+document.addEventListener('DOMContentLoaded', async() => {
+    //on load get deleted inventory entries
+    try{
+        await window.electronAPI.get_Deleted_Inventory_Entries();
+        console.log("Response from get_Deleted_Inventory_Entries: ", response);
+    }catch(err){
+        console.log(err);
+    }
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape' && currentlyEditingRow) {
             restoreOriginalValues(currentlyEditingRow);

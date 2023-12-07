@@ -74,6 +74,24 @@ const getLocation_id = (zone_id, warehouse_id) => {
     });
 }
 
+const getLocationById = async(location_id) => {
+    return new Promise((resolve, reject) => {
+        database.get(`SELECT * FROM Locations WHERE location_id = ?`, [location_id], function (err, row) {
+            if (err) {
+                console.error('Error getting location by id', err.message);
+                reject(err);
+            } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
+                resolve(row);
+            }
+        });
+    });
+}
+
+
 const getLocation_notes = (location_id) => {
     return new Promise((resolve, reject) => {
         database.get(`SELECT location_notes FROM Locations WHERE location_id = ?`, [location_id], function (err, row) {
@@ -280,7 +298,8 @@ module.exports = {
     deleteLocation,
     deleteAllLocations,
     getSpecificLocation,
-    updateLocation
+    updateLocation,
+    getLocationById
 }
 
 // Path: backend/locations.js

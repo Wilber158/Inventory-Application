@@ -228,6 +228,31 @@ const deleteInventoryEntry = async (inventory_entry_id) => {
         throw new Error("Error performing deleteInventoryEntry")
     }
 }
+//get the deleted inventory entries and part_name, part_number, warehouse_name, zone_name, vendor_name
+const getDeletedInventoryEntries = async () => {
+    try{
+        let deletedEntries = await entriesCRUD.getDeletedInventoryEntries();
+        for (const entry of deletedEntries) {
+            let part = await partsCRUD.getPartById(entry.part_id);
+            let location = await locationsCRUD.getLocationById(entry.location_id);
+            let warehouse = await warehouseCRUD.getWarehouseById(location.warehouse_id);
+            let zone = await zoneCRUD.getZone(location.zone_id);
+            let vendor = entry.vendor_id ? await vendorsCRUD.getVendor(entry.vendor_id) : null;
+            entry.part_name = part.part_name;
+            entry.part_number = part.part_number;
+            entry.part_prefix = part.part_prefix;
+    
+            entry.warehouse_name = warehouse.warehouse_name;
+            entry.zone_name = zone.zone_name;
+            entry.vendor_name = vendor ? vendor.vendor_name : null;
+
+        }
+        return deletedEntries;
+    }catch(err){
+        console.log(err);
+        throw new Error("Error performing getDeletedInventoryEntries")
+    }
+}
     
 
 
@@ -236,7 +261,8 @@ module.exports = {
     updateUserInventoryEntry,
     getInventoryEntry,
     deleteInventoryEntry,
-    bulkCreateUserInventoryEntry
+    bulkCreateUserInventoryEntry,
+    getDeletedInventoryEntries
 }
 
 

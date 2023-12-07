@@ -34,6 +34,24 @@ const getWarehouse_id = (warehouse_name) => {
     });
 }
 
+const getWarehouseById = async(warehouse_id) => {
+    return new Promise((resolve, reject) => {
+        database.get(`SELECT * FROM Warehouse WHERE warehouse_id = ?`, [warehouse_id], function (err, row) {
+            if (err) {
+                console.error('Error getting warehouse by id', err.message);
+                reject(err);
+            } else {
+                if(row == undefined){
+                    resolve(row);
+                    return;
+                }
+                resolve(row);
+            }
+        });
+    });
+}
+
+
 const getWarehouse_name = (warehouse_id) => {
     return new Promise((resolve, reject) => {
         database.get(`SELECT warehouse_name FROM Warehouse WHERE warehouse_id = ?`, [warehouse_id], function (err, row) {
@@ -133,7 +151,8 @@ module.exports = {
     getAllWarehouses,
     updateWarehouse_name,
     updateWarehouse_notes,
-    deleteWarehouse
+    deleteWarehouse,
+    getWarehouseById
 }
 
 

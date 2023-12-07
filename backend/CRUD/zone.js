@@ -31,7 +31,7 @@ const getAllZones = () => {
     });
 }
 
-const getZone = (zone_id) => {
+const getZone = async(zone_id) => {
     return new Promise((resolve, reject) => {
         database.get(`SELECT * FROM Zones WHERE zone_id = ?`, [zone_id], function (err, row) {
             if (err) {

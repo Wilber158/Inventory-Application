@@ -325,3 +325,17 @@ ipcMain.on('update_Location_Entry', async (event, formData) => {
     event.reply('update_Location_Entry_Response', { error: error.message });
   }
 });
+
+ipcMain.on('get_Deleted_Inventory_Entries', async (event) => {
+  try{
+    console.log("calling getDeletedInventoryEntries...");
+    const result = await userEntries.getDeletedInventoryEntries();
+
+    console.log("result of getDeletedInventoryEntries: ", result);
+
+    event.reply('get_Deleted_Inventory_Entries_Response', result);
+  }catch(error){
+    console.error('Error in get_Deleted_Inventory_Entries:', error);
+    event.reply('get_Deleted_Inventory_Entries_Response', { error: error.message });
+  }
+});

@@ -372,7 +372,7 @@ const softDeleteInventoryEntry = async(inventory_entry_id, delete_reason) => {
 
             //Insert the deleted row into the DeletedInventoryEntries table
             const sqlInsert = `INSERT INTO DeletedInventoryEntries 
-                               (inventory_entry_id, part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, deleted_date, delete_reason)
+                               (inventory_entry_id, part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type, deleted_date, delete_reason)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
             database.run(sqlInsert, [...Object.values(rows), new Date().toISOString, delete_reason], (err) => {
                 if(err){
@@ -390,6 +390,18 @@ const softDeleteInventoryEntry = async(inventory_entry_id, delete_reason) => {
         });
     });
 }
+
+const getDeletedInventoryEntries = () => {
+    return new Promise((resolve, reject) => {
+        database.all(`SELECT * FROM DeletedInventoryEntries`, (err, rows) => {
+            if(err){
+                return reject(err);
+            }
+            resolve(rows);
+        });
+    });
+}
+
 
 const updateInventoryEntryPartType = (inventory_entry_id, part_type) => {
     const sql = `UPDATE InventoryEntries SET part_type = ? WHERE inventory_entry_id = ?`;
@@ -453,7 +465,8 @@ module.exports = {
     updateInventoryEntry,
     softDeleteInventoryEntry,
     recoverDeletedPart,
-    getSpecificInventoryEntry
+    getSpecificInventoryEntry,
+    getDeletedInventoryEntries,
 }
 
 

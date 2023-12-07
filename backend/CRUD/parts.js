@@ -20,7 +20,7 @@ const getAllParts = () => {
 }
 
 
-const getPartById = (partId) => {
+const getPartById =  async(partId) => {
     const sql = `
         SELECT * FROM Parts
         WHERE part_id = ?
