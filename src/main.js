@@ -241,7 +241,7 @@ ipcMain.on('get_locations', async (event, formData) => {
   }
 });
 
-ipcMain.on('deleteInventoryEntry', async (event, id) => {
+ipcMain.handle('deleteInventoryEntry', async (event, id) => {
   try {
       const response = await dialog.showMessageBox({
           type: 'question',
@@ -250,20 +250,22 @@ ipcMain.on('deleteInventoryEntry', async (event, id) => {
           title: 'Confirm Delete',
           message: 'Are you sure you want to delete this entry?',
       });
+
       if (response.response === 1) {
           console.log("calling deleteInventoryEntry...", id);
-          const result = await userEntries.deleteInventoryEntry(id);
-          console.log("result of deleteInventoryEntry: ", result);
-          event.reply('deleteInventoryEntry_Response', { response: 1});
+          await userEntries.deleteInventoryEntry(id);
+          console.log("Inventory entry deleted: ", id);
+          return { success: true, inventoryEntryId: id };
       } else {
           console.log("Deletion cancelled by user");
-          event.reply('deleteInventoryEntry_Response', { response: 0 });
+          return { success: false, cancelled: true };
       }
   } catch (error) {
       console.error('Error in deleteInventoryEntry:', error);
-      event.reply('deleteInventoryEntry_Response', { response: -1, error: error.message });
+      return { success: false, error: error.message };
   }
 });
+
 
 
 /*

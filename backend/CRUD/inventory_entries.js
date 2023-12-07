@@ -372,9 +372,13 @@ const softDeleteInventoryEntry = async(inventory_entry_id, delete_reason) => {
 
             //Insert the deleted row into the DeletedInventoryEntries table
             const sqlInsert = `INSERT INTO DeletedInventoryEntries 
-                               (inventory_entry_id, part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price, part_type, deleted_date, delete_reason)
-                               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-            database.run(sqlInsert, [...Object.values(rows), new Date().toISOString, delete_reason], (err) => {
+                   (inventory_entry_id, part_id, location_id, quantity, date_last_updated, 
+                   vendor_id, manufacturer, condition, unit_cost, entry_notes, 
+                   sell_price, part_type, deleted_date, delete_reason)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            const valuesForInsert = [...Object.values(rows), new Date().toISOString(), delete_reason];
+
+            database.run(sqlInsert, valuesForInsert, (err) => {
                 if(err){
                     return reject(err);
                 }
