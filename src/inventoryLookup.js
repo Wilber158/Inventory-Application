@@ -166,9 +166,23 @@ function renderTable(data) {
             editRow(row, item); // Pass the item data to the editRow function
         });
 
-        deleteBtn.addEventListener('click', () => {
-            deleteRow(row); // Pass the item data to the deleteRow function
+        deleteBtn.addEventListener('click', async () => {
+            try {
+                const response = await window.electronAPI.deleteInventoryEntry(row.dataset.index);
+        
+                if (response.success) {
+                    // Delete the row from the UI
+                    deleteRow(row);
+                } else if (response.cancelled) {
+                    console.log('Deletion cancelled by user.');
+                } else {
+                    console.error('Failed to delete entry:', response.error);
+                }
+            } catch (err) {
+                console.error('Error during deletion:', err);
+            }
         });
+        
 
     });
 }
@@ -249,7 +263,6 @@ async function deleteRow(row) {
     // Assuming you have a  window.electronAPI.deleteInventoryEntry
     try{
         console.log("Deleting inventory entry with id: ", inventoryEntryId)
-        await window.electronAPI.deleteInventoryEntry(inventoryEntryId);
         const rowIndex = Array.from(row.parentNode.children).indexOf(row);
         currentData.splice(rowIndex, 1);
         console.log("Current data after deletion: ", currentData);
