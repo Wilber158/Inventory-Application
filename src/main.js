@@ -310,3 +310,18 @@ ipcMain.on('update_Inventory_Entry', async (event, formData) => {
     event.reply('update_Inventory_Entry_Response', { error: error.message });
   }
 });
+
+ipcMain.on('update_Location_Entry', async (event, formData) => {
+  try{
+    console.log("calling updateLocationEntry...");
+    console.log(formData);
+    const result = await userLocations.updateLocationEntry(formData);
+
+    console.log("result of updateLocationEntry: ", result);
+
+    event.reply('update_Location_Entry_Response', result);
+  }catch(error){
+    console.error('Error in update_Location_Entry:', error);
+    event.reply('update_Location_Entry_Response', { error: error.message });
+  }
+});

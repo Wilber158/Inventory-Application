@@ -221,6 +221,10 @@ function onTableClick(event) {
 }
 
 function editRow(row) {
+    if(currentlyEditingRow == row){
+        return;
+    }
+
     if (currentlyEditingRow && currentlyEditingRow !== row) {
         restoreOriginalValues(currentlyEditingRow);
     }

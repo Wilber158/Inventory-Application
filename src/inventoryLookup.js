@@ -12,7 +12,7 @@ const table = document.getElementById('dataTable');
 const submitButton = document.getElementById('submitButton');
 const form = document.getElementById('inventoryForm');
 window.onload = loadSidebar;
-let currentData = [];
+let currentData = []; 
 let currentlyEditingRow = null;
 
 
@@ -263,6 +263,9 @@ async function deleteRow(row) {
 }
 
 function editRow(row) {
+    if(currentlyEditingRow == row){
+        return;
+    }
     // If there's already a row being edited, restore its original values before editing another row
     if (currentlyEditingRow && currentlyEditingRow !== row) {
         restoreOriginalValues(currentlyEditingRow);
