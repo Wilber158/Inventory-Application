@@ -89,10 +89,7 @@ function renderTable(data) {
         cellPartType.setAttribute('name', 'part_type');
         set.part_type = part_type;
 
-        const cellQuantity = row.insertCell();
-        cellQuantity.textContent = item.quantity;
-        cellQuantity.setAttribute('name', 'quantity');
-        set.quantity = item.quantity;
+        
 
         const cellWarehouse = row.insertCell();
         const warehouse_name = item.warehouse_name;
