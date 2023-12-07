@@ -9,7 +9,7 @@ async function loadSidebar() {
 }
 
 const table = document.getElementById('dataTable');
-const submitButton = document.getElementById('submitButton');
+const submitButton = document.getElementById('submitButton2');
 const form = document.getElementById('inventoryForm');
 window.onload = loadSidebar;
 let currentData = [];

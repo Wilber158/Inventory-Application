@@ -13,22 +13,26 @@
     </header>
     <h1>Manage Locations</h1>
     <div class="title-line"></div>
-    <div class="container">
-        <form id="inventoryForm">
-            <div class="search_inputs">
-                <div class="input_pair" id="ip2">
-                    <label for="prefix">Warehouse Name:</label>
-                    <input type="text" id="warehouse_name" name="prefix">
+    <div class="center-container">
+        <div id="parameters">
+            <form id="inventoryForm">
+                <div class="search_inputs">
+                    <div class="input_pair" id="ip2">
+                        <label for="prefix">Warehouse Name:</label>
+                        <input type="text" id="warehouse_name" name="prefix">
+                    </div>
+    
+                    <div class="input_pair" id="ip3">
+                        <label for="partNumber">Zone Name:</label>
+                        <input type="text" id="zone_name" name="partNumber">
+                    </div>
                 </div>
-
-                <div class="input_pair" id="ip3">
-                    <label for="partNumber">Zone Name:</label>
-                    <input type="text" id="zone_name" name="partNumber">
-                </div>
-            </div>
-            <button id="submitButton" type="submit">Submit</button>
-
-        </form>
+                <button id="submitButton2" type="submit">Submit</button>
+    
+            </form>
+        </div>
+    </div>
+    <div class="container2">
         <!-- Table for displaying search results -->
         <table id="dataTable">
             <thead>
