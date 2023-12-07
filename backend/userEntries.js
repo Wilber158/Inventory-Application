@@ -253,6 +253,15 @@ const getDeletedInventoryEntries = async () => {
         throw new Error("Error performing getDeletedInventoryEntries")
     }
 }
+
+const restoreInventoryEntry = async (inventory_entry_id) => {
+    try{
+        await entriesCRUD.recoverDeletedPart(inventory_entry_id);
+    }catch(err){
+        console.log(err);
+        throw new Error("Error performing restoreInventoryEntry")
+    }
+}
     
 
 
@@ -262,7 +271,8 @@ module.exports = {
     getInventoryEntry,
     deleteInventoryEntry,
     bulkCreateUserInventoryEntry,
-    getDeletedInventoryEntries
+    getDeletedInventoryEntries,
+    restoreInventoryEntry
 }
 
 

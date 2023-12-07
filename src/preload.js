@@ -21,5 +21,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     update_Location_Entry_Response: (callback) => ipcRenderer.on('update_Location_Entry_Response', callback),
     get_Deleted_Inventory_Entries: () => ipcRenderer.send('get_Deleted_Inventory_Entries'),
     get_Deleted_Inventory_Entries_Response: (callback) => ipcRenderer.on('get_Deleted_Inventory_Entries_Response', callback),
+    restoreInventoryEntry: (inventoryEntryId) => ipcRenderer.invoke('restoreInventoryEntry', inventoryEntryId),
 });
 

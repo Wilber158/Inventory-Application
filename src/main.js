@@ -310,6 +310,7 @@ ipcMain.on('update_Inventory_Entry', async (event, formData) => {
   }catch(error){
     console.error('Error in update_Inventory_Entry:', error);
     event.reply('update_Inventory_Entry_Response', { error: error.message });
+    showErrorInfoDialog()
   }
 });
 
@@ -339,5 +340,30 @@ ipcMain.on('get_Deleted_Inventory_Entries', async (event) => {
   }catch(error){
     console.error('Error in get_Deleted_Inventory_Entries:', error);
     event.reply('get_Deleted_Inventory_Entries_Response', { error: error.message });
+  }
+});
+
+ipcMain.handle('restoreInventoryEntry', async (event, id) => {
+  try {
+      const response = await dialog.showMessageBox({
+          type: 'question',
+          buttons: ['Cancel', 'Restore'],
+          defaultId: 0,
+          title: 'Confirm Restore',
+          message: 'Are you sure you want to restore this entry?',
+      });
+
+      if (response.response === 1) {
+          console.log("calling restoreInventoryEntry...", id);
+          await userEntries.restoreInventoryEntry(id);
+          console.log("Inventory entry restored: ", id);
+          return { success: true, inventoryEntryId: id };
+      } else {
+          console.log("Restoration cancelled by user");
+          return { success: false, cancelled: true };
+      }
+  } catch (error) {
+      console.error('Error in restoreInventoryEntry:', error);
+      return { success: false, error: error.message };
   }
 });

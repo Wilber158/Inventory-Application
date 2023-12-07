@@ -426,25 +426,32 @@ const updateInventoryEntryPartType = (inventory_entry_id, part_type) => {
 const recoverDeletedPart = (inventory_entry_id) => {
     return new Promise((resolve, reject) => {
         database.get(`SELECT * FROM DeletedInventoryEntries WHERE inventory_entry_id = ?`, [inventory_entry_id], (err, rows) => {
-            if(err){
+            if(err) {
                 return reject(err);
             }
-            if(!rows){
+            if(!rows) {
                 return reject(new Error(`Error recovering Inventory Entry. Inventory Entry not found.`));
             }
 
-            //Insert the deleted row into the InventoryEntries table
+            // Prepare the values for insertion, excluding inventory_entry_id, deleted_date, and delete_reason
+            const {
+                inventory_entry_id, deleted_date, delete_reason, ...insertValues
+            } = rows;
+
+            // Insert the deleted row back into the InventoryEntries table
             const sqlInsert = `INSERT INTO InventoryEntries 
-                               (inventory_entry_id, part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, condition, unit_cost, entry_notes, sell_price)
+                               (part_id, location_id, quantity, date_last_updated, vendor_id, manufacturer, 
+                               condition, unit_cost, entry_notes, sell_price, part_type)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-            database.run(sqlInsert, [...Object.values(rows)], (err) => {
-                if(err){
+            database.run(sqlInsert, Object.values(insertValues), (err) => {
+                if(err) {
                     return reject(err);
                 }
-                //Delete the row from the InventoryEntries table
+
+                // Delete the row from the DeletedInventoryEntries table
                 const sqlDelete = `DELETE FROM DeletedInventoryEntries WHERE inventory_entry_id = ?`;
                 database.run(sqlDelete, [inventory_entry_id], (err) => {
-                    if(err){
+                    if(err) {
                         return reject(err);
                     }
                     resolve(null);
@@ -453,6 +460,7 @@ const recoverDeletedPart = (inventory_entry_id) => {
         });
     });
 }
+
 
 
 module.exports = {

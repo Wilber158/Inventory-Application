@@ -136,17 +136,26 @@ function renderTable(data) {
         currentData.push(set);
         // Edit and Delete buttons
         const btnCell = row.insertCell();
-        const editBtn = createButton('Edit', 'edit-btn');
-        const deleteBtn = createButton('Delete', 'delete-btn');
-        btnCell.appendChild(editBtn);
+        const deleteBtn = createButton('Recover', 'delete-btn');
         btnCell.appendChild(deleteBtn);
         // Add event listeners to the edit and delete buttons
-        editBtn.addEventListener('click', () => {
-            editRow(row, item); // Pass the item data to the editRow function
-        });
 
-        deleteBtn.addEventListener('click', () => {
-            deleteRow(row); // Pass the item data to the deleteRow function
+        deleteBtn.addEventListener('click', async() => {
+            try{
+                const response = await window.electronAPI.restoreInventoryEntry(row.dataset.index);
+                console.log("Response from restoreInventoryEntry: ", response);
+                if(response.success){
+                    deleteRow(row);
+                }
+                else if(response.cancelled){
+                    console.log("User cancelled restore operation");
+                }
+                else {
+                    console.error('Failed to delete entry: ', response.error);
+                }
+            }catch(err){
+                console.error('Failed to delete entry: ', err);
+            }
         });
 
     });
@@ -183,7 +192,7 @@ async function applyChanges(row) {
     try{
         await window.electronAPI.update_Inventory_Entry(data);
     }catch(err){
-        console.log(err);
+        console.log(err); 
     }
     currentlyEditingRow = null; // Clear the editing state
     console.log("Row after apply changes: ", row);
@@ -228,7 +237,6 @@ async function deleteRow(row) {
     // Assuming you have a  window.electronAPI.deleteInventoryEntry
     try{
         console.log("Deleting inventory entry with id: ", inventoryEntryId)
-        await window.electronAPI.deleteInventoryEntry(inventoryEntryId);
         const rowIndex = Array.from(row.parentNode.children).indexOf(row);
         currentData.splice(rowIndex, 1);
         console.log("Current data after deletion: ", currentData);
