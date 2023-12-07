@@ -35,6 +35,8 @@ window.electronAPI.get_locations_Response((event, response) => {
 
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
     submitButton.addEventListener('click', async (event) => {
         event.preventDefault();
@@ -58,6 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
             form.reportValidity()
         }
     });
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && currentlyEditingRow) {
+            restoreOriginalValues(currentlyEditingRow);
+            currentlyEditingRow = null; // Reset the currently editing row
+        }
+    });
+    document.addEventListener('keydown', function(event) {
+        const activeElement = document.activeElement;
+        if (event.key === 'Enter' && currentlyEditingRow && activeElement.tagName === 'INPUT') {
+            event.preventDefault(); // Prevent default form submission
+            applyChanges(currentlyEditingRow);
+            currentlyEditingRow = null; // Reset the currently editing row
+        }
+    });
+
 });
 
 
@@ -69,28 +86,44 @@ function renderTable(data) {
         tableBody.deleteRow(0);
     }
     console.log("Type of data: " + typeof data)
+
     // Populate the table with data
-    data.forEach(item => {
+    data.forEach(item=> {
         let set = {};
         const row = tableBody.insertRow();
-        console.log("Currently editing location "+ item.location_id)
-        row.dataset.id = item.location_id
+        row.dataset.index = item.location_id;
+        
         // Mapping data to table columns
-        const cellPartNumber = row.insertCell();
-        cellPartNumber.textContent = item.warehouse_name;
+
+        const cellWarehouse = row.insertCell();
+        const warehouse_name = item.warehouse_name;
+        cellWarehouse.textContent = warehouse_name;
+        cellWarehouse.setAttribute('name', 'warehouse_name');
         set.warehouse_name = warehouse_name;
 
-        const cellType = row.insertCell();
-        cellType.textContent = item.zone_name;
-        set.zone_name = item.zone_name;
+        const cellZone = row.insertCell();
+        let zone_name = item.zone_name;
+        cellZone.textContent = zone_name;
+        cellZone.setAttribute('name', 'zone_name');
+        set.zone = zone_name;
 
-        const cellQuantity = row.insertCell();
-        cellQuantity.textContent = item.location_notes;
-        set.location_notes = item.location_notes;
+        const cellLocation_Notes = row.insertCell();
+        let location_notes = item.location_notes;
+        cellLocation_Notes.textContent = location_notes;
+        cellLocation_Notes.setAttribute('name', 'location_notes');
+        set.location_notes = location_notes;
 
-        const singlePartsCell = row.insertCell();
-        singlePartsCell.appendChild(createDropdown(item.single_part_only));
-        set.single_part_only = item.single_part_only;
+        const cellSingle_Part_Only = row.insertCell();
+        let single_part_only = item.single_part_only;
+        if(single_part_only == 1){
+            single_part_only = "True";
+        }
+        else if(single_part_only == 0){
+            single_part_only = "False";
+        }
+        cellSingle_Part_Only.textContent = single_part_only
+        cellSingle_Part_Only.setAttribute('name', 'single_part_only');
+        set.single_part_only = single_part_only;
 
         
         currentData.push(set);
@@ -102,32 +135,8 @@ function renderTable(data) {
         editBtn.addEventListener('click', () => {
             editRow(row, item); // Pass the item data to the editRow function
         });
-
     });
 }
-
-function createDropdown(selectedValue) {
-    const select = document.createElement('select');
-    
-    // Add a default option for when selectedValue is null
-    const defaultOption = new Option('Select', '', false, false);
-    select.appendChild(defaultOption);
-
-    // True and False options
-    const trueOption = new Option('true', 'true', selectedValue === 'true', selectedValue === 'true');
-    const falseOption = new Option('false', 'false', selectedValue === 'false', selectedValue === 'false');
-
-    select.appendChild(trueOption);
-    select.appendChild(falseOption);
-
-    // If selectedValue is null, set the default option as selected
-    if (selectedValue === null) {
-        select.value = '';
-    }
-
-    return select;
-}
-
 
 function createButton(text, className) {
     const btn = document.createElement('span');
@@ -147,47 +156,28 @@ function onTableClick(event) {
     }
 }
 
-function editRow(row) {
-    console.log("Editing row!!!")
-    // If there's already a row being edited, restore its original values before editing another row
-    if (currentlyEditingRow && currentlyEditingRow !== row) {
-        restoreOriginalValues(currentlyEditingRow);
-    }
-
-    // Check if the current row is already in edit mode
-    const isEditing = row.querySelector('input');
-    if (isEditing) {
-        // Row is already in edit mode
-        return;
-    }
-
-    // Set the currently editing row
-    currentlyEditingRow = row;
-
-    // Replace each cell (except the last one with buttons) with an input element
-    for (let i = 0; i < row.cells.length-2; i++) {
-        const cellValue = row.cells[i].textContent;
-        const input = createInput(cellValue);
-        row.cells[i].innerHTML = '';
-        row.cells[i].appendChild(input);
-
-        if (i === 0) {
-            input.focus();
-        }
-    }
-}
-
-
-
-function applyChanges(row) {
-    for (let i = 1; i < row.cells.length - 1; i++) {
+async function applyChanges(row) {
+    console.log("Row before apply changes: ", row);
+    const data = {};
+    for (let i = 0; i < row.cells.length - 1; i++) {
         const input = row.cells[i].querySelector('input');
         row.cells[i].textContent = input.value;
+        const cellName = row.cells[i].getAttribute('name');
+        data[cellName] = input.value;
     }
+    data.location_id = row.dataset.index;
+    try{
+        console.log("Data to be updated: ", data);
+        await window.electronAPI.update_Location_Entry(data);
+    }catch(err){
+        console.log(err);
+    }
+    currentlyEditingRow = null; // Clear the editing state
+    console.log("Row after apply changes: ", row);
 }
 
 function removeInputEventListeners(row) {
-    for (let i = 1; i < row.cells.length - 1; i++) {
+    for (let i = 0; i < row.cells.length - 1; i++) {
         const input = row.cells[i].querySelector('input');
         if (input) {
             input.removeEventListener('keydown', arguments.callee);
@@ -204,7 +194,7 @@ function restoreOriginalValues(row) {
 
     // Replace input fields with the original data
     const keys = Object.keys(originalData);
-    for (let i = 0; i < keys.length-1; i++) { // Assuming the last key is for the action buttons
+    for (let i = 0; i < keys.length; i++) { // Assuming the last key is for the action buttons
         row.cells[i].textContent = originalData[keys[i]];
     }
 
@@ -218,14 +208,27 @@ function createInput(value) {
     return input;
 }
 
-function deleteRow(row, item) {
-    // Assuming you have a function window.electronAPI.deleteInventoryEntry
-    window.electronAPI.deleteInventoryEntry(item.id, (response) => {
-        if (response.error) {
-            console.error('Error deleting inventory entry:', response.error);
-        } else {
-            // Remove the row from the table
-            row.remove();
+
+function editRow(row) {
+    // If there's already a row being edited, restore its original values before editing another row
+    if(currentlyEditingRow == row){
+        return;
+    }
+    if (currentlyEditingRow && currentlyEditingRow !== row) {
+        restoreOriginalValues(currentlyEditingRow);
+    }
+    // Set the currently editing row
+    currentlyEditingRow = row;
+
+    // Replace each cell (except the last one with buttons) with an input element
+    for (let i = 0; i < row.cells.length - 1; i++) {
+        const cellValue = row.cells[i].textContent;
+        const input = createInput(cellValue);
+        row.cells[i].innerHTML = '';
+        row.cells[i].appendChild(input);
+
+        if (i === 0) {
+            input.focus();
         }
-    });
+    }
 }

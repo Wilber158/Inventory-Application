@@ -18,5 +18,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     auto_Add_Entry_Response: (callback) => ipcRenderer.on('auto_Add_Entry_Response', callback),
     update_Inventory_Entry: (formData) => ipcRenderer.send('update_Inventory_Entry', formData),
     update_Inventory_Entry_Response: (callback) => ipcRenderer.on('update_Inventory_Entry_Response', callback),
+    update_Location_Entry: (formData) => ipcRenderer.send('update_Location_Entry', formData),
+    update_Location_Entry_Response: (callback) => ipcRenderer.on('update_Location_Entry_Response', callback)
 });
 

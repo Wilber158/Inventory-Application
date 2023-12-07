@@ -210,6 +210,33 @@ const updateLocation_single_part_only = (location_id, single_part_only) => {
     });
 }
 
+const updateLocation = async(location_id, updateFields) => {
+    const fields = [];
+    const values = [];
+    console.log("updateFields in updateLocation: ", updateFields);
+    Object.entries(updateFields).forEach(([key, value]) => {
+        fields.push(`${key} = ?`);
+        values.push(value);
+    });
+
+    const sql = `UPDATE Locations SET ${fields.join(', ')} WHERE location_id = ?`;
+    console.log("sql in updateLocation: ", sql);
+    values.push(location_id);
+    console.log("values in updateLocation: ", values);
+
+    return new Promise((resolve, reject) => {
+        database.run(sql, values, function (err) {
+            if (err) {
+                console.error('Error updating location', err.message);
+                reject(err);
+            } else {
+                console.log("Row(s) updated: ", this.changes);
+                resolve(this.changes);
+            }
+        });
+    });
+
+}
 
 //Delete
 const deleteLocation = (location_id) => {
@@ -252,7 +279,8 @@ module.exports = {
     updateLocation_single_part_only,
     deleteLocation,
     deleteAllLocations,
-    getSpecificLocation
+    getSpecificLocation,
+    updateLocation
 }
 
 // Path: backend/locations.js
