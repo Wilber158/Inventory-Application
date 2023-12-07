@@ -97,14 +97,17 @@ input {
     width: 180px;
 }
 
-#prefix, #partNumber, #type, #totalQuantity {
+#prefix, #partNumber, #type, #quantity, #warehouse_name, #zone_name{
     width: 50%;
     padding: auto;
     border: 1px solid #ccc;
     border-radius: 4px;
     background-color: #dddadaa8;
 }
-
+#ip2,#ip3{
+    width: 30%;
+    margin-right: 10%;
+}
 #submitButton {
     background-color: rgb(96, 141, 253);
     padding: 7px;
