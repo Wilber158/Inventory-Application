@@ -91,11 +91,14 @@ th {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: auto;
+    width: 985px;
     max-width: 1200px;
     height: auto;
+    max-height: 600px; /*makes the table scrollable*/
+    overflow-y: auto;
 }
 table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     margin-top: 20px;
     table-layout: fixed; /* Fixed table layout */
@@ -126,5 +129,5 @@ label {
 }
 
 input {
-    width: 60px; /* Adjust as needed */
+    width: 90%; /* Adjust as needed */
 }

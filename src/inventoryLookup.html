@@ -13,31 +13,34 @@
     </header>
     <h1>Inventory Lookup</h1>
     <div class="title-line"></div>
+    <div class="center-container">
+        <div id="parameters">
+            <form id="inventoryForm">
+                <div class="search_inputs">
+                    <div class="input_pair">
+                        <label for="prefix">Prefix:</label>
+                        <input type="text" id="prefix" name="prefix" >
+                    </div>
+    
+                    <div class="input_pair">
+                        <label for="partNumber">Part Number:</label>
+                        <input type="text" id="partNumber" name="partNumber" required>
+                    </div>
+    
+                    <div class="input_pair">
+                        <label for="type">Type:</label>
+                        <input type="text" id="type" name="type" >
+                    </div>
+                    <div class="input_pair">
+                        <label for="totalQuantity">Quantity:</label>
+                        <input type="text" id="quantity" name="totalQuantity">
+                    </div>
+                </div>
+                <button id="submitButton" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
     <div class="container">
-        <form id="inventoryForm">
-            <div class="search_inputs">
-                <div class="input_pair">
-                    <label for="prefix">Prefix:</label>
-                    <input type="text" id="prefix" name="prefix" >
-                </div>
-
-                <div class="input_pair">
-                    <label for="partNumber">Part Number:</label>
-                    <input type="text" id="partNumber" name="partNumber" required>
-                </div>
-
-                <div class="input_pair">
-                    <label for="type">Type:</label>
-                    <input type="text" id="type" name="type" >
-                </div>
-                <div class="input_pair">
-                    <label for="totalQuantity">Quantity:</label>
-                    <input type="text" id="quantity" name="totalQuantity">
-                </div>
-            </div>
-            <button id="submitButton" type="submit">Submit</button>
-
-        </form>
         <!-- Table for displaying search results -->
         <form>
         <table id="dataTable">

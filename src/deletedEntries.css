@@ -24,10 +24,11 @@ header {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 30px auto;
-    width: 80%;
-    max-width: 1000px;
+    /*deals with the size of the whole table container*/
+    width: 975px;
     height: auto;
-    overflow-x: auto; /* Add horizontal scrollbar if necessary */
+    max-height: 600px; /*makes the table scrollable*/
+    overflow-y: auto;
 }
 
 
@@ -49,7 +50,7 @@ h1 {
 /* Table settings */
 
 table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     margin-top: 20px;
     table-layout: fixed; /* Fixed table layout */
@@ -65,7 +66,6 @@ th, td {
     text-align: left;
     word-wrap: break-word; /* Ensures text wraps inside cells */
 }
-
 .edit-btn, .delete-btn {
     cursor: pointer;
     padding: 5px;

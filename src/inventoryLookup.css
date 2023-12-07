@@ -24,12 +24,34 @@ header {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     margin: 30px auto;
-    width: 80%;
-    max-width: 1000px;
+    width: 985px;
     height: auto;
-    overflow-x: auto; /* Add horizontal scrollbar if necessary */
+    max-height: 600px; /*makes the table scrollable*/
+    overflow-y: auto;
+}
+.container2 {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 30px auto;
+    width: 500px;
+    height: auto;
+    max-height: 600px; /*makes the table scrollable*/
+    overflow-y: auto;
+}
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     /* Adjust height as needed */
 }
 
+#parameters {
+    /* Optional: Add width, padding, etc. */
+    width: auto; /* Example width */
+    display: flex;
+}
 
 h1 {
     font-size: 32px;
@@ -49,7 +71,7 @@ h1 {
 /* Table settings */
 
 table {
-    width: 100%;
+    width: auto;
     border-collapse: collapse;
     margin-top: 20px;
     table-layout: fixed; /* Fixed table layout */
@@ -80,7 +102,7 @@ label {
 }
 
 input {
-    width: 60px; /* Adjust as needed */
+    width: 90%; /* Adjust as needed */
 }
 
 .search_inputs {
@@ -113,4 +135,16 @@ input {
     padding: 7px;
     border-radius: 10px;
     cursor: pointer;
+    margin-left: 379.25px;
+    margin-right: 379.25px;
+    
+}
+#submitButton2 {
+    background-color: rgb(96, 141, 253);
+    padding: 7px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 278.25px;
+    margin-right: 278.25px;
+    
 }
