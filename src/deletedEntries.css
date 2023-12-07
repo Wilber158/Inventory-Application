@@ -97,7 +97,7 @@ input {
     width: 180px;
 }
 
-#prefix, #partNumber, #type, #totalQuantity {
+#prefix, #partNumber, #type, #quantity {
     width: 50%;
     padding: auto;
     border: 1px solid #ccc;
