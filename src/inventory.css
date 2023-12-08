@@ -27,7 +27,7 @@ header {
     width: 80%;
     max-width: 1000px;
     height: auto;
-    overflow-x: auto;
+    overflow-x: auto; /* Add horizontal scrollbar if necessary */
 }
 
 h1 {

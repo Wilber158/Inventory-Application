@@ -46,7 +46,8 @@ header {
 }
 
 #parameters {
-    width: auto;
+    /* Optional: Add width, padding, etc. */
+    width: auto; /* Example width */
     display: flex;
 }
 
@@ -98,7 +99,7 @@ label {
 }
 
 input {
-    width: 90%; /* Adjust as needed */
+    width: 90%; 
 }
 
 .search_inputs {

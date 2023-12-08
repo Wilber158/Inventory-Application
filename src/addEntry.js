@@ -56,14 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             //validate the form data
-            //TODO
-            //if(!valid)
             // Send the form data to the main process
             await window.electronAPI.submit_Add_Entry(formData);
 
             // Listen for the response from the main process
             window.electronAPI.submit_Add_Entry_Response((result) => {
-                //handle the response, ex: send to a new page
+                //handle the response
                 console.log(result);
                 console.log("Holy shit it worked")
                 inputIds.forEach(id => document.getElementById(id).value = '');
