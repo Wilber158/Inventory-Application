@@ -162,7 +162,8 @@ ipcMain.on('auto_Add_Entry', async (event, data) => {
   try {
     console.log("calling bulkCreate in auto_Add_Entry with data: ", data);
     await userEntries.bulkCreateUserInventoryEntry(data);
-            
+    showSuccessInfoDialog()
+
   } catch (error) {
       // Handle the error
       console.error('Error in auto_Add_Entry:', error);
@@ -217,7 +218,6 @@ ipcMain.on('get_CSV_Data', async (event, filePath) => {
     console.log("calling get_CSV_Data...");
     console.log(filePath);
     const result = await csvParsing.parseCSV(filePath);
-
     console.log("result of get_CSV_Data: ", result);
     event.reply('get_CSV_Data_Response', result);
   }catch(error){
@@ -266,36 +266,6 @@ ipcMain.handle('deleteInventoryEntry', async (event, id) => {
   }
 });
 
-
-
-/*
-ipcMain.on('deleteInventoryEntry', async (event, id) => {
-  try {
-    // Show a confirmation dialog before proceeding
-    const response = await dialog.showMessageBox({
-      type: 'question',
-      buttons: ['Cancel', 'Delete'],
-      defaultId: 0,
-      title: 'Confirm Delete',
-      message: 'Are you sure you want to delete this entry?',
-    });
-    // Check if the user clicked 'Delete'
-    if (response.response === 1) {
-      console.log("calling deleteInventoryEntry...");
-      console.log(id);
-      const result = await userEntries.deleteInventoryEntry(id);
-      console.log("result of deleteInventoryEntry: ", result);
-      event.reply('deleteInventoryEntry_Response', result);
-    } else {
-      // User cancelled the operation
-      event.reply('deleteInventoryEntry_Response', result);
-    }
-  } catch (error) {
-    console.error('Error in deleteInventoryEntry:', error);
-    event.reply('deleteInventoryEntry_Response', { error: error.message });
-  }
-});
-*/
 
 
 ipcMain.on('update_Inventory_Entry', async (event, formData) => {

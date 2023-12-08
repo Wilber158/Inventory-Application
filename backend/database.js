@@ -3,13 +3,7 @@ const path = require('path');
 
 
 
-/* Future improvements:
-    All tables should only reference IDs from other tables, not names. This will allow for easier renaming of parts, vendors, etc.
-*/
 
-
-
-// You can place it in the same directory or a dedicated data directory.
 const dbPath = path.join(__dirname, 'inventory.db');
 
 // Open a database connection. If the file does not exist, it will be created.
@@ -24,7 +18,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
     }
 });
 
-// Function to setup the database (e.g., create tables)
+// Function to setup the database
 function setupDatabase() {
     // Define SQL queries to create your tables if they don't exist
     const createPartsTable = `
@@ -47,7 +41,6 @@ function setupDatabase() {
             console.error('Error creating Parts table', err.message);
         } else {
             console.log('Parts table created or already exists.');
-            // You can place more table creation code here or seed initial data
         }
     });
 
