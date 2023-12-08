@@ -13,7 +13,6 @@ window.onload = loadSidebar;
 const staticData = [
     { Part: 1, Quantity: 'Item 1', Location: 'Description 1', Manufacturer: 'LG', Seller: 'Verizon', UnitCost: '5%' },
     { Part: 2, Quantity: 'Item 2', Location: 'Description 2', Manufacturer: 'dd', Seller: 'Ven', UnitCost: '6$' },
-    // ... more static data
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -134,7 +133,6 @@ function createInput(value) {
 }
 
 function deleteRow(row) {
-    // Assuming the first cell contains the 'Part' ID
     const partId = row.cells[0].textContent;
 
     // Find and remove the item from staticData
