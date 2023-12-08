@@ -1,4 +1,3 @@
-/* Reset some default styles */
 body, ul, li {
     margin: 0;
     padding: 0;
@@ -28,7 +27,7 @@ header {
     width: 80%;
     max-width: 1000px;
     height: auto;
-    overflow-x: auto; /* Add horizontal scrollbar if necessary */
+    overflow-x: auto;
 }
 
 h1 {
@@ -91,7 +90,6 @@ th {
     margin-right: 5px;
 }
 
-/* js variables */
 
 label {
     font-weight: bold;

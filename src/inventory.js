@@ -134,16 +134,13 @@ function createInput(value) {
 }
 
 function deleteRow(row) {
-    // Assuming the first cell contains the 'Part' ID
     const partId = row.cells[0].textContent;
 
-    // Find and remove the item from staticData
     const index = staticData.findIndex(item => item.Part == partId);
     if (index > -1) {
         staticData.splice(index, 1);
     }
 
-    // Remove the row visually from the HTML table
     row.remove();
 
     console.log('Deleted row with Part ID:', partId);

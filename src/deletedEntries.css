@@ -1,4 +1,3 @@
-/* Reset some default styles */
 body, h1, ul, li {
     margin: 0;
     padding: 0;
@@ -73,7 +72,6 @@ th, td {
     display: inline-block;
 }
 
-/* Additional styles */
 label {
     font-weight: bold;
     margin-bottom: 5px;

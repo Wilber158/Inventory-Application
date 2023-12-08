@@ -1,4 +1,3 @@
-/* Reset some default styles */
 body, h1, ul, li {
     margin: 0;
     padding: 0;
@@ -44,12 +43,10 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-     /* Adjust height as needed */
 }
 
 #parameters {
-    /* Optional: Add width, padding, etc. */
-    width: auto; /* Example width */
+    width: auto;
     display: flex;
 }
 
@@ -95,7 +92,6 @@ th, td {
     display: inline-block;
 }
 
-/* Additional styles */
 label {
     font-weight: bold;
     margin-bottom: 5px;

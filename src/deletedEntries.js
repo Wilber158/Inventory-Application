@@ -234,7 +234,6 @@ async function deleteRow(row) {
     console.log("row being deleted: ", row);
     console.log("row.dataset.index: ", row.dataset.index);
     const inventoryEntryId = row.dataset.index;
-    // Assuming you have a  window.electronAPI.deleteInventoryEntry
     try{
         console.log("Deleting inventory entry with id: ", inventoryEntryId)
         const rowIndex = Array.from(row.parentNode.children).indexOf(row);
