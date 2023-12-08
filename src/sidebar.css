@@ -3,7 +3,7 @@ body{
 }
 
 a:hover {
-    text-decoration: underline; /* Add underline on hover if desired */
+    text-decoration: underline;
 }
 
 .sidebar li {

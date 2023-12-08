@@ -41,7 +41,6 @@ function setupDatabase() {
             console.error('Error creating Parts table', err.message);
         } else {
             console.log('Parts table created or already exists.');
-            // You can place more table creation code here or seed initial data
         }
     });
 
